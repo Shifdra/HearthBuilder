@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="deck.aspx.cs" Inherits="deck" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="viewDeck.aspx.cs" Inherits="HearthBuilder.viewDeck" %>
 
 <!DOCTYPE html>
 
@@ -9,7 +9,7 @@
 <body>
     <form id="form1" runat="server">
     <div>
-        
+        Test
     </div>
     </form>
 </body>

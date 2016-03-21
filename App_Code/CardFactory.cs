@@ -12,7 +12,7 @@ public static class CardFactory
 	{
         List<Card> cards = new List<Card>();
 
-        JsonTextReader reader = new JsonTextReader(new StringReader(json));
+        /*JsonTextReader reader = new JsonTextReader(new StringReader(json));
 while (reader.Read())
 {
     if (reader.Value != null)
@@ -23,7 +23,7 @@ while (reader.Read())
     {
         Console.WriteLine("Token: {0}", reader.TokenType);
     }
-}
+}*/
 
         return cards;
 
