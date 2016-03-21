@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Newtonsoft.Json;
+using System.IO;
 
 /// <summary>
 /// Summary description for Parser
@@ -12,18 +14,9 @@ public static class CardFactory
 	{
         List<Card> cards = new List<Card>();
 
-        /*JsonTextReader reader = new JsonTextReader(new StringReader(json));
-while (reader.Read())
-{
-    if (reader.Value != null)
-    {
-        Console.WriteLine("Token: {0}, Value: {1}", reader.TokenType, reader.Value);
-    }
-    else
-    {
-        Console.WriteLine("Token: {0}", reader.TokenType);
-    }
-}*/
+        cards = JsonConvert.DeserializeObject<List<Card>>(File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "\\hearthstone.json")));
+
+        
 
         return cards;
 

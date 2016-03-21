@@ -11,6 +11,7 @@ namespace HearthBuilder
     {
         protected void Application_Start(object sender, EventArgs e)
         {
+            List<Card> cards = CardFactory.BuildCards();
         }
     }
 }
