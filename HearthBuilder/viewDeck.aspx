@@ -1,16 +1,9 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="viewDeck.aspx.cs" Inherits="HearthBuilder.viewDeck" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="viewDeck.aspx.cs" Inherits="HearthBuilder.viewDeck" MasterPageFile="~/page.Master"%>
 
-<!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title></title>
-</head>
-<body>
-    <form id="form1" runat="server">
-    <div>
-        Test
-    </div>
-    </form>
-</body>
-</html>
+<asp:Content ContentPlaceHolderId="formPlaceHolder" runat="server">
+  <h2>W3Schools</h2>
+  <form runat="server">
+    <asp:TextBox id="textbox1" runat="server" />
+    <asp:Button id="button1" runat="server" text="Button" />
+  </form>
+</asp:Content>

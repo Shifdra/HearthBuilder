@@ -10,24 +10,24 @@
 namespace HearthBuilder {
     
     
-    public partial class viewDeck {
+    public partial class page {
         
         /// <summary>
-        /// textbox1 control.
+        /// headPlaceHolder control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox textbox1;
+        protected global::System.Web.UI.WebControls.ContentPlaceHolder headPlaceHolder;
         
         /// <summary>
-        /// button1 control.
+        /// formPlaceHolder control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button button1;
+        protected global::System.Web.UI.WebControls.ContentPlaceHolder formPlaceHolder;
     }
 }
