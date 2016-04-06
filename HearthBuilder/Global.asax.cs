@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
+using HearthDb;
 
 namespace HearthBuilder
 {
@@ -11,7 +12,9 @@ namespace HearthBuilder
     {
         protected void Application_Start(object sender, EventArgs e)
         {
-            List<Card> cards = CardFactory.BuildCards();
+            Card leeroy = Cards.GetFromName("Leeroy Jenkins", HearthDb.Enums.Language.enUS, true);
+
+            //throw new Exception("Card: " + leeroy.ToString());
         }
     }
 }
