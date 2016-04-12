@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using HearthDb;
 
 namespace HearthBuilder.Controllers
 {
@@ -20,8 +21,16 @@ namespace HearthBuilder.Controllers
             return View();
         }
 
-        public ActionResult Card() //viewing a card
+        public ActionResult Card(String name) //viewing a card
         {
+            //look for a card using the name
+
+            Card card = Cards.GetFromName(name, HearthDb.Enums.Language.enUS, true);
+
+            ViewData["searchName"] = name;
+
+            ViewData["card"] = card;
+
             return View();
         }
 	}

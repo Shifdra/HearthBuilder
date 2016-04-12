@@ -1,4 +1,4 @@
-﻿
+﻿@using HearthDb
 @{
     ViewBag.Title = "Card";
 }
@@ -6,3 +6,18 @@
 <h2>Card</h2>
 
 <p>Viewing a card</p>
+
+@{
+    Card card = (Card)ViewData["card"];
+    String searchName = (String)ViewData["searchName"];
+    
+}
+
+@if (card != null)
+{
+    <p>Card Name: @card.Name</p>
+}
+else
+{
+    <p>Could not find card using searchName: @searchName</p>
+}
