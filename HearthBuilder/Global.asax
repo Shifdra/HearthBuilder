@@ -1,1 +1,1 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="HearthBuilder.Global" Language="C#" %>
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="HearthBuilder.MvcApplication" Language="C#" %>
