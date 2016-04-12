@@ -17,11 +17,15 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", null, new { @class = "navbar-brand" })
+                @Html.ActionLink("Hearth Builder", "Index", "Home", null, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Browse Decks", "Index", "Browse")</li>
+                    <li>@Html.ActionLink("Build a Deck", "Index", "Build")</li>
                 </ul>
+                @Html.Partial("_LoginPartial") <!-- This will include the login view-->
             </div>
         </div>
     </div>
@@ -30,7 +34,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - HearthBuilder</p>
         </footer>
     </div>
 
