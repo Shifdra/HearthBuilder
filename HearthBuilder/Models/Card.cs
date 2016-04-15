@@ -20,10 +20,10 @@ namespace HearthBuilder.Models
         public string Id { get; set; }
         public string Name { get; set; }
         public string Text { get; set; }
-        public CardClass Class { get; set; }
+        public PlayerClass Class { get; set; }
         public Rarity Rarity { get; set; }
 
-        public Card(string Id, string Name, string Text, CardClass Class, Rarity Rarity)
+        public Card(string Id, string Name, string Text, PlayerClass Class, Rarity Rarity)
         {
             this.Id = Id;
             this.Name = Name;
@@ -37,7 +37,41 @@ namespace HearthBuilder.Models
             Id = card.Id;
             Name = card.Name;
             Text = card.Text;
-            Class = card.Class;
+
+            switch (card.Class)
+            {
+                case CardClass.DRUID:
+                    Class = PlayerClass.DRUID;
+                    break;
+                case CardClass.HUNTER:
+                    Class = PlayerClass.HUNTER;
+                    break;
+                case CardClass.MAGE:
+                    Class = PlayerClass.MAGE;
+                    break;
+                case CardClass.PALADIN:
+                    Class = PlayerClass.PALADIN;
+                    break;
+                case CardClass.PRIEST:
+                    Class = PlayerClass.PRIEST;
+                    break;
+                case CardClass.ROGUE:
+                    Class = PlayerClass.ROGUE;
+                    break;
+                case CardClass.SHAMAN:
+                    Class = PlayerClass.SHAMAN;
+                    break;
+                case CardClass.WARLOCK:
+                    Class = PlayerClass.WARLOCK;
+                    break;
+                case CardClass.WARRIOR:
+                    Class = PlayerClass.WARRIOR;
+                    break;
+                default:
+                    Class = PlayerClass.NONE;
+                    break;
+            }
+
             Rarity = card.Rarity;
         }
 
