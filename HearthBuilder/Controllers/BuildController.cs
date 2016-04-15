@@ -32,9 +32,21 @@ namespace HearthBuilder.Controllers
                 return RedirectToAction("Index", "Build");
             }
 
+            //see if we are resuming an old deck
+            if (Session["deck"] == null)
+            {
+                
+            }
+
+
             ViewData["class"] = id;
             
             return View();
+        }
+
+        public string ListCards()
+        {
+            return Cards.Instance.AsJSON();
         }
 	}
 }
