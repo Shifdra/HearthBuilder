@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Newtonsoft.Json;
 
 namespace HearthBuilder.Models
 {
@@ -59,6 +60,11 @@ namespace HearthBuilder.Models
                 return results.ElementAt(0);
             else
                 return null;
+        }
+
+        public string AsJSON()
+        {
+            return JsonConvert.SerializeObject(AllCards);
         }
 
     }
