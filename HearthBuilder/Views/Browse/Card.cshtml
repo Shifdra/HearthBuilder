@@ -1,4 +1,4 @@
-﻿@using HearthDb
+﻿@using HearthBuilder.Models
 @{
     ViewBag.Title = "Card";
 }
@@ -10,14 +10,18 @@
 @{
     Card card = (Card)ViewData["card"];
     String searchName = (String)ViewData["searchName"];
-    
-}
 
-@if (card != null)
-{
+    if (card != null)
+    {
+
     <p>Card Name: @card.Name</p>
-}
-else
-{
-    <p>Could not find card using searchName: @searchName</p>
-}
+    <p>Text: @card.Text</p>
+    <img src="@card.Url" />
+    <img src="@card.UrlGold" />
+    }
+    else
+    {
+        <p>Could not find card using searchName: @searchName</p>
+    }
+    
+    }

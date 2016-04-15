@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using HearthBuilder.Models
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -25,10 +27,28 @@
                     <li>@Html.ActionLink("Browse Decks", "Index", "Browse")</li>
                     <li>@Html.ActionLink("Build a Deck", "Index", "Build")</li>
                 </ul>
-                @Html.Partial("_LoginPartial") <!-- This will include the login view-->
+                @Html.Partial("_LoginHeaderPartial") <!-- This will include the login view-->
             </div>
         </div>
     </div>
+
+    @{
+        if (Session["notifications"] != null)
+        {
+            foreach (Notification notification in (List<Notification>)Session["notifications"])
+            {
+                <div class="alert @notification.getAlertClass() alert-dismissible fade in" role="alert">
+                    <div class="container">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <strong>@notification.Title</strong> @notification.Description
+                    </div>
+                </div>
+            }
+            ((List<Notification>)Session["notifications"]).Clear();
+        }
+    }
 
     <div class="container body-content">
         @RenderBody()

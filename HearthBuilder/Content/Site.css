@@ -1,3 +1,101 @@
-﻿body {
+﻿/* a font similar to hearthstone */
+@font-face{
+    font-family:belwe;
+    font-style:normal;
+    font-weight:400;
+    src:url(/fonts/belwebd-webfont.eot) format("embedded-opentype"),
+        url(/fonts/belwebd-webfont.woff) format("woff"),
+        url(/fonts/belwebd-webfont.ttf) format("truetype")
+}
+
+
+body {
     padding-top: 50px;
+}
+
+.pickClass {
+
+}
+
+.pickClass .portrait {
+    text-align: center;
+}
+
+.pickClass .name {
+    text-shadow: 1px 1px 0 #000,1px 0 0 #000,1px -1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 1px 0 #000,-1px 0 0 #000,-1px -1px 0 #000;
+    font-weight: 400;
+    font-size:3.5em;
+    color: #FFF;
+    font-family: belwe;
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+}
+
+.pickClass i {
+    height: 275px;
+    width: 240px;
+    display: inline-block;
+    
+    background-size: 306px 464px !important;
+    background-position-y: -113px !important;
+}
+
+.pickClass .druid i {
+    background: url("/Content/Images/heros/HERO_06.gif") center no-repeat;
+    
+}
+
+.pickClass .hunter i {
+    background: url("/Content/Images/heros/HERO_05.gif") center no-repeat;
+    
+}
+
+.pickClass .mage i {
+    background: url("/Content/Images/heros/HERO_08.gif") center no-repeat;
+    
+}
+
+.pickClass .paladin i {
+    background: url("/Content/Images/heros/HERO_04.gif") center no-repeat;
+    
+}
+
+.pickClass .priest i {
+    background: url("/Content/Images/heros/HERO_09.gif") center no-repeat;
+    
+}
+
+.pickClass .rogue i {
+    background: url("/Content/Images/heros/HERO_03.gif") center no-repeat;
+    
+}
+
+.pickClass .shaman i {
+    background: url("/Content/Images/heros/HERO_02.gif") center no-repeat;
+    
+}
+
+.pickClass .warlock i {
+    background: url("/Content/Images/heros/HERO_07.gif") center no-repeat;
+    
+}
+
+.pickClass .warrior i {
+    background: url("/Content/Images/heros/HERO_01.gif") center no-repeat;
+    
+}
+
+
+
+
+
+
+/* Alert boxes */
+.alert {
+    margin-bottom: 0px;
+}
+.alert:last-child {
+    margin-bottom: 20px;
 }
