@@ -1,8 +1,78 @@
-﻿
+﻿@using HearthBuilder.Models
 @{
-    ViewBag.Title = "Deck";
+    ViewBag.Title = "Building a "+ViewData["class"]+" Deck";
+
+    List<Card> allCards = Cards.Instance.AllCards;
+
+    PlayerClass pClass = (PlayerClass)Enum.Parse(typeof(PlayerClass), (string)ViewData["class"], true);
+
+    /*@foreach (Card card in allCards)
+    {
+
+    }
+    */
 }
 
-<h2>Deck</h2>
-<p>This is where players will build a deck.</p>
+<script>
+    $(function () {
+        var isLoaded = false;
+        var cardsJSON = $.getJSON("/Build/ListCards/", function () {
+            isLoaded = true;
+            $(".searchCards").prop("disabled", false); //enable the textbox
+            console.log("Successfully pulled cardsJSON!");
+        });
+        
+        $('.searchCards').keyup(function () {
+            $('.selectCard').html("");
+            var searchString = $('.searchCards').val();
+            console.log("searching for " + $('.searchCards').val());
+            if (isLoaded === true) {
+                $.each(cardsJSON, function () {
+                    $.each(this, function (key, card) {
+                        if (typeof card.Name !== 'undefined') {
+                            //console.log("Name: " + name);
+                            if (card.Class == @((int)pClass) || card.Class == 0){
+                                if (card.Name.toLowerCase().indexOf(searchString) != -1) {
+                                    $('.selectCard').append('<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"><img src="'+card.Url+'" /></div>');
+                                    //console.log("Found Card: " + card.Name);
+                                }
+                            }
+                        }
 
+                    });
+                });
+            } else {
+                console.log("isLoaded == false!");
+            }
+        });
+    });
+</script>
+
+<div class="buildDeck">
+    <h1>Building a @ViewData["class"] Deck</h1>
+
+    <div class="row">
+        <div class="col-xs-9">
+            
+
+
+            <div id="overview" class="panel panel-default">
+                <div class="panel-heading">Search for Cards: <input disabled class="searchCards" type="text" placeholder="Card Names" /> </div>
+                <div class="panel-body">
+                    <div class="row selectCard">
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-xs-3">
+            <div id="overview" class="panel panel-default">
+                <div class="panel-heading">Deck</div>
+                <div class="panel-body">
+                    The deck in progress will appear here...
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
