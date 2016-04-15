@@ -12,18 +12,7 @@ namespace HearthBuilder
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
-            /*routes.MapRoute(
-                name: "BuildDeck",
-                url: "Build/{action}/{param1}",
-                defaults: new
-                {
-                    controller = "Build",
-                    action = "Index",
-                    param1 = "" //this is required
-                }
-            );*/
-
+            
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
