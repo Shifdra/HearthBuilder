@@ -11,6 +11,89 @@
 
 body {
     padding-top: 50px;
+    color: #333333;
+    font-weight: 300;
+	background: transparent url("/Content/Images/body-content-bg.jpg") 50% 0 repeat-y;
+    position: relative;
+}
+
+h1, h2, h3, h4 {
+    text-align: center;
+    text-shadow: 1px 1px 0 #000,1px 0 0 #000,1px -1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 1px 0 #000,-1px 0 0 #000,-1px -1px 0 #000;
+    font-weight: 400;
+    color: #FFF;
+    font-family: belwe;
+}
+
+input{
+    color: #000;
+}
+
+
+.navbar-default {
+	background-color: #251d18;
+	box-shadow: 0 0 12px rgba(0,0,0,0.4);
+	border: 0;
+}
+
+.navbar {
+    border-radius: 0;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus, .navbar-default .navbar-nav > li > a.active {
+    color: #fff;
+    background-color: #3d312d;
+}
+
+.navbar-default .navbar-brand {
+    color: #fff;
+    font-weight: bold;
+}
+
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+    color: #F1CA43;
+    background-color: transparent;
+}
+
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+    background-color: #3d312d;
+    color: #fff;
+}
+
+.panel-default {
+    border-color: #BFA880; /* #C5AD83 #BFA880 #AD9B78 */
+}
+
+.panel {
+    margin-bottom: 20px;
+    background-color: #f4e5c6;
+    border-radius: 4px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+.panel-default > .panel-heading {
+    font-size: 1.8em;
+    text-align: center;
+    text-shadow: 1px 1px 0 #000,1px 0 0 #000,1px -1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 1px 0 #000,-1px 0 0 #000,-1px -1px 0 #000;
+    font-weight: 400;
+    color: #FFF;
+    font-family: belwe;
+    background-color: #D9BE91;
+}
+
+
+
+
+/* Alert boxes */
+.alert {
+    margin-bottom: 0px;
+}
+.alert:last-child {
+    margin-bottom: 20px;
 }
 
 .pickClass {
@@ -87,15 +170,11 @@ body {
     
 }
 
+.buildDeck {
 
-
-
-
-
-/* Alert boxes */
-.alert {
-    margin-bottom: 0px;
 }
-.alert:last-child {
-    margin-bottom: 20px;
+
+.buildDeck .selectCard img {
+    width:100%;
 }
+
