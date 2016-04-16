@@ -25,6 +25,8 @@ namespace HearthBuilder.Models
             Cards = cards;
             Class = pClass;
             Title = title;
+
+            SortCards(); //sort them
         }
 
         public void AddCard(Card card)
@@ -56,6 +58,8 @@ namespace HearthBuilder.Models
             //add the card to the deck
             Cards.Add(card);
 
+            //resort them
+            SortCards();
         }
 
         public void RemoveCard(Card card)
@@ -75,6 +79,12 @@ namespace HearthBuilder.Models
                     return; //dont keep looping (we dont want to remove other occurances, just the first)
                 }
             }
+        }
+
+        private void SortCards()
+        {
+            //we want to order the cards by mana Cost
+            Cards.Sort((x, y) => x.Cost.CompareTo(y.Cost));
         }
         
     }
