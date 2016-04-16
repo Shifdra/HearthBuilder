@@ -17,19 +17,21 @@ namespace HearthBuilder.Models
         {
             get { return "//wow.zamimg.com/images/hearthstone/cards/enus/animated/" + Id + "_premium.gif"; }
         }
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string Text { get; set; }
-        public PlayerClass Class { get; set; }
-        public Rarity Rarity { get; set; }
+        public string Id { get; private set; }
+        public string Name { get; private set; }
+        public string Text { get; private set; }
+        public int Cost { get; private set; }
+        public PlayerClass Class { get; private set; }
+        public Rarity Rarity { get; private set; }
 
-        public Card(string Id, string Name, string Text, PlayerClass Class, Rarity Rarity)
+        public Card(string Id, string Name, string Text, PlayerClass Class, Rarity Rarity, int Cost)
         {
             this.Id = Id;
             this.Name = Name;
             this.Text = Text;
             this.Class = Class;
             this.Rarity = Rarity;
+            this.Cost = Cost;
         }
 
         public Card(HearthDb.Card card) 
@@ -74,6 +76,7 @@ namespace HearthBuilder.Models
             }
 
             Rarity = card.Rarity;
+            Cost = card.Cost;
         }
 
 
