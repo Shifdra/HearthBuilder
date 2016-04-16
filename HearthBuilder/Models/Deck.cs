@@ -57,6 +57,25 @@ namespace HearthBuilder.Models
             Cards.Add(card);
 
         }
+
+        public void RemoveCard(Card card)
+        {
+            if (card == null)
+                throw new DeckException("The card cannot be null!");
+
+            if (Cards.Count == 0)
+                throw new DeckException("There are no cards in this deck to remove.");
+
+            //remove the card
+            foreach (Card aCard in Cards)
+            {
+                if (aCard.Id == card.Id) //we found a match
+                {
+                    Cards.Remove(card);
+                    return; //dont keep looping (we dont want to remove other occurances, just the first)
+                }
+            }
+        }
         
     }
 }

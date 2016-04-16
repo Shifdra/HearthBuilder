@@ -80,6 +80,34 @@ namespace HearthBuilder.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult RemoveCard(string id)
+        {
+            var result = new List<object>();
+
+            if (Session["deck"] == null)
+            {
+                //somethings wrong, there should be a deck here...
+                result.Add(new { Result = "0", Message = "No deck to remove card!" });
+            }
+            else
+            {
+                try
+                {
+                    Deck deck = (Deck)Session["deck"];
+                    deck.RemoveCard(Cards.Instance.getById(id));
+                    Session["deck"] = deck;
+                    result.Add(new { Result = "1", Message = "Card removed from deck!" });
+                }
+                catch (Exception e)
+                {
+                    result.Add(new { Result = "0", Message = e.Message, CardId = id, StackTrace = e.StackTrace.ToString() });
+                }
+            }
+
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         public string ListDeck()
         {
             return JsonConvert.SerializeObject((Deck)Session["deck"]);
