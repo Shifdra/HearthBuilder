@@ -1704,8 +1704,6 @@
     <Content Include="fonts\belwebd-webfont.eot" />
     <Content Include="fonts\belwebd-webfont.ttf" />
     <Content Include="fonts\belwebd-webfont.woff" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -1713,7 +1711,6 @@
     <Content Include="Views\Build\Index.cshtml" />
     <Content Include="Views\Build\Deck.cshtml" />
     <Content Include="Views\Browse\Deck.cshtml" />
-    <Content Include="Views\Browse\Card.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
@@ -1742,6 +1739,8 @@
     <Content Include="Views\web.config" />
     <Content Include="packages.config" />
     <Content Include="Views\Shared\_LoginHeaderPartial.cshtml" />
+    <Content Include="Views\Browse\CardName.cshtml" />
+    <Content Include="Views\Browse\CardId.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -21,7 +21,7 @@ namespace HearthBuilder.Controllers
             return View();
         }
 
-        public ActionResult Card(String id) //viewing a card
+        public ActionResult CardName(String id) //viewing a card
         {
             //look for a card using the name
             Card card = Cards.Instance.getByName(id);// Cards.GetFromName(id HearthDb.Enums.Language.enUS, true);
@@ -31,5 +31,16 @@ namespace HearthBuilder.Controllers
 
             return View();
         }
-	}
+
+        public ActionResult CardId(String id) //viewing a card
+        {
+            //look for a card using the name
+            Card card = Cards.Instance.getById(id);// Cards.GetFromName(id HearthDb.Enums.Language.enUS, true);
+
+            ViewData["card"] = card;
+            ViewData["searchName"] = id;
+
+            return View();
+        }
+    }
 }

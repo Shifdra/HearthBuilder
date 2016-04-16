@@ -42,30 +42,23 @@ namespace HearthBuilder.Models
 
         public Card getByName(string name)
         {
-            IEnumerable<Card> results = AllCards.Where(card => card.Name == name);
-
-            //if we found something, return it
-            if (results.Count() == 1)
-                return results.ElementAt(0);
-            else
-                return null;
+            foreach (Card card in AllCards)
+            {
+                if (card.Name == name)
+                    return card;
+            }
+            return null;
         }
 
         public Card getById(string id)
         {
-            IEnumerable<Card> results = AllCards.Where(card => card.Id == id);
-
-            //if we found something, return it
-            if (results.Count() != 1)
-                return results.ElementAt(0);
-            else
-                return null;
+            foreach (Card card in AllCards)
+            {
+                if (card.Id == id)
+                    return card;
+            }
+            return null;
         }
-
-        public string AsJSON()
-        {
-            return JsonConvert.SerializeObject(AllCards);
-        }
-
+        
     }
 }

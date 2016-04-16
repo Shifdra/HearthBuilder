@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using HearthBuilder.Models;
+using Newtonsoft.Json;
 
 namespace HearthBuilder.Controllers
 {
@@ -32,42 +33,56 @@ namespace HearthBuilder.Controllers
                 return RedirectToAction("Index", "Build");
             }
 
+            PlayerClass pClass = (PlayerClass)Enum.Parse(typeof(PlayerClass), id, true);
+
             //see if we are resuming an old deck
             if (Session["deck"] == null)
             {
-                
+                Session["deck"] = new Deck(pClass);
             }
 
 
-            ViewData["class"] = id;
+            ViewData["className"] = id;
             
             return View();
         }
 
         public string ListCards()
         {
-            return Cards.Instance.AsJSON();
+            return JsonConvert.SerializeObject(Cards.Instance.AllCards);
         }
 
-        public string AddCard(string className, string cardId)
+        public ActionResult AddCard(string id)
         {
-            PlayerClass pClass = (PlayerClass)Enum.Parse(typeof(PlayerClass), className, true);
-
-            //see if we are resuming an old deck
+            var result = new List<object>();
+            
             if (Session["deck"] == null)
             {
-                Deck deck = new Deck(pClass);
-                deck.AddCard(Cards.Instance.getById(cardId));
-                Session["deck"] = deck;
-
+                //somethings wrong, there should be a deck here...
+                result.Add(new { Result = "0", Message = "No deck to add card!" });
             }
             else
             {
-                ((Deck)Session["deck"]).AddCard(Cards.Instance.getById(cardId));
+                try
+                {
+                    Deck deck = (Deck)Session["deck"];
+                    deck.AddCard(Cards.Instance.getById(id));
+                    Session["deck"] = deck;
+                    result.Add(new { Result = "1", Message = "Added card to Deck" });
+                }
+                catch (Exception e)
+                {
+                    result.Add(new { Result = "0", Message = e.Message, CardId = id, StackTrace = e.StackTrace.ToString() });
+                }
             }
 
 
-            return "";
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public string ListDeck()
+        {
+            return JsonConvert.SerializeObject((Deck)Session["deck"]);
         }
 	}
 }

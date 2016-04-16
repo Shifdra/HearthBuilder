@@ -15,7 +15,9 @@ namespace HearthBuilder.Models
 
         public Deck(PlayerClass pClass)
         {
+            Cards = new List<Card>();
             Class = pClass;
+            Title = "";
         }
 
         public Deck(List<Card> cards, PlayerClass pClass, string title)
@@ -27,6 +29,9 @@ namespace HearthBuilder.Models
 
         public void AddCard(Card card)
         {
+            if (card == null)
+                throw new DeckException("The card cannot be null!");
+
             //check size limit
             if (Cards.Count >= 30) 
                 throw new DeckException("You cannot have more than 30 cards in a deck.");

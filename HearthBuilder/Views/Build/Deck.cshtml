@@ -5,19 +5,14 @@
 
     List<Card> allCards = Cards.Instance.AllCards;
 
-    PlayerClass pClass = (PlayerClass)Enum.Parse(typeof(PlayerClass), (string)ViewData["class"], true);
-
-    /*@foreach (Card card in allCards)
-    {
-
-    }
-    */
+    PlayerClass pClass = ((Deck)Session["deck"]).Class; //(PlayerClass)Enum.Parse(typeof(PlayerClass), (string)ViewData["class"], true);
+    
 }
 
 <script>
     
     
-    $(function () {
+    /*$(function () {
         var isLoaded = false;
         var cardsJSON = $.getJSON("/Build/ListCards/", function () {
             isLoaded = true;
@@ -35,7 +30,7 @@
                     $.each(this, function (key, card) {
                         if (typeof card.Name !== 'undefined') {
                             //console.log("Name: " + name);
-                            if (card.Class == @((int)pClass) || card.Class == 0){
+                            if (card.Class == @((int)pClass)/* || card.Class == 0){
                                 if (card.Name.toLowerCase().indexOf(searchString) != -1) {
                                     $('.selectCard').append('<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"><img ng-click="myData.doClick(item, $event)" data-id="'+card.Id+'" src="'+card.Url+'" /></div>');
                                     //console.log("Found Card: " + card.Name);
@@ -62,20 +57,118 @@
             alert($('img.btnCard').data('id'));
         });
 
-    });
+    });*/
 </script>
-@Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js")
 
-<div ng-controller="BuildController" class="buildDeck">
-    <h1>Building a @ViewData["class"] Deck</h1>
-    {{myData.fromServer}}
+<div data-ng-controller="BuildController" data-ng-init="init()" class="buildDeck">
+    <h1>Building a @ViewData["className"] Deck</h1>
+    <script>
+        var myapp = angular.module('myapp', ['ngSanitize']);
+        myapp.controller("BuildController", function ($scope, $http, $compile) {
+
+            // in controller
+
+            $scope.txtSearch = {
+                text: '',
+                class: '@ViewData["className"]'
+            };
+            $scope.cardData = {};
+
+            $scope.init = function () {
+                var responsePromise = $http.get("/Build/ListCards/");
+
+                responsePromise.success(function (data, status, headers, config) {
+                    $scope.cardData = data;
+                    $scope.filterCards();
+                    $scope.refreshDeck();
+                    //alert(data);
+                });
+                responsePromise.error(function (data, status, headers, config) {
+                    alert("AJAX failed!");
+                });
+                // check if there is query in url
+                // and fire search in case its value is not empty
+            };
+
+            $scope.cardClicked = function(item) {
+
+                var id = item.currentTarget.getAttribute("data-id");
+
+                console.log("clicked!" + id);
+                //alert("clicked!" + id);
+
+                var responsePromise = $http.get("/Build/AddCard/"+id+"/");
+
+                responsePromise.success(function(data, status, headers, config) {
+                    //$scope.myData.fromServer = data.message;
+                    angular.forEach(data, function (result){
+                        //alert("Ajax msg:" + result.Message);
+
+                        if (result.Result == '1'){
+                            //we added a card, lets update the Deck List
+                            $scope.refreshDeck();
+                        }
+                        else {
+                            alert("Error: " + result.Message);
+                        }
+                    });
+                    
+                });
+                responsePromise.error(function(data, status, headers, config) {
+                    alert("AJAX failed!" + data.Message);
+                });
+            }
+
+            $scope.deckList = "";
+            $scope.refreshDeck = function() {
+                var results = "";
+                var responsePromise = $http.get("/Build/ListDeck/");
+                responsePromise.success(function(data, status, headers, config) {
+                    //$scope.myData.fromServer = data.message;
+                    angular.forEach(data.Cards, function (card){
+                        results += "<p>" + card.Name + "</p>";
+                    });
+
+                    var element = angular.element(document.querySelector('.deckList'));
+                    var generated = element.html(results);
+                    $scope.deckList = $compile(generated.contents())($scope);
+                    
+                });
+                responsePromise.error(function(data, status, headers, config) {
+                    alert("AJAX failed!" + data.Message);
+                });
+            }
+
+            $scope.filterCards = function () {
+
+                var results = "";
+                $scope.cardsResponse = "";
+
+                console.log("Search: " + $scope.txtSearch.text);
+                angular.forEach($scope.cardData, function (card) { //loop through every card
+                    $scope.cardData.curCard = card; //assign the current card to the scope
+                    //console.log($scope.cardData.curCard);
+                    if ($scope.cardData.curCard.Class == @((int)pClass) || $scope.cardData.curCard.Class == 0){ //filter by current class, and non-class
+                        if ($scope.cardData.curCard.Name.toLowerCase().indexOf($scope.txtSearch.text) > -1) { //filter by textbox
+                            results += '<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"><img alt="tacos" ng-click="cardClicked($event)" data-id="' + $scope.cardData.curCard.Id + '" src="' + $scope.cardData.curCard.Url + '" /></div>';
+                        }
+                    }
+                });
+
+                var element = angular.element(document.querySelector('.selectCard'));
+                var generated = element.html(results);
+                $scope.cardsResponse = $compile(generated.contents())($scope);
+            }
+        } );
+    </script>
+
     <div class="row">
         <div class="col-xs-9">
             <div id="overview" class="panel panel-default">
-                <div class="panel-heading">Search for Cards: <input autofocus disabled class="searchCards" type="text" placeholder="Card Names" /> </div>
+                <div class="panel-heading">Search for Cards: <input autofocus type="text" name="input" ng-model="txtSearch.text" ng-change="filterCards()" ng-trim="true" placeholder="Card Names" /> </div>
                 <div class="panel-body">
-                    <div class="row selectCard">
-                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"><img class="btnCard" data-id="123" src="" /></div>
+                    <div class="row selectCard" >
+                        
                     </div>
                 </div>
             </div>
@@ -84,7 +177,9 @@
             <div id="overview" class="panel panel-default">
                 <div class="panel-heading">Deck</div>
                 <div class="panel-body">
-                    The deck in progress will appear here...
+                    <div class="deckList">
+
+                    </div>
                 </div>
             </div>
         </div>
