@@ -103,8 +103,31 @@
                 var responsePromise = $http.get("/Build/ListDeck/");
                 responsePromise.success(function(data, status, headers, config) {
                     //$scope.myData.fromServer = data.message;
+                    var count = 0;
                     angular.forEach(data.Cards, function (card){
-                        results += "<div class='cardRow' ng-click='delCardClick($event)' data-id='" + card.Id + "'><div class='card' style=\"background-image: url('/Content/Images/bars/"+card.Id+".png');\"></div><div class='cardFrame'><span class='cardCost'>"+card.Cost+"</span><span class='cardName'>"+card.Name+"</span><span class='delCard'>Remove <i class='fa fa-times' aria-hidden='true'></i></span></div></div>";
+                        var duplicateVisible = "";
+                        var shouldHide = false;
+
+                        //we don't want to show duplicate cards, instead we should show a counter beside the card
+                        //so we loop through again, looking for another occurrance
+                        var tmpCount = 0;
+                        angular.forEach(data.Cards, function (tempCard){
+                            if (card.Id == tempCard.Id && count != tmpCount) { //if we have duplicate cards
+                                if (count < tmpCount) { //if were on the 2nd occurance of the card
+                                    duplicateVisible = "<span class='duplicate'>2</span>";
+                                } else if (count > tmpCount) {
+                                    //hide entire entry
+                                    shouldHide = true;
+                                }
+                            }
+                                
+                            tmpCount += 1;
+                        });
+
+                        if (!shouldHide)
+                            results += "<div class='cardRow' ng-click='delCardClick($event)' data-id='" + card.Id + "'><div class='card' style=\"background-image: url('/Content/Images/bars/"+card.Id+".png');\"></div><div class='cardFrame'><span class='cardCost'>"+card.Cost+"</span><span class='cardName'>"+card.Name+"</span><span class='delCard'>Remove <i class='fa fa-times' aria-hidden='true'></i></span>"+duplicateVisible+"</div></div>";
+                        
+                        count += 1;
                     });
 
                     var element = angular.element(document.querySelector('.deckList'));
