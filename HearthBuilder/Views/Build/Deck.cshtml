@@ -113,11 +113,10 @@
                         var tmpCount = 0;
                         angular.forEach(data.Cards, function (tempCard){
                             if (card.Id == tempCard.Id && count != tmpCount) { //if we have duplicate cards
-                                if (count < tmpCount) { //if were on the 2nd occurance of the card
+                                if (count < tmpCount) { //if were on the first occurance of the card
                                     duplicateVisible = "<span class='duplicate'>2</span>";
-                                } else if (count > tmpCount) {
-                                    //hide entire entry
-                                    shouldHide = true;
+                                } else if (count > tmpCount) {  //if were on the 2nd occurance of the card
+                                    shouldHide = true; //hide entire entry because the first has a counter
                                 }
                             }
                                 
