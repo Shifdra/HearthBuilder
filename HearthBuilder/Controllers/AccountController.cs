@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HearthBuilder.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,16 +9,12 @@ namespace HearthBuilder.Controllers
 {
     public class AccountController : Controller
     {
+        Account account = new Account();
         //
         // GET: /Account/
         public ActionResult Index() //main profile page? redirect /Account/Login if not logged in?
         {
-            return View();
-        }
-
-        public ActionResult Login() 
-        {
-            return View();
+            return View(account);
         }
 
         public ActionResult Register()
