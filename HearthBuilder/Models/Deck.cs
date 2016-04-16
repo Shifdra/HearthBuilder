@@ -13,6 +13,11 @@ namespace HearthBuilder.Models
         public PlayerClass Class { get; private set; }
         public string Title { get; set; }
 
+        public Deck(PlayerClass pClass)
+        {
+            Class = pClass;
+        }
+
         public Deck(List<Card> cards, PlayerClass pClass, string title)
         {
             Cards = cards;

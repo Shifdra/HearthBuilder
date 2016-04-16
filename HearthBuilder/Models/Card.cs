@@ -38,6 +38,7 @@ namespace HearthBuilder.Models
             Name = card.Name;
             Text = card.Text;
 
+            //use our own Card Class design
             switch (card.Class)
             {
                 case CardClass.DRUID:

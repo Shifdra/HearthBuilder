@@ -48,5 +48,26 @@ namespace HearthBuilder.Controllers
         {
             return Cards.Instance.AsJSON();
         }
+
+        public string AddCard(string className, string cardId)
+        {
+            PlayerClass pClass = (PlayerClass)Enum.Parse(typeof(PlayerClass), className, true);
+
+            //see if we are resuming an old deck
+            if (Session["deck"] == null)
+            {
+                Deck deck = new Deck(pClass);
+                deck.AddCard(Cards.Instance.getById(cardId));
+                Session["deck"] = deck;
+
+            }
+            else
+            {
+                ((Deck)Session["deck"]).AddCard(Cards.Instance.getById(cardId));
+            }
+
+
+            return "";
+        }
 	}
 }

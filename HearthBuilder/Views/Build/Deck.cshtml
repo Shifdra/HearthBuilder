@@ -1,6 +1,7 @@
 ﻿@using HearthBuilder.Models
+@using System.Web.Optimization
 @{
-    ViewBag.Title = "Building a "+ViewData["class"]+" Deck";
+    ViewBag.Title = "Building a " + ViewData["class"] + " Deck";
 
     List<Card> allCards = Cards.Instance.AllCards;
 
@@ -14,11 +15,14 @@
 }
 
 <script>
+    
+    
     $(function () {
         var isLoaded = false;
         var cardsJSON = $.getJSON("/Build/ListCards/", function () {
             isLoaded = true;
             $(".searchCards").prop("disabled", false); //enable the textbox
+            $(".searchCards").focus();
             console.log("Successfully pulled cardsJSON!");
         });
         
@@ -33,8 +37,9 @@
                             //console.log("Name: " + name);
                             if (card.Class == @((int)pClass) || card.Class == 0){
                                 if (card.Name.toLowerCase().indexOf(searchString) != -1) {
-                                    $('.selectCard').append('<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"><img src="'+card.Url+'" /></div>');
+                                    $('.selectCard').append('<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"><img ng-click="myData.doClick(item, $event)" data-id="'+card.Id+'" src="'+card.Url+'" /></div>');
                                     //console.log("Found Card: " + card.Name);
+
                                 }
                             }
                         }
@@ -45,26 +50,35 @@
                 console.log("isLoaded == false!");
             }
         });
+
+        $(document.body).on('click', '.btnCard',function () {
+            $.ajax({
+                type: "POST",
+                url: "/Build/Deck/AddCard/"+$('img.btnCard').data('id'),
+                success: function(msg){
+                    alert( "Data Saved: " + msg );
+                }
+            });
+            alert($('img.btnCard').data('id'));
+        });
+
     });
 </script>
+@Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js")
 
-<div class="buildDeck">
+<div ng-controller="BuildController" class="buildDeck">
     <h1>Building a @ViewData["class"] Deck</h1>
-
+    {{myData.fromServer}}
     <div class="row">
         <div class="col-xs-9">
-            
-
-
             <div id="overview" class="panel panel-default">
-                <div class="panel-heading">Search for Cards: <input disabled class="searchCards" type="text" placeholder="Card Names" /> </div>
+                <div class="panel-heading">Search for Cards: <input autofocus disabled class="searchCards" type="text" placeholder="Card Names" /> </div>
                 <div class="panel-body">
                     <div class="row selectCard">
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"><img class="btnCard" data-id="123" src="" /></div>
                     </div>
                 </div>
             </div>
-
-
         </div>
         <div class="col-xs-3">
             <div id="overview" class="panel panel-default">
