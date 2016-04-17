@@ -11,6 +11,7 @@ namespace HearthBuilder.Models
     {
         public List<Card> Cards { get; private set; }
         public PlayerClass Class { get; private set; }
+        public string ClassStr { get { return char.ToUpper(Class.ToString().ToLower()[0]) + Class.ToString().ToLower().Substring(1); } } //converts "CLASS" to "Class"
         public string Title { get; set; }
 
         public Deck(PlayerClass pClass)
@@ -83,7 +84,9 @@ namespace HearthBuilder.Models
 
         private void SortCards()
         {
-            //we want to order the cards by mana Cost
+            //sort alphabetically
+            Cards.Sort((x, y) => string.Compare(x.Name, y.Name));
+            //then, we want to order the cards by mana Cost
             Cards.Sort((x, y) => x.Cost.CompareTo(y.Cost));
         }
         

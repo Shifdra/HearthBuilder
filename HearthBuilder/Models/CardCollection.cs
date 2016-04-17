@@ -34,10 +34,17 @@ namespace HearthBuilder.Models
             //import the data from the db, 
             Dictionary<string, HearthDb.Card> dbCards = HearthDb.Cards.Collectible;
 
-            AllCards = new List<Card>();
+            List<Card> tmpCards = new List<Card>();
+
+            
             foreach (KeyValuePair<string, HearthDb.Card> card in dbCards){
-                AllCards.Add(new Card(card.Value));
+                tmpCards.Add(new Card(card.Value));
             }
+
+            AllCards = new List<Card>();
+            //sort Alphabetically by Name, then by Cost
+            AllCards = tmpCards.OrderBy(x => x.Cost).ThenBy(x => x.Name).ToList();
+
         }
 
         public Card getByName(string name)
