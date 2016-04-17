@@ -14,6 +14,14 @@ namespace HearthBuilder.Controllers
         // GET: /Build/
         public ActionResult Index() //this will be select a class
         {
+            if (Session["deck"] != null) //if they have a deck already, send them there
+            {
+                Deck deck = (Deck)Session["deck"];
+                
+
+                return RedirectToAction("Deck", new { id = deck.ClassStr });
+            }
+
             return View();
         }
 
@@ -112,5 +120,37 @@ namespace HearthBuilder.Controllers
         {
             return JsonConvert.SerializeObject((Deck)Session["deck"]);
         }
-	}
+
+        public ActionResult SaveDeck()
+        {
+            var result = new List<object>();
+
+            if (Session["deck"] == null)
+            {
+                //somethings wrong, there should be a deck here...
+                result.Add(new { Result = "0", Message = "No deck to save!" });
+            }
+            else
+            {
+                try
+                {
+                    Deck deck = (Deck)Session["deck"];
+                    //save the deck
+                    Session["deck"] = deck;
+                    result.Add(new { Result = "1", Message = "Saved deck!" });
+                }
+                catch (Exception e)
+                {
+                    result.Add(new { Result = "0", Message = e.Message, StackTrace = e.StackTrace.ToString() });
+                }
+            }
+            
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ConfirmDeleteDeck() //this will be select a class
+        {
+            return View();
+        }
+    }
 }

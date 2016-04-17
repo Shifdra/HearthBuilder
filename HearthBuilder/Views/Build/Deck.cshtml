@@ -10,7 +10,6 @@
 }
 
 <div data-ng-controller="BuildController" data-ng-init="init()" class="buildDeck">
-    <h1>Build a @ViewData["className"] Deck</h1>
     <script>
         var myapp = angular.module('myapp', ['ngSanitize']);
         myapp.controller("BuildController", function ($scope, $http, $compile) {
@@ -42,10 +41,6 @@
             $scope.addCardClick = function(item) {
 
                 var id = item.currentTarget.getAttribute("data-id");
-
-                console.log("clicked!" + id);
-                //alert("clicked!" + id);
-
                 var responsePromise = $http.get("/Build/AddCard/"+id+"/");
 
                 responsePromise.success(function(data, status, headers, config) {
@@ -71,14 +66,9 @@
             $scope.delCardClick = function(item) {
 
                 var id = item.currentTarget.getAttribute("data-id");
-
-                console.log("clicked!" + id);
-                //alert("clicked!" + id);
-                
                 var responsePromise = $http.get("/Build/RemoveCard/"+id+"/");
 
                 responsePromise.success(function(data, status, headers, config) {
-                    //$scope.myData.fromServer = data.message;
                     angular.forEach(data, function (result){
                         //alert("Ajax msg:" + result.Message);
 
@@ -97,6 +87,27 @@
                 });
             }
 
+            $scope.saveDeckClick = function() {
+                                
+                var responsePromise = $http.get("/Build/SaveDeck/");
+                responsePromise.success(function(data, status, headers, config) {
+                    angular.forEach(data, function (result){
+                        if (result.Result == '1'){
+                            //we saved the deck successfully
+                            $scope.refreshDeck();
+                        }
+                        else {
+                            alert("Error: " + result.Message);
+                        }
+                    });
+                    
+                });
+                responsePromise.error(function(data, status, headers, config) {
+                    alert("AJAX failed!" + data.Message);
+                });
+            }
+
+            
             $scope.deckList = "";
             $scope.refreshDeck = function() {
                 var results = "";
@@ -162,8 +173,10 @@
         } );
     </script>
 
+
     <div class="row">
         <div class="col-xs-12 col-offset-262">
+            <h1>Building a @ViewData["className"] Deck</h1>
             <div id="overview" class="panel panel-default">
                 <div class="panel-heading">Search for Cards: <input autofocus type="text" name="input" ng-model="txtSearch.text" ng-change="filterCards()" ng-trim="true" placeholder="Card Names" /> </div>
                 <div class="panel-body">
@@ -174,8 +187,9 @@
             </div>
         </div>
         <div class="col-fixed-262">
+            <div class="deckOptions"><button ng-click='saveDeckClick()' class="btn btn-primary btn-lg">Save</button> <a href="/Build/ConfirmDeleteDeck/" class="btn btn-danger btn-lg">Discard</a></div>
             <div id="overview" class="panel panel-default">
-                <div class="panel-heading">Deck</div>
+                <div class="panel-heading"><input type="text" name="input" ng-model="txtDeckName.text" ng-trim="true" placeholder="Deck Name" class="txtDeckName" value="@(((Deck)Session["deck"]).Title)"/></div>
                 <div class="panel-body">
                     <div class="deckList">
 
@@ -183,7 +197,5 @@
                 </div>
             </div>
         </div>
-        
-        
     </div>
 </div>

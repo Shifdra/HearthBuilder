@@ -165,6 +165,11 @@ input{
 
 }
 
+.buildDeck .deckOptions {
+    text-align:center;
+    padding: 12px;
+}
+
 .buildDeck .selectCard img {
     width:100%;
     cursor: pointer;
@@ -172,6 +177,10 @@ input{
 
 .buildDeck .deckList {
     
+}
+
+.buildDeck .txtDeckName {
+    width: 100%;
 }
 
 .buildDeck .cardRow {
@@ -220,7 +229,7 @@ input{
     color: #FFF;
     font-family: belwe;
     top: 1px;
-    left: 11px;
+    left: 12px;
 }
 
 .buildDeck .deckList .delCard {

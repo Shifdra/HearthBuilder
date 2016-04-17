@@ -1763,6 +1763,7 @@
     <Content Include="Views\Shared\_LoginHeaderPartial.cshtml" />
     <Content Include="Views\Browse\CardName.cshtml" />
     <Content Include="Views\Browse\CardId.cshtml" />
+    <Content Include="Views\Build\ConfirmDeleteDeck.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
