@@ -11,7 +11,10 @@
             <div class="panel-heading"><h4>Are you sure you want to permanently discard your deck?!</h4></div>
             <div class="panel-body text-center">
                 <p>
-                    <a href="#" class="btn btn-lg btn-danger">Discard</a> <a href="/Build" class="btn btn-lg btn-primary">Cancel</a>
+                    @using (@Html.BeginForm("ConfirmDeleteDeck", "Build", FormMethod.Post, new { id = "yes" })){
+                        <button type="submit" href="#" class="btn btn-lg btn-danger">Discard</button> <a href="/Build" class="btn btn-lg btn-primary">Cancel</a>
+                    }
+                    
                 </p>
             </div>
         </div>

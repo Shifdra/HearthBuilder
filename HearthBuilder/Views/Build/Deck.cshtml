@@ -56,7 +56,7 @@
                             alert("Error: " + result.Message);
                         }
                     });
-                    
+
                 });
                 responsePromise.error(function(data, status, headers, config) {
                     alert("AJAX failed!" + data.Message);
@@ -80,7 +80,7 @@
                             alert("Error: " + result.Message);
                         }
                     });
-                    
+
                 });
                 responsePromise.error(function(data, status, headers, config) {
                     alert("AJAX failed!" + data.Message);
@@ -88,11 +88,12 @@
             }
 
             $scope.saveDeckClick = function() {
-                                
+
                 var responsePromise = $http.get("/Build/SaveDeck/");
                 responsePromise.success(function(data, status, headers, config) {
                     angular.forEach(data, function (result){
                         if (result.Result == '1'){
+                            $scope.showNotification("Success!", "Deck Saved.", "alert-success");
                             //we saved the deck successfully
                             $scope.refreshDeck();
                         }
@@ -100,15 +101,14 @@
                             alert("Error: " + result.Message);
                         }
                     });
-                    
+
                 });
                 responsePromise.error(function(data, status, headers, config) {
                     alert("AJAX failed!" + data.Message);
                 });
             }
 
-            
-            $scope.deckList = "";
+
             $scope.refreshDeck = function() {
                 var results = "";
                 var responsePromise = $http.get("/Build/ListDeck/");
@@ -130,20 +130,20 @@
                                     shouldHide = true; //hide entire entry because the first has a counter
                                 }
                             }
-                                
+
                             tmpCount += 1;
                         });
 
                         if (!shouldHide)
                             results += "<div class='cardRow' ng-click='delCardClick($event)' data-id='" + card.Id + "'><div class='card' style=\"background-image: url('/Content/Images/bars/"+card.Id+".png');\"></div><div class='cardFrame'><span class='cardCost'>"+card.Cost+"</span><span class='cardName'>"+card.Name+"</span><span class='delCard'>Remove <i class='fa fa-times' aria-hidden='true'></i></span>"+duplicateVisible+"</div></div>";
-                        
+
                         count += 1;
                     });
 
                     var element = angular.element(document.querySelector('.deckList'));
                     var generated = element.html(results);
-                    $scope.deckList = $compile(generated.contents())($scope);
-                    
+                    $compile(generated.contents())($scope);
+
                 });
                 responsePromise.error(function(data, status, headers, config) {
                     alert("AJAX failed!" + data.Message);
@@ -153,7 +153,6 @@
             $scope.filterCards = function () {
 
                 var results = "";
-                $scope.cardsResponse = "";
 
                 console.log("Search: " + $scope.txtSearch.text);
                 angular.forEach($scope.cardData, function (card) { //loop through every card
@@ -168,31 +167,45 @@
 
                 var element = angular.element(document.querySelector('.selectCard'));
                 var generated = element.html(results);
-                $scope.cardsResponse = $compile(generated.contents())($scope);
+                $compile(generated.contents())($scope);
+            }
+
+            $scope.showNotification = function (title, msg, type) {
+                
+                var alert = '<div class="alert '+type+' alert-dismissible fade in" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button> <strong>'+title+'</strong> '+msg+'</div>';
+
+                var element = angular.element(document.querySelector('#notificationBlock'));
+                var generated = element.html(alert);
+                $compile(generated.contents())($scope);
             }
         } );
     </script>
 
+    <div id="notificationBlock">
 
-    <div class="row">
-        <div class="col-xs-12 col-offset-262">
-            <h1>Building a @ViewData["className"] Deck</h1>
-            <div id="overview" class="panel panel-default">
-                <div class="panel-heading">Search for Cards: <input autofocus type="text" name="input" ng-model="txtSearch.text" ng-change="filterCards()" ng-trim="true" placeholder="Card Names" /> </div>
-                <div class="panel-body">
-                    <div class="row selectCard">
+    </div>
 
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-offset-262">
+                <h1>Building a @ViewData["className"] Deck</h1>
+                <div id="overview" class="panel panel-default">
+                    <div class="panel-heading">Search for Cards: <input autofocus type="text" name="input" ng-model="txtSearch.text" ng-change="filterCards()" ng-trim="true" placeholder="Card Names" /> </div>
+                    <div class="panel-body">
+                        <div class="row selectCard">
+
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-fixed-262">
-            <div class="deckOptions"><button ng-click='saveDeckClick()' class="btn btn-primary btn-lg">Save</button> <a href="/Build/ConfirmDeleteDeck/" class="btn btn-danger btn-lg">Discard</a></div>
-            <div id="overview" class="panel panel-default">
-                <div class="panel-heading"><input type="text" name="input" ng-model="txtDeckName.text" ng-trim="true" placeholder="Deck Name" class="txtDeckName" value="@(((Deck)Session["deck"]).Title)"/></div>
-                <div class="panel-body">
-                    <div class="deckList">
+            <div class="col-fixed-262">
+                <div class="deckOptions"><button ng-click='saveDeckClick()' class="btn btn-primary btn-lg">Save</button> <a href="/Build/ConfirmDeleteDeck/" class="btn btn-danger btn-lg">Discard</a></div>
+                <div id="overview" class="panel panel-default">
+                    <div class="panel-heading"><input type="text" name="input" ng-model="txtDeckName.text" ng-trim="true" placeholder="Deck Name" class="txtDeckName" value="@(((Deck)Session["deck"]).Title)" /></div>
+                    <div class="panel-body">
+                        <div class="deckList">
 
+                        </div>
                     </div>
                 </div>
             </div>

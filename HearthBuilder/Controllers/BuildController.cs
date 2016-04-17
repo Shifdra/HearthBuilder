@@ -148,9 +148,41 @@ namespace HearthBuilder.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
         public ActionResult ConfirmDeleteDeck() //this will be select a class
         {
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult ConfirmDeleteDeck(string id) //this will be select a class
+        {
+            if (Session["deck"] == null)
+            {
+                if (Session["notifications"] != null)
+                    ((List<Notification>)Session["notifications"]).Add(new Notification("Error", "You can't discard a deck you don't have!" + id, NotificationType.ERROR));
+                else
+                {
+                    List<Notification> notifications = new List<Notification>();
+                    notifications.Add(new Notification("Error", "You can't discard a deck you don't have!" + id, NotificationType.ERROR));
+                    Session["notifications"] = notifications;
+                }
+            }
+
+            Session["deck"] = null; //invalidate the session
+
+            if (Session["notifications"] != null)
+                ((List<Notification>)Session["notifications"]).Add(new Notification("Okay...", "This deck has been discarded! " + id, NotificationType.WARNING));
+            else
+            {
+                List<Notification> notifications = new List<Notification>();
+                notifications.Add(new Notification("Okay...", "This deck has been discarded! " + id, NotificationType.WARNING));
+                Session["notifications"] = notifications;
+            }
+
+            
+
+            return Redirect("/Build/");
         }
     }
 }
