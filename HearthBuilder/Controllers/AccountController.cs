@@ -1,20 +1,28 @@
 ﻿using HearthBuilder.Models;
-using System;
+using HearthBuilder.Models.Account;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace HearthBuilder.Controllers
 {
     public class AccountController : Controller
     {
-        Account account = new Account();
+        UserDAO userDAO = new UserDAO();
         //
         // GET: /Account/
-        public ActionResult Index() //main profile page? redirect /Account/Login if not logged in?
+        public ActionResult Index()
         {
-            return View(account);
+            //login page
+            User user = userDAO.GetAccountByEmail("trevor166933@hotmail.com");
+
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            else
+            {
+                return View(user);
+            }
         }
 
         public ActionResult Register()
