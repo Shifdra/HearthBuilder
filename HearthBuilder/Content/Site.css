@@ -210,7 +210,7 @@ input{
     color: #251d18;
 }
 
-.buildDeck .cardRow {
+.deckList .cardRow {
     position: relative;
     display:block;
     height: 35px;
@@ -218,18 +218,18 @@ input{
     cursor: pointer;
 }
 
-.buildDeck .cardRow:hover .delCard{
+.deckList .cardRow:hover .delCard{
     visibility: visible;
 }
 
-.buildDeck .deckList .cardFrame {
+.deckList .cardFrame {
     background: url('/Content/Images/deck/frame.png') no-repeat;
     height: 35px;
     width: 218px;
     position: absolute;
 }
 
-.buildDeck .deckList .card {
+.deckList .card {
     height: 34px;
     width: 134px;
     top: 0;
@@ -237,7 +237,7 @@ input{
     position: absolute;
 }
 
-.buildDeck .deckList .cardName {
+.deckList .cardName {
     position:absolute;
     text-shadow: 1px 1px 0 #000,1px 0 0 #000,1px -1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 1px 0 #000,-1px 0 0 #000,-1px -1px 0 #000;
     font-weight: 400;
@@ -248,7 +248,7 @@ input{
     left: 35px;
 }
 
-.buildDeck .deckList .cardCost {
+.deckList .cardCost {
     position:absolute;
     text-shadow: 1px 1px 0 #000,1px 0 0 #000,1px -1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 1px 0 #000,-1px 0 0 #000,-1px -1px 0 #000;
     font-weight: 400;
@@ -259,7 +259,7 @@ input{
     left: 12px;
 }
 
-.buildDeck .deckList .delCard {
+.deckList .delCard {
     visibility:hidden;
     text-shadow: 1px 1px 0 #000,1px 0 0 #000,1px -1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 1px 0 #000,-1px 0 0 #000,-1px -1px 0 #000;
     font-weight: 400;
@@ -274,14 +274,14 @@ input{
     text-align: center;
 }
 
-.buildDeck .deckList .delCard i {
+.deckList .delCard i {
     font-size: 1em;
     top: 4px;
     right: 10px;
     color: red;
 }
 
-.buildDeck .deckList .duplicate {
+.deckList .duplicate {
     position: absolute;
     top: 1px;
     right: 3px;
@@ -303,4 +303,9 @@ input{
 
 .buildDeck .col-offset-262 {
     padding-left: 280px;
+}
+
+.browseDeck .deckList {
+    width: 230px;
+    display: inline-block;
 }
