@@ -4,30 +4,25 @@ using System.Linq;
 using System.Web;
 using HearthDb.CardDefs;
 using HearthDb.Enums;
+using HearthBuilder.Models.Cards;
 
-namespace HearthBuilder.Models
+namespace HearthBuilder.Models.Decks
 {
     public class Deck
     {
+        public int Id { get; private set; }
         public List<Card> Cards { get; private set; }
         public PlayerClass Class { get; private set; }
         public string ClassStr { get { return char.ToUpper(Class.ToString().ToLower()[0]) + Class.ToString().ToLower().Substring(1); } } //converts "CLASS" to "Class"
         public string Title { get; set; }
+        public int Likes { get; set; }
 
-        public Deck(PlayerClass pClass)
+        public Deck(int id, PlayerClass pClass)
         {
+            Id = id;
             Cards = new List<Card>();
             Class = pClass;
             Title = "";
-        }
-
-        public Deck(List<Card> cards, PlayerClass pClass, string title)
-        {
-            Cards = cards;
-            Class = pClass;
-            Title = title;
-
-            SortCards(); //sort them
         }
 
         public void AddCard(Card card)
@@ -84,10 +79,9 @@ namespace HearthBuilder.Models
 
         private void SortCards()
         {
-            //sort alphabetically
-            Cards.Sort((x, y) => string.Compare(x.Name, y.Name));
-            //then, we want to order the cards by mana Cost
-            Cards.Sort((x, y) => x.Cost.CompareTo(y.Cost));
+            //sort Alphabetically by Name, then by Cost
+            List<Card> tmpCards = Cards.OrderBy(x => x.Cost).ThenBy(x => x.Name).ToList();
+            Cards = tmpCards;
         }
         
     }

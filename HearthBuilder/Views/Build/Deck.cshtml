@@ -12,7 +12,7 @@
 <div data-ng-controller="BuildController" data-ng-init="init()" class="buildDeck">
     <script>
         var myapp = angular.module('myapp', ['ngSanitize']);
-        myapp.controller("BuildController", function ($scope, $http, $compile) {
+        myapp.controller("BuildController", function ($scope, $http, $compile, $timeout) {
 
             // in controller
 
@@ -49,11 +49,12 @@
                         //alert("Ajax msg:" + result.Message);
 
                         if (result.Result == '1'){
-                            //we added a card, lets update the Deck List
+                            $scope.showNotification("Success!", "Card Added.", "alert-success");
                             $scope.refreshDeck();
                         }
                         else {
-                            alert("Error: " + result.Message);
+                            $scope.showNotification("Error!", result.Message, "alert-danger");
+                            //alert("Error: " + result.Message);
                         }
                     });
 
@@ -70,14 +71,13 @@
 
                 responsePromise.success(function(data, status, headers, config) {
                     angular.forEach(data, function (result){
-                        //alert("Ajax msg:" + result.Message);
-
                         if (result.Result == '1'){
                             //we added a card, lets update the Deck List
+                            $scope.showNotification("Success!", "Card Removed.", "alert-success");
                             $scope.refreshDeck();
                         }
                         else {
-                            alert("Error: " + result.Message);
+                            $scope.showNotification("Error!", "Card couldn't be removed!? " + result.Message, "alert-danger");
                         }
                     });
 
@@ -87,13 +87,14 @@
                 });
             }
 
+            $scope.txtDeckName = "@(((Deck)Session["deck"]).Title)";
             $scope.saveDeckClick = function() {
 
-                var responsePromise = $http.get("/Build/SaveDeck/");
+                var responsePromise = $http.get("/Build/SaveDeck/"+$scope.txtDeckName);
                 responsePromise.success(function(data, status, headers, config) {
                     angular.forEach(data, function (result){
                         if (result.Result == '1'){
-                            $scope.showNotification("Success!", "Deck Saved.", "alert-success");
+                            $scope.showNotification("Success!", result.Message, "alert-success");
                             //we saved the deck successfully
                             $scope.refreshDeck();
                         }
@@ -108,7 +109,7 @@
                 });
             }
 
-
+            $scope.cardCount = 0;
             $scope.refreshDeck = function() {
                 var results = "";
                 var responsePromise = $http.get("/Build/ListDeck/");
@@ -144,6 +145,9 @@
                     var generated = element.html(results);
                     $compile(generated.contents())($scope);
 
+
+                    $scope.cardCount = count;
+
                 });
                 responsePromise.error(function(data, status, headers, config) {
                     alert("AJAX failed!" + data.Message);
@@ -170,13 +174,23 @@
                 $compile(generated.contents())($scope);
             }
 
+            $scope.showNotificationTimeout = {};
+
             $scope.showNotification = function (title, msg, type) {
-                
-                var alert = '<div class="alert '+type+' alert-dismissible fade in" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button> <strong>'+title+'</strong> '+msg+'</div>';
+
+                var alert = '<div ng-show="showNotificationMessage" class="notificationAlert alert '+type+' alert-dismissible" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button> <strong>'+title+'</strong> '+msg+'</div>';
 
                 var element = angular.element(document.querySelector('#notificationBlock'));
                 var generated = element.html(alert);
                 $compile(generated.contents())($scope);
+
+                $scope.showNotificationMessage = true;
+
+                $timeout.cancel($scope.showNotificationTimeout); //cancel the previous timeout, weve got a new notification to show
+
+                $scope.showNotificationTimeout = $timeout(function() {
+                    $scope.showNotificationMessage = false;
+                }, 5000);
             }
         } );
     </script>
@@ -201,10 +215,13 @@
             <div class="col-fixed-262">
                 <div class="deckOptions"><button ng-click='saveDeckClick()' class="btn btn-primary btn-lg">Save</button> <a href="/Build/ConfirmDeleteDeck/" class="btn btn-danger btn-lg">Discard</a></div>
                 <div id="overview" class="panel panel-default">
-                    <div class="panel-heading"><input type="text" name="input" ng-model="txtDeckName.text" ng-trim="true" placeholder="Deck Name" class="txtDeckName" value="@(((Deck)Session["deck"]).Title)" /></div>
+                    <div class="panel-heading"><input type="text" name="input" ng-model="txtDeckName" ng-trim="true" placeholder="Deck Name" class="txtDeckName" /></div>
                     <div class="panel-body">
                         <div class="deckList">
 
+                        </div>
+                        <div class="cardCount">
+                            <span>({{cardCount}}/30) Cards</span>
                         </div>
                     </div>
                 </div>

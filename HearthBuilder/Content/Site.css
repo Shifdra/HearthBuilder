@@ -29,6 +29,12 @@ input{
     color: #000;
 }
 
+.borderlessInput {
+    border: none;
+    background-color: transparent;
+    font-family: inherit;
+    font-size: inherit;
+}
 
 .navbar-default {
 	background-color: #251d18;
@@ -68,14 +74,18 @@ input{
     border-color: #BFA880; /* #C5AD83 #BFA880 #AD9B78 */
 }
 
-.panel {
+.panel, .modal-content {
     margin-bottom: 20px;
     background-color: #f4e5c6;
     border-radius: 4px;
     box-shadow: 0 0 5px rgba(0,0,0,0.1);
 }
 
-.panel-default > .panel-heading {
+.modal-dialog .modal-header {
+    padding: 0;
+}
+
+.panel-default > .panel-heading, .modal-dialog .modal-title {
     font-size: 1.8em;
     text-align: center;
     text-shadow: 1px 1px 0 #000,1px 0 0 #000,1px -1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 1px 0 #000,-1px 0 0 #000,-1px -1px 0 #000;
@@ -88,12 +98,20 @@ input{
 
 
 
+
 /* Alert boxes */
 .alert {
     margin-bottom: 0px;
 }
 .alert:last-child {
     margin-bottom: 20px;
+}
+
+.notificationAlert {
+    position: fixed;
+    top: 60px;
+    left:40%;
+    z-index:10;
 }
 
 .pickClass {
@@ -165,6 +183,14 @@ input{
 
 }
 
+.buildDeck .cardCount {
+    font-weight: 400;
+    font-size:1.2em;
+    color: #7e6b51;
+    font-family: belwe;
+    text-align:center;
+}
+
 .buildDeck .deckOptions {
     text-align:center;
     padding: 12px;
@@ -181,6 +207,7 @@ input{
 
 .buildDeck .txtDeckName {
     width: 100%;
+    color: #251d18;
 }
 
 .buildDeck .cardRow {

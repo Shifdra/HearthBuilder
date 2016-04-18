@@ -5,7 +5,7 @@ using System.Web;
 using HearthDb.CardDefs;
 using HearthDb.Enums;
 
-namespace HearthBuilder.Models
+namespace HearthBuilder.Models.Cards
 {
     public class Card
     {
