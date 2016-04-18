@@ -8,21 +8,28 @@ namespace HearthBuilder.Controllers
     public class AccountController : Controller
     {
         UserDAO userDAO = new UserDAO();
-        //
-        // GET: /Account/
+
+        //view login page on first visit
         public ActionResult Index()
         {
-            //login page
-            User user = userDAO.GetAccountByEmail("trevor166933@hotmail.com");
+            return View();
+        }
 
-            if (user == null)
+        [HttpPost]
+        public ActionResult Index(User user)
+        {
+            /*if (ModelState.IsValid)
             {
-                return HttpNotFound();
-            }
-            else
-            {
-                return View(user);
-            }
+                if (users.userName == "NAAM" && users.userPassword == "WACHTWOORD")
+                {
+                    FormsAuthentication.SetAuthCookie(users.userName, false);
+                    return RedirectToAction("", "Home");
+                }
+                {
+                    ModelState.AddModelError("", "Invalid username and/or password");
+                }
+            }*/
+            return View();
         }
 
         public ActionResult Register()

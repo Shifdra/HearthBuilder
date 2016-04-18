@@ -1719,6 +1719,10 @@
     <Content Include="fonts\belwebd-webfont.eot" />
     <Content Include="fonts\belwebd-webfont.ttf" />
     <Content Include="fonts\belwebd-webfont.woff" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
@@ -1748,6 +1752,7 @@
     </Compile>
     <Compile Include="Models\Account\User.cs" />
     <Compile Include="Models\Account\UserDAO.cs" />
+    <Compile Include="Models\Account\UserSession.cs" />
     <Compile Include="Models\Card.cs" />
     <Compile Include="Models\CardCollection.cs" />
     <Compile Include="Models\Deck.cs" />

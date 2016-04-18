@@ -8,6 +8,8 @@ namespace HearthBuilder.Models.Account
     public class UserDAO
     {
         private MySqlConnection connection;
+        private MySqlCommand cmd;
+        private MySqlDataReader reader;
 
         public UserDAO() { }
 
@@ -18,18 +20,17 @@ namespace HearthBuilder.Models.Account
             connection.Open();
         }
 
-        public User GetAccountByEmail(String email)
+        public User GetAccountByEmailAndPassword(String email, String password)
         {
             User user = new User();
 
             try
             {
                 GetConnection();
-
-                MySqlCommand cmd = new MySqlCommand();
+                cmd = new MySqlCommand();
                 cmd.Connection = connection;
-                cmd.CommandText = string.Format("SELECT * FROM account WHERE email = '{0}'", email);
-                MySqlDataReader reader = cmd.ExecuteReader();
+                cmd.CommandText = string.Format("SELECT * FROM account WHERE email = '{0}' AND password = '{1}'", email, password);
+                reader = cmd.ExecuteReader();
 
                 if (reader.Read())
                 {
@@ -40,18 +41,14 @@ namespace HearthBuilder.Models.Account
                     user.Email = reader.GetString("email");
                     user.Password = reader.GetString("password");
                 }
-                else
-                {
-                    //did not return anything
-                }
-                reader.Close();
-                connection.Close();
             }
             catch (MySqlException e)
             {
                 System.Diagnostics.Debug.WriteLine(e.Message);
             }
 
+            reader.Close();
+            connection.Close();
             return user;
         }
     }

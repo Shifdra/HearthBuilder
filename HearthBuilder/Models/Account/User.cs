@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 using System.ComponentModel.DataAnnotations;
 
-namespace HearthBuilder.Models
+namespace HearthBuilder.Models.Account
 {
     public class User
     {
@@ -9,11 +12,11 @@ namespace HearthBuilder.Models
         public String Fname { get; set; }
         public String Lname { get; set; }
 
-        [Required]
-        [Display(Name = "Email")]
+        [Required(ErrorMessage = "An email is required.")]
+        [RegularExpression(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$", ErrorMessage = "Invalid email address.")]
         public String Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "A password is required.")]
         [DataType(DataType.Password)]
         public String Password { get; set; }
 

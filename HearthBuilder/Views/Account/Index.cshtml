@@ -1,9 +1,33 @@
-﻿
+﻿@model HearthBuilder.Models.Account.User
+
 @{
     ViewBag.Title = "Login";
 }
 
-<h1>Login</h1>
+<div class="container">
+    <h1>Login</h1>
 
-@Html.ActionLink("About this Website", "About");
-
+    @using (Html.BeginForm())
+    {
+        <div class="row">
+            <div class="col-xs-offset-4 col-xs-4">
+                <fieldset>
+                    @Html.ValidationSummary(true)
+                    <div class="input-group">
+                        @Html.LabelFor(model => model.Email)
+                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Email)
+                    </div>
+                    <div class="input-group">
+                        @Html.LabelFor(model => model.Password)
+                        @Html.TextBoxFor(model => model.Password, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Password)
+                    </div>
+                    <div>
+                        <input type="submit" value="Login" class="btn btn-outline btn-primary btn-lg btn-block" />
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    }
+</div>
