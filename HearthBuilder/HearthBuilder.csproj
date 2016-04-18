@@ -1742,21 +1742,21 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BrowseController.cs" />
-    <Compile Include="Controllers\BuildController.cs" />
+    <Compile Include="Controllers\DeckController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Account\User.cs" />
     <Compile Include="Models\Account\UserDAO.cs" />
-    <Compile Include="Models\Card.cs" />
-    <Compile Include="Models\CardCollection.cs" />
-    <Compile Include="Models\Deck.cs" />
-    <Compile Include="Models\Exceptions\DeckException.cs" />
-    <Compile Include="Models\ImageActionLinkHelper.cs" />
-    <Compile Include="Models\NotificationType.cs" />
-    <Compile Include="Models\Notification.cs" />
-    <Compile Include="Models\PlayerClasses.cs" />
+    <Compile Include="Models\Cards\Card.cs" />
+    <Compile Include="Models\Cards\CardCollection.cs" />
+    <Compile Include="Models\Decks\Deck.cs" />
+    <Compile Include="Models\Decks\DeckDAO.cs" />
+    <Compile Include="Models\Decks\DeckException.cs" />
+    <Compile Include="Models\Notifications\NotificationType.cs" />
+    <Compile Include="Models\Notifications\Notification.cs" />
+    <Compile Include="Models\Cards\PlayerClasses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1765,7 +1765,10 @@
     <Content Include="Views\Shared\_LoginHeaderPartial.cshtml" />
     <Content Include="Views\Browse\CardName.cshtml" />
     <Content Include="Views\Browse\CardId.cshtml" />
-    <Content Include="Views\Build\ConfirmDeleteDeck.cshtml" />
+    <Content Include="Views\Deck\ConfirmDeleteDeck.cshtml" />
+    <Content Include="Views\Deck\New.cshtml" />
+    <Content Include="Views\Deck\Index.cshtml" />
+    <Content Include="Views\Deck\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

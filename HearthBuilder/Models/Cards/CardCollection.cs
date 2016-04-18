@@ -4,15 +4,15 @@ using System.Linq;
 using System.Web;
 using Newtonsoft.Json;
 
-namespace HearthBuilder.Models
+namespace HearthBuilder.Models.Cards
 {
     //Singleton Deign
-    public sealed class Cards
+    public sealed class CardCollection
     {
-        private static volatile Cards instance;
+        private static volatile CardCollection instance;
         private static object syncRoot = new Object();
 
-        public static Cards Instance 
+        public static CardCollection Instance 
         {
             get 
             {
@@ -20,7 +20,7 @@ namespace HearthBuilder.Models
                 {
                     if (instance == null)
                     {
-                        instance = new Cards();
+                        instance = new CardCollection();
                     }
                 }
                 return instance;
@@ -29,7 +29,7 @@ namespace HearthBuilder.Models
 
         public List<Card> AllCards { get; private set; }
 
-        private Cards()
+        private CardCollection()
         {
             //import the data from the db, 
             Dictionary<string, HearthDb.Card> dbCards = HearthDb.Cards.Collectible;

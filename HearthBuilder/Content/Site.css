@@ -29,6 +29,12 @@ input{
     color: #000;
 }
 
+.borderlessInput {
+    border: none;
+    background-color: transparent;
+    font-family: inherit;
+    font-size: inherit;
+}
 
 .navbar-default {
 	background-color: #251d18;
@@ -197,6 +203,7 @@ input{
 
 .buildDeck .txtDeckName {
     width: 100%;
+    color: #251d18;
 }
 
 .buildDeck .cardRow {

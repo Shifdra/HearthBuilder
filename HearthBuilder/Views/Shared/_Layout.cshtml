@@ -1,4 +1,4 @@
-﻿@using HearthBuilder.Models
+﻿@using HearthBuilder.Models.Notifications
 
 <!DOCTYPE html>
 <html>
@@ -12,8 +12,9 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-touch.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-sanitize.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 </head>
 <body ng-app="myapp">
     <div class="navbar navbar-default navbar-fixed-top">
@@ -30,7 +31,7 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("Browse Decks", "Index", "Browse")</li>
-                    <li>@Html.ActionLink("Build a Deck", "Index", "Build")</li>
+                    <li>@Html.ActionLink("Build a Deck", "Index", "Deck")</li>
                 </ul>
                 @Html.Partial("_LoginHeaderPartial") <!-- This will include the login view-->
             </div>

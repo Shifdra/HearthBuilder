@@ -1,29 +1,27 @@
-﻿@using HearthBuilder.Models
+﻿@using HearthBuilder.Models.Cards
+@using HearthBuilder.Models.Decks
+@using HearthBuilder.Models.Notifications
 @using System.Web.Optimization
 @{
-    ViewBag.Title = "Build a " + ViewData["class"] + " Deck";
-
-    List<Card> allCards = Cards.Instance.AllCards;
-
-    PlayerClass pClass = ((Deck)Session["deck"]).Class; //(PlayerClass)Enum.Parse(typeof(PlayerClass), (string)ViewData["class"], true);
+    
+    ViewBag.Title = "Edit a " + ((Deck)Session["deck"]).ClassStr + " Deck";
     
 }
 
-<div data-ng-controller="BuildController" data-ng-init="init()" class="buildDeck">
+<div data-ng-controller="EditController" data-ng-init="init()" class="buildDeck">
     <script>
         var myapp = angular.module('myapp', ['ngSanitize']);
-        myapp.controller("BuildController", function ($scope, $http, $compile, $timeout) {
+        myapp.controller("EditController", function ($scope, $http, $compile, $timeout) {
 
             // in controller
 
-            $scope.txtSearch = {
-                text: '',
-                class: '@ViewData["className"]'
-            };
+            $scope.txtSearch = "";
+            $scope.txtDeckName = "@(((Deck)Session["deck"]).Title)";
+            $scope.playerClass = @((int)((Deck)Session["deck"]).Class);
             $scope.cardData = {};
 
             $scope.init = function () {
-                var responsePromise = $http.get("/Build/ListCards/");
+                var responsePromise = $http.get("/Deck/ListCards/");
 
                 responsePromise.success(function (data, status, headers, config) {
                     $scope.cardData = data;
@@ -32,7 +30,7 @@
                     //alert(data);
                 });
                 responsePromise.error(function (data, status, headers, config) {
-                    alert("AJAX failed!");
+                    alert("AJAX failed! init");
                 });
                 // check if there is query in url
                 // and fire search in case its value is not empty
@@ -41,7 +39,7 @@
             $scope.addCardClick = function(item) {
 
                 var id = item.currentTarget.getAttribute("data-id");
-                var responsePromise = $http.get("/Build/AddCard/"+id+"/");
+                var responsePromise = $http.get("/Deck/AddCard/"+id+"/");
 
                 responsePromise.success(function(data, status, headers, config) {
                     //$scope.myData.fromServer = data.message;
@@ -60,14 +58,14 @@
 
                 });
                 responsePromise.error(function(data, status, headers, config) {
-                    alert("AJAX failed!" + data.Message);
+                    alert("AJAX failed! add" + data.Message);
                 });
             }
 
             $scope.delCardClick = function(item) {
 
                 var id = item.currentTarget.getAttribute("data-id");
-                var responsePromise = $http.get("/Build/RemoveCard/"+id+"/");
+                var responsePromise = $http.get("/Deck/RemoveCard/"+id+"/");
 
                 responsePromise.success(function(data, status, headers, config) {
                     angular.forEach(data, function (result){
@@ -83,14 +81,15 @@
 
                 });
                 responsePromise.error(function(data, status, headers, config) {
-                    alert("AJAX failed!" + data.Message);
+                    alert("AJAX failed! del" + data.Message);
                 });
             }
 
-            $scope.txtDeckName = "@(((Deck)Session["deck"]).Title)";
+
             $scope.saveDeckClick = function() {
 
-                var responsePromise = $http.get("/Build/SaveDeck/"+$scope.txtDeckName);
+                $scope.showNotification("Saving to DB...", "", "alert-warning");
+                var responsePromise = $http.get("/Deck/SaveDeck/"+$scope.txtDeckName);
                 responsePromise.success(function(data, status, headers, config) {
                     angular.forEach(data, function (result){
                         if (result.Result == '1'){
@@ -105,14 +104,14 @@
 
                 });
                 responsePromise.error(function(data, status, headers, config) {
-                    alert("AJAX failed!" + data.Message);
+                    alert("AJAX failed! del" + data.Message);
                 });
             }
 
             $scope.cardCount = 0;
             $scope.refreshDeck = function() {
                 var results = "";
-                var responsePromise = $http.get("/Build/ListDeck/");
+                var responsePromise = $http.get("/Deck/ListDeck/");
                 responsePromise.success(function(data, status, headers, config) {
                     //$scope.myData.fromServer = data.message;
                     var count = 0;
@@ -150,7 +149,7 @@
 
                 });
                 responsePromise.error(function(data, status, headers, config) {
-                    alert("AJAX failed!" + data.Message);
+                    alert("AJAX failed! refresh" + data.Message);
                 });
             }
 
@@ -158,12 +157,12 @@
 
                 var results = "";
 
-                console.log("Search: " + $scope.txtSearch.text);
+                console.log("Search: " + $scope.txtSearch);
                 angular.forEach($scope.cardData, function (card) { //loop through every card
                     $scope.cardData.curCard = card; //assign the current card to the scope
                     //console.log($scope.cardData.curCard);
-                    if ($scope.cardData.curCard.Class == @((int)pClass) || $scope.cardData.curCard.Class == 0){ //filter by current class, and non-class
-                        if ($scope.cardData.curCard.Name.toLowerCase().indexOf($scope.txtSearch.text) > -1) { //filter by textbox
+                    if ($scope.cardData.curCard.Class == $scope.playerClass || $scope.cardData.curCard.Class == 0){ //filter by current class, and non-class
+                        if ($scope.cardData.curCard.Name.toLowerCase().indexOf($scope.txtSearch) > -1) { //filter by textbox
                             results += '<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"><img alt="tacos" ng-click="addCardClick($event)" data-id="' + $scope.cardData.curCard.Id + '" src="' + $scope.cardData.curCard.Url + '" /></div>';
                         }
                     }
@@ -202,9 +201,9 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12 col-offset-262">
-                <h1>Building a @ViewData["className"] Deck</h1>
+                <h1>Editing a @(((Deck)Session["deck"]).ClassStr) Deck</h1>
                 <div id="overview" class="panel panel-default">
-                    <div class="panel-heading">Search for Cards: <input autofocus type="text" name="input" ng-model="txtSearch.text" ng-change="filterCards()" ng-trim="true" placeholder="Card Names" /> </div>
+                    <div class="panel-heading">Search for Cards: <input autofocus type="text" name="input" ng-model="txtSearch" ng-change="filterCards()" ng-trim="true" placeholder="Card Names" /> </div>
                     <div class="panel-body">
                         <div class="row selectCard">
 
@@ -213,7 +212,7 @@
                 </div>
             </div>
             <div class="col-fixed-262">
-                <div class="deckOptions"><button ng-click='saveDeckClick()' class="btn btn-primary btn-lg">Save</button> <a href="/Build/ConfirmDeleteDeck/" class="btn btn-danger btn-lg">Discard</a></div>
+                <div class="deckOptions"><button ng-click='saveDeckClick()' class="btn btn-primary btn-lg">Save</button> <a href="/Deck/ConfirmDeleteDeck/" class="btn btn-danger btn-lg">Delete</a></div>
                 <div id="overview" class="panel panel-default">
                     <div class="panel-heading"><input type="text" name="input" ng-model="txtDeckName" ng-trim="true" placeholder="Deck Name" class="txtDeckName" /></div>
                     <div class="panel-body">

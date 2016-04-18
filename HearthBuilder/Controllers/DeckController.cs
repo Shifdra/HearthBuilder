@@ -1,69 +1,77 @@
-﻿using System;
+﻿using HearthBuilder.Models;
+using HearthBuilder.Models.Cards;
+using HearthBuilder.Models.Decks;
+using HearthBuilder.Models.Notifications;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using HearthBuilder.Models;
-using Newtonsoft.Json;
 
 namespace HearthBuilder.Controllers
 {
-    public class BuildController : Controller
+    public class DeckController : Controller
     {
-        //
-        // GET: /Build/
-        public ActionResult Index() //this will be select a class
+        // GET: Deck
+        public ActionResult Index() //selecting a new class
         {
-            if (Session["deck"] != null) //if they have a deck already, send them there
-            {
-                Deck deck = (Deck)Session["deck"];
-                
-
-                return RedirectToAction("Deck", new { id = deck.ClassStr });
-            }
-
             return View();
         }
 
-        public ActionResult Deck(string id) //this will be actually building the deck 
+        public ActionResult New(string id) //generating a new deck from the db
         {
             //check to ensure we have a valid action
-            if (id != "Druid" && id != "Hunter" && id != "Mage" && id != "Paladin" && id != "Priest" && id != "Rogue" && id != "Shaman" && id != "Warlock" && id != "Warrior") {
-                if (Session["notifications"] != null)
-                    ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "You must select a class!", NotificationType.ERROR));
-                else
-                {
-                    List<Notification> notifications = new List<Notification>();
-                    notifications.Add(new Notification("Error!", "You must select a class!", NotificationType.ERROR));
-                    Session["notifications"] = notifications;
-                }
-
-                return RedirectToAction("Index", "Build");
-            }
-
-            PlayerClass pClass = (PlayerClass)Enum.Parse(typeof(PlayerClass), id, true);
-
-            //see if we are resuming an old deck
-            if (Session["deck"] == null)
+            if (id != "Druid" && id != "Hunter" && id != "Mage" && id != "Paladin" && id != "Priest" && id != "Rogue" && id != "Shaman" && id != "Warlock" && id != "Warrior")
             {
-                Session["deck"] = new Deck(pClass);
+                if (Session["notifications"] == null)
+                    Session["notifications"] = new List<Notification>();
+
+                ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "You must select a class!", NotificationType.ERROR));
+                
+                return RedirectToAction("Index", "Deck");
             }
 
+            //generating a new deck from the db
+            Deck deck = DeckDAO.Instance.CreateNewDeck(id.ToUpper());
 
-            ViewData["className"] = id;
+            //redirect them to the edit deck page
+            return RedirectToAction("Edit", new { id = deck.Id });
+        }
+
+        public ActionResult Edit(int id = 0) //editing a current deck
+        {
+            if (Session["notifications"] == null)
+                Session["notifications"] = new List<Notification>();
             
+            //try to pull the deck via ID from the DB
+            Deck deck = DeckDAO.Instance.GetDeckById(id);
+
+            if (deck == null)
+            {
+                ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "Couldn't edit a deck that doesn't exist!", NotificationType.ERROR));
+                return Redirect("/");
+            }
+
+            Session["deck"] = deck; //save the deck to the session
+
             return View();
         }
 
         public string ListCards()
         {
-            return JsonConvert.SerializeObject(Cards.Instance.AllCards);
+            return JsonConvert.SerializeObject(CardCollection.Instance.AllCards);
+        }
+
+        public string ListDeck()
+        {
+            return JsonConvert.SerializeObject((Deck)Session["deck"]);
         }
 
         public ActionResult AddCard(string id)
         {
             var result = new List<object>();
-            
+
             if (Session["deck"] == null)
             {
                 //somethings wrong, there should be a deck here...
@@ -74,7 +82,7 @@ namespace HearthBuilder.Controllers
                 try
                 {
                     Deck deck = (Deck)Session["deck"];
-                    deck.AddCard(Cards.Instance.getById(id));
+                    deck.AddCard(CardCollection.Instance.getById(id));
                     Session["deck"] = deck;
                     result.Add(new { Result = "1", Message = "Added card to Deck" });
                 }
@@ -102,7 +110,7 @@ namespace HearthBuilder.Controllers
                 try
                 {
                     Deck deck = (Deck)Session["deck"];
-                    deck.RemoveCard(Cards.Instance.getById(id));
+                    deck.RemoveCard(CardCollection.Instance.getById(id));
                     Session["deck"] = deck;
                     result.Add(new { Result = "1", Message = "Card removed from deck!" });
                 }
@@ -116,12 +124,7 @@ namespace HearthBuilder.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public string ListDeck()
-        {
-            return JsonConvert.SerializeObject((Deck)Session["deck"]);
-        }
-
-        public ActionResult SaveDeck()
+        public ActionResult SaveDeck(string id)
         {
             var result = new List<object>();
 
@@ -132,19 +135,21 @@ namespace HearthBuilder.Controllers
             }
             else
             {
-                try
-                {
-                    Deck deck = (Deck)Session["deck"];
-                    //save the deck
-                    Session["deck"] = deck;
+                Deck deck = (Deck)Session["deck"];
+                //add the new title
+                deck.Title = id;
+                Session["deck"] = deck; //update the session
+
+                //save the deck
+                //generating a new deck from the db
+                DeckDAO.Instance.UpdateDeck(deck);
+
+                if (deck != null)
                     result.Add(new { Result = "1", Message = "Saved deck!" });
-                }
-                catch (Exception e)
-                {
-                    result.Add(new { Result = "0", Message = e.Message, StackTrace = e.StackTrace.ToString() });
-                }
+                else 
+                    result.Add(new { Result = "0", Message = "Couldn't save deck!?" });
             }
-            
+
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -180,7 +185,7 @@ namespace HearthBuilder.Controllers
                 Session["notifications"] = notifications;
             }
 
-            
+
 
             return Redirect("/Build/");
         }
