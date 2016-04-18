@@ -76,7 +76,7 @@
                     });
                 }
 
-                $scope.saveDeckClick = function() {
+                $scope.saveDeck = function() {
                     $scope.showNotification("Saving to DB...", "", "alert-warning");
                     var responsePromise = $http.post("/Deck/SaveDeck/", { id : $scope.txtDeckName });
                     responsePromise.success(function(data, status, headers, config) {
@@ -95,6 +95,37 @@
                     responsePromise.error(function(data, status, headers, config) {
                         alert("AJAX failed! del" + data.Message);
                     });
+                }
+
+                $scope.saveDeckClick = function() {
+                    if ($scope.cardCount < 30) { //is this deck not finished?
+                        var modalInstance = $uibModal.open({
+                            templateUrl: '/Content/ModalConfirm.html',
+                            size: 'sm',
+                            scope: $scope,
+                            resolve: {
+                                message: function () {
+                                    return "This deck is not yet finished (requires a total of 30 cards). Would you like to save anyways?";
+                                },
+                                title: function () {
+                                    return "Save Deck";
+                                }
+                            },
+                            controller:function($uibModalInstance, $scope, message, title){
+                                $scope.promptMessage = message;
+                                $scope.promptTitle = title;
+                                $scope.ok = function () {
+                                    $scope.saveDeck();
+                                    $uibModalInstance.dismiss('cancel');
+                                }
+                                $scope.cancel = function () {
+                                    $uibModalInstance.dismiss('cancel');
+                                };
+                            },
+                        });
+                    } else { //it is, save it
+                        $scope.saveDeck();
+                    }
                 }
 
                 $scope.cardCount = 0;
@@ -175,6 +206,7 @@
                     var modalInstance = $uibModal.open({
                         templateUrl: '/Content/ModalConfirm.html',
                         size: 'sm',
+                        scope: $scope,
                         resolve: {
                             message: function () {
                                 return "Are you sure you want to delete this deck? This cannot be undone!";
@@ -188,19 +220,19 @@
                             $scope.promptTitle = title;
                             $scope.ok = function () {
                                 console.log("Deleting deck...");
-                                //$scope.showNotification("Deleting deck...", "", "alert-warning");
+                                $scope.showNotification("Deleting deck...", "", "alert-warning");
                                 $uibModalInstance.dismiss('cancel');
                                 var responsePromise = $http.post("/Deck/DeleteDeck/");
                                 responsePromise.success(function(data, status, headers, config) {
                                     angular.forEach(data, function (result){
                                         if (result.Result == '1'){
                                             console.log("Deck Removed.");
-                                            //$scope.showNotification("Success!", "Deck Removed.", "alert-success");
+                                            $scope.showNotification("Success!", "Deck Removed.", "alert-success");
                                             $window.location.href = '/';
                                         }
                                         else {
                                             console.log("Deck couldn't be removed!? "  + result.Message);
-                                            //$scope.showNotification("Error!", "Deck couldn't be removed!? " + result.Message, "alert-danger");
+                                            $scope.showNotification("Error!", "Deck couldn't be removed!? " + result.Message, "alert-danger");
                                         }
                                     });
                                 });
