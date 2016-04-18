@@ -2,6 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace HearthBuilder.Models.Account
 {
@@ -11,25 +14,46 @@ namespace HearthBuilder.Models.Account
         private MySqlCommand cmd;
         private MySqlDataReader reader;
 
-        public UserDAO() { }
+        private static UserDAO instance;
+        private static object syncRoot = new Object();
 
-        private void GetConnection()
+        private UserDAO()
         {
             connection = new MySqlConnection();
             connection.ConnectionString = ConfigurationManager.ConnectionStrings["MySQLConnection"].ConnectionString;
-            connection.Open();
         }
 
-        public User GetAccountByEmailAndPassword(String email, String password)
+        public static UserDAO Instance
         {
-            User user = new User();
+            get
+            {
+                lock (syncRoot)
+                {
+                    if (instance == null)
+                    {
+                        instance = new UserDAO();
+                    }
+                }
+                return instance;
+            }
+        }
+
+        static string Hash(string input)
+        {
+            var hash = (new SHA1Managed()).ComputeHash(Encoding.UTF8.GetBytes(input));
+            return string.Join("", hash.Select(b => b.ToString("x2")).ToArray());
+        }
+
+        public User GetAccountByEmailAndPassword(User user)
+        {
+            String passHash = Hash(user.Email + ":" + user.Password);
 
             try
             {
-                GetConnection();
-                cmd = new MySqlCommand();
-                cmd.Connection = connection;
-                cmd.CommandText = string.Format("SELECT * FROM account WHERE email = '{0}' AND password = '{1}'", email, password);
+                connection.Open();
+                cmd = new MySqlCommand("SELECT * FROM account WHERE email = @email AND password = @passHash", connection);
+                cmd.Parameters.AddWithValue("@email", user.Email);
+                cmd.Parameters.AddWithValue("@passHash", passHash);
                 reader = cmd.ExecuteReader();
 
                 if (reader.Read())
@@ -41,6 +65,10 @@ namespace HearthBuilder.Models.Account
                     user.Email = reader.GetString("email");
                     user.Password = reader.GetString("password");
                 }
+                else
+                {
+                    return null;
+                }
             }
             catch (MySqlException e)
             {
@@ -48,6 +76,29 @@ namespace HearthBuilder.Models.Account
             }
 
             reader.Close();
+            connection.Close();
+            return user;
+        }
+
+        public User RegisterUser(User user)
+        {
+            String passHash = Hash(user.Email + ":" + user.Password);
+
+            try
+            {
+                connection.Open();
+                cmd = new MySqlCommand("INSERT INTO account (first_name, last_name, email, password) VALUES (@fname, @lname, @email, @passHash)", connection);
+                cmd.Parameters.AddWithValue("@fname", user.Fname);
+                cmd.Parameters.AddWithValue("@lname", user.Lname);
+                cmd.Parameters.AddWithValue("@email", user.Email);
+                cmd.Parameters.AddWithValue("@passHash", passHash);
+                cmd.ExecuteNonQuery();
+            }
+            catch (MySqlException e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+            }
+
             connection.Close();
             return user;
         }

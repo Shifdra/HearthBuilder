@@ -7,7 +7,9 @@ namespace HearthBuilder.Controllers
 {
     public class AccountController : Controller
     {
-        UserDAO userDAO = new UserDAO();
+        UserDAO userDAO = UserDAO.Instance;
+        UserSession userSession = new UserSession();
+
 
         //view login page on first visit
         public ActionResult Index()
@@ -18,24 +20,28 @@ namespace HearthBuilder.Controllers
         [HttpPost]
         public ActionResult Index(User user)
         {
-            /*if (ModelState.IsValid)
-            {
-                if (users.userName == "NAAM" && users.userPassword == "WACHTWOORD")
-                {
-                    FormsAuthentication.SetAuthCookie(users.userName, false);
-                    return RedirectToAction("", "Home");
-                }
-                {
-                    ModelState.AddModelError("", "Invalid username and/or password");
-                }
-            }*/
-            return View();
+            User userLogin = userDAO.GetAccountByEmailAndPassword(user);
+            if (userLogin != null)
+                this.Session["UserSession"] = userLogin;
+
+            return RedirectToAction("Index", "Home");
         }
 
+        //view register page
         public ActionResult Register()
         {
             return View();
         }
 
-	}
+        [HttpPost]
+        public ActionResult Register(User user)
+        {
+            User userRegister = userDAO.RegisterUser(user);
+            if (userRegister != null)
+                this.Session["UserSession"] = userRegister;
+
+            return RedirectToAction("Index", "Home");
+        }
+
+    }
 }

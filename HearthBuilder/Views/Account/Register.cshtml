@@ -1,7 +1,43 @@
-﻿
+﻿@model HearthBuilder.Models.Account.User
+
 @{
     ViewBag.Title = "Register";
 }
 
-<h2>Register</h2>
+<div class="container">
+    <h1>Register</h1>
 
+    @using (Html.BeginForm())
+    {
+        <div class="row">
+            <div class="col-xs-offset-4 col-xs-4">
+                <fieldset>
+                    @Html.ValidationSummary(true)
+                    <div class="input-group">
+                        @Html.LabelFor(model => model.Fname)
+                        @Html.TextBoxFor(model => model.Fname, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Fname)
+                    </div>
+                    <div class="input-group">
+                        @Html.LabelFor(model => model.Lname)
+                        @Html.TextBoxFor(model => model.Lname, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Lname)
+                    </div>
+                    <div class="input-group">
+                        @Html.LabelFor(model => model.Email)
+                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Email)
+                    </div>
+                    <div class="input-group">
+                        @Html.LabelFor(model => model.Password)
+                        @Html.TextBoxFor(model => model.Password, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Password)
+                    </div>
+                    <div>
+                        <input type="submit" value="Register" class="btn btn-outline btn-primary btn-lg btn-block" />
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    }
+</div>

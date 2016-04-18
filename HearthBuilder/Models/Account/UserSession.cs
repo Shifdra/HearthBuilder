@@ -8,7 +8,5 @@ namespace HearthBuilder.Models.Account
     public class UserSession
     {
         public User UserAccount { get; set; }
-
-
     }
 }

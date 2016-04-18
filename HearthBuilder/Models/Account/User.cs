@@ -21,5 +21,11 @@ namespace HearthBuilder.Models.Account
         public String Password { get; set; }
 
         public User() { }
+
+        public override string ToString()
+        {
+            return ID + ", " + Fname + ", " + Lname + ", " + Email + ", " + Password;
+        }
+
     }
 }
