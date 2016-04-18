@@ -65,6 +65,7 @@ namespace HearthBuilder.Controllers
             catch (Exception e)
             {
                 ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "Unexpected error getting deck! " + e.Message, NotificationType.ERROR));
+                return Redirect("/");
             }
             return View();
         }

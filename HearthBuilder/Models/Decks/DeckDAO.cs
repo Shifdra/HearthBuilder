@@ -12,8 +12,7 @@ namespace HearthBuilder.Models.Decks
     {
         private static DeckDAO instance;
         private static object syncRoot = new Object();
-        private MySqlConnection connection;
-
+        
         public static DeckDAO Instance
         {
             get
@@ -31,101 +30,94 @@ namespace HearthBuilder.Models.Decks
 
         private DeckDAO()
         {
-            connection = new MySqlConnection();
-            connection.ConnectionString = ConfigurationManager.ConnectionStrings["MySQLConnection"].ConnectionString;
         }
 
         public Deck GetDeckById(int id)
         {
             try
             {
-                connection.Open();
-                using (MySqlCommand cmd1 = new MySqlCommand("SELECT * FROM decks WHERE id = @id", connection))
+                using (MySqlConnection connection = new MySqlConnection(ConfigurationManager.ConnectionStrings["MySQLConnection"].ConnectionString))
                 {
+                    MySqlCommand cmd1 = new MySqlCommand("SELECT * FROM decks WHERE id = @id", connection);
                     cmd1.Parameters.AddWithValue("@id", id);
-                    MySqlDataReader reader = cmd1.ExecuteReader();
-
-                    if (reader.Read())
+                    connection.Open();
+                    Deck deck = new Deck();
+                    using (MySqlDataReader deckReader = cmd1.ExecuteReader())
                     {
-                        //map values to user obj
-                        Deck deck = new Deck(id, (PlayerClass)Enum.Parse(typeof(PlayerClass), reader.GetString("class"), true));
-                        var titleOrdinal = reader.GetOrdinal("title");
-                        if (!reader.IsDBNull(titleOrdinal))
-                            deck.Title = reader.GetString(titleOrdinal);
-                        deck.Likes = reader.GetInt32("likes");
-                        reader.Close();
-
-                        //now get the cards
-                        using (MySqlCommand cmd2 = new MySqlCommand("SELECT card_id FROM deck_cards WHERE deck_id = @id", connection))
+                        if (deckReader.Read())
                         {
-                            cmd2.Parameters.AddWithValue("@id", id);
-                            MySqlDataReader cardsReader = cmd2.ExecuteReader();
-
-                            //add each card to the deck
-                            while (cardsReader.Read())
-                            {
-                                deck.AddCard(CardCollection.Instance.getById(cardsReader.GetString("card_id")));
-                            }
-                            cardsReader.Close();
+                            //map values to deck obj
+                            deck = new Deck(id, (PlayerClass)Enum.Parse(typeof(PlayerClass), deckReader.GetString("class"), true));
+                            var titleOrdinal = deckReader.GetOrdinal("title");
+                            if (!deckReader.IsDBNull(titleOrdinal))
+                                deck.Title = deckReader.GetString(titleOrdinal);
+                            deck.Likes = deckReader.GetInt32("likes");
                         }
-                        connection.Close();
+                    }
+                    
+                    //now get the cards
+                    MySqlCommand cmd2 = new MySqlCommand("SELECT card_id FROM deck_cards WHERE deck_id = @id", connection);
+                    cmd2.Parameters.AddWithValue("@id", id);
+                    using (MySqlDataReader cardsReader = cmd2.ExecuteReader())
+                    {
+                        //add each card to the deck
+                        while (cardsReader.Read())
+                        {
+                            deck.AddCard(CardCollection.Instance.getById(cardsReader.GetString("card_id")));
+                        }
+                        
                         return deck;
                     }
-                    reader.Close(); //this is needed again, if we couldnt find a deck
                 }
             }
             catch (Exception e)
             {
-                connection.Close();
                 throw e;
             }
-            connection.Close();
-            return null;
         }
 
         public Deck CreateNewDeck(string pClass)
         {
             try
             {
-                connection.Open();
-                MySqlCommand cmd = connection.CreateCommand();
-                cmd.CommandText = string.Format("INSERT INTO decks (`class`) VALUES (@pClass)");
-                cmd.Parameters.AddWithValue("@pClass", pClass);
-                cmd.ExecuteNonQuery();
-                int deckid = 0;
-                int.TryParse(cmd.LastInsertedId.ToString(), out deckid); //get the mysql generated last ID
+                using (MySqlConnection connection = new MySqlConnection(ConfigurationManager.ConnectionStrings["MySQLConnection"].ConnectionString))
+                {
+                    connection.Open();
+                    MySqlCommand cmd = connection.CreateCommand();
+                    cmd.CommandText = string.Format("INSERT INTO decks (`class`) VALUES (@pClass)");
+                    cmd.Parameters.AddWithValue("@pClass", pClass);
+                    cmd.ExecuteNonQuery();
+                    int deckid = 0;
+                    int.TryParse(cmd.LastInsertedId.ToString(), out deckid); //get the mysql generated last ID
 
-                connection.Close();
-                return new Deck(deckid, (PlayerClass)Enum.Parse(typeof(PlayerClass), pClass, true));
+                    return new Deck(deckid, (PlayerClass)Enum.Parse(typeof(PlayerClass), pClass, true));
+                }
             }
             catch (MySqlException e)
             {
                 System.Diagnostics.Debug.WriteLine(e.Message);
                 throw e;
             }
-
-            return null;
         }
 
         public void UpdateDeck(Deck deck)
         {
-            connection.Open();
-            using (MySqlCommand cmd1 = new MySqlCommand("UPDATE decks SET title = @title WHERE id = @id", connection))
+            using (MySqlConnection connection = new MySqlConnection(ConfigurationManager.ConnectionStrings["MySQLConnection"].ConnectionString))
             {
+                connection.Open();
+
+                MySqlCommand cmd1 = new MySqlCommand("UPDATE decks SET title = @title WHERE id = @id", connection);
                 cmd1.Parameters.AddWithValue("@title", deck.Title);
                 cmd1.Parameters.AddWithValue("@id", deck.Id);
                 cmd1.ExecuteNonQuery();
-            }
-            using (MySqlCommand cmd2 = new MySqlCommand("DELETE FROM deck_cards WHERE deck_id = @id", connection))
-            {
+
+                MySqlCommand cmd2 = new MySqlCommand("DELETE FROM deck_cards WHERE deck_id = @id", connection);
                 cmd2.Parameters.AddWithValue("@id", deck.Id);
                 cmd2.ExecuteNonQuery();
-            }
 
-            using (MySqlTransaction transaction = connection.BeginTransaction())
-            {
-                using (MySqlCommand cmd3 = connection.CreateCommand())
+                using (MySqlTransaction transaction = connection.BeginTransaction())
                 {
+                    MySqlCommand cmd3 = connection.CreateCommand();
                     cmd3.Transaction = transaction;
                     cmd3.CommandType = System.Data.CommandType.Text;
                     cmd3.CommandText = "INSERT INTO deck_cards (deck_id, card_id) VALUES (@deckid, @cardId);";
@@ -150,32 +142,79 @@ namespace HearthBuilder.Models.Decks
                     }
                 }
             }
-            connection.Close();
         }
 
         public void DeleteDeck(int id)
         {
-            connection.Open();
-            try
+            using (MySqlConnection connection = new MySqlConnection(ConfigurationManager.ConnectionStrings["MySQLConnection"].ConnectionString))
             {
-                
-                using (MySqlCommand cmd1 = new MySqlCommand("DELETE FROM decks WHERE id = @id", connection))
+                try
                 {
+                    connection.Open();
+                    MySqlCommand cmd1 = new MySqlCommand("DELETE FROM decks WHERE id = @id", connection);
                     cmd1.Parameters.AddWithValue("@id", id);
                     cmd1.ExecuteNonQuery();
-                }
-                using (MySqlCommand cmd2 = new MySqlCommand("DELETE FROM deck_cards WHERE deck_id = @id", connection))
-                {
+
+                    MySqlCommand cmd2 = new MySqlCommand("DELETE FROM deck_cards WHERE deck_id = @id", connection);
                     cmd2.Parameters.AddWithValue("@id", id);
                     cmd2.ExecuteNonQuery();
+                }
+                catch (Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                    throw e;
+                }
+                connection.Close();
+            }
+        }
+
+        public List<Deck> GetAllDecks()
+        {
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(ConfigurationManager.ConnectionStrings["MySQLConnection"].ConnectionString))
+                {
+                    MySqlCommand cmd1 = new MySqlCommand("SELECT * FROM decks", connection);
+                    List<Deck> decks = new List<Deck>();
+                    connection.Open();
+                    using (MySqlDataReader deckReader = cmd1.ExecuteReader())
+                    {
+                        while (deckReader.Read())
+                        {
+                            //map values to deck obj
+                            Deck deck = new Deck(deckReader.GetInt32("id"), (PlayerClass)Enum.Parse(typeof(PlayerClass), deckReader.GetString("class"), true));
+                            var titleOrdinal = deckReader.GetOrdinal("title");
+                            if (!deckReader.IsDBNull(titleOrdinal))
+                                deck.Title = deckReader.GetString(titleOrdinal);
+                            deck.Likes = deckReader.GetInt32("likes");
+                            decks.Add(deck);
+                        }
+                    }
+
+                    foreach(Deck deck in decks)
+                    {
+                        //now get the cards
+                        MySqlCommand cmd2 = new MySqlCommand("SELECT card_id FROM deck_cards WHERE deck_id = @id", connection);
+                        cmd2.Parameters.AddWithValue("@id", deck.Id);
+                        MySqlDataReader cardsReader = cmd2.ExecuteReader();
+                        using (cardsReader)
+                        {
+                            //add each card to the deck
+                            while (cardsReader.Read())
+                            {
+                                deck.AddCard(CardCollection.Instance.getById(cardsReader.GetString("card_id")));
+                            }
+                        }
+                        cardsReader.Close();
+                    }
+                    
+                    return decks;
                 }
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine(e.Message);
                 throw e;
             }
-            connection.Close();
         }
 
     }

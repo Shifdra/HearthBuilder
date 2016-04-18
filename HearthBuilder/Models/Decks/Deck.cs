@@ -25,6 +25,14 @@ namespace HearthBuilder.Models.Decks
             Title = "";
         }
 
+        public Deck()
+        {
+            Id = 0;
+            Cards = new List<Card>();
+            Class = PlayerClass.NONE;
+            Title = "";
+        }
+
         public void AddCard(Card card)
         {
             if (card == null)

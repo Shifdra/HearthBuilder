@@ -1750,7 +1750,7 @@
     </Compile>
     <Compile Include="Models\Account\User.cs" />
     <Compile Include="Models\Account\UserDAO.cs" />
-	<Compile Include="Models\Account\UserSession.cs" />
+    <Compile Include="Models\Account\UserSession.cs" />
     <Compile Include="Models\Cards\Card.cs" />
     <Compile Include="Models\Cards\CardCollection.cs" />
     <Compile Include="Models\Decks\Deck.cs" />
