@@ -1709,6 +1709,7 @@
     <Content Include="Content\Images\heros\HERO_07.gif" />
     <Content Include="Content\Images\heros\HERO_08.gif" />
     <Content Include="Content\Images\heros\HERO_09.gif" />
+    <Content Include="Content\ModalConfirm.html" />
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

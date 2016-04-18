@@ -44,17 +44,21 @@ namespace HearthBuilder.Controllers
             if (Session["notifications"] == null)
                 Session["notifications"] = new List<Notification>();
             
-            //try to pull the deck via ID from the DB
-            Deck deck = DeckDAO.Instance.GetDeckById(id);
-
-            if (deck == null)
+            try
             {
-                ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "Couldn't edit a deck that doesn't exist!", NotificationType.ERROR));
-                return Redirect("/");
+                //try to pull the deck via ID from the DB
+                Deck deck = DeckDAO.Instance.GetDeckById(id);
+                if (deck == null)
+                {
+                    ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "Couldn't edit a deck that doesn't exist!", NotificationType.ERROR));
+                    return Redirect("/");
+                }
+                Session["deck"] = deck; //save the deck to the session
             }
-
-            Session["deck"] = deck; //save the deck to the session
-
+            catch (Exception e)
+            {
+                ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "Unexpected error getting deck! " + e.Message, NotificationType.ERROR));
+            }
             return View();
         }
 
