@@ -84,10 +84,9 @@ namespace HearthBuilder.Models
 
         private void SortCards()
         {
-            //sort alphabetically
-            Cards.Sort((x, y) => string.Compare(x.Name, y.Name));
-            //then, we want to order the cards by mana Cost
-            Cards.Sort((x, y) => x.Cost.CompareTo(y.Cost));
+            //sort Alphabetically by Name, then by Cost
+            List<Card> tmpCards = Cards.OrderBy(x => x.Cost).ThenBy(x => x.Name).ToList();
+            Cards = tmpCards;
         }
         
     }
