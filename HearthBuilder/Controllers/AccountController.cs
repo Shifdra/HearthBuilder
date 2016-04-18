@@ -22,7 +22,7 @@ namespace HearthBuilder.Controllers
         {
             User userLogin = userDAO.GetAccountByEmailAndPassword(user);
             if (userLogin != null)
-                this.Session["UserSession"] = userLogin;
+                Session["UserSession"] = userLogin;
 
             return RedirectToAction("Index", "Home");
         }
@@ -38,7 +38,7 @@ namespace HearthBuilder.Controllers
         {
             User userRegister = userDAO.RegisterUser(user);
             if (userRegister != null)
-                this.Session["UserSession"] = userRegister;
+                Session["UserSession"] = userRegister;
 
             return RedirectToAction("Index", "Home");
         }

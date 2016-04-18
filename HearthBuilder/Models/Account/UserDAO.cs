@@ -8,14 +8,14 @@ using System.Text;
 
 namespace HearthBuilder.Models.Account
 {
-    public class UserDAO
+    public sealed class UserDAO
     {
+        private static UserDAO instance;
+        private static object syncRoot = new Object();
+
         private MySqlConnection connection;
         private MySqlCommand cmd;
         private MySqlDataReader reader;
-
-        private static UserDAO instance;
-        private static object syncRoot = new Object();
 
         private UserDAO()
         {

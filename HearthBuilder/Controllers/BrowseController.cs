@@ -28,7 +28,7 @@ namespace HearthBuilder.Controllers
             {
                 ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "Unexpected error getting decks! " + e.Message, NotificationType.ERROR));
             }
-            return View();
+            return View(new SearchParams());
         }
 
         public ActionResult Deck() //viewing an individual deck
