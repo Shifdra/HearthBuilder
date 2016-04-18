@@ -3,25 +3,27 @@
     ViewBag.Title = "Card";
 }
 
-<h2>Card Name</h2>
+<div class="container">
+    <h2>Card Name</h2>
 
-<p>Viewing a card</p>
+    <p>Viewing a card</p>
 
-@{
-    Card card = (Card)ViewData["card"];
-    String searchName = (String)ViewData["searchName"];
+    @{
+        Card card = (Card)ViewData["card"];
+        String searchName = (String)ViewData["searchName"];
 
-    if (card != null)
-    {
+        if (card != null)
+        {
 
-        <p>Card Name: @card.Name</p>
-        <p>Text: @card.Text</p>
-        <img src="@card.Url" />
-        <img src="@card.UrlGold" />
+            <p>Card Name: @card.Name</p>
+            <p>Text: @card.Text</p>
+            <img src="@card.Url" />
+            <img src="@card.UrlGold" />
+        }
+        else
+        {
+            <p>Could not find card using searchName: @searchName</p>
+        }
+
     }
-    else
-    {
-        <p>Could not find card using searchName: @searchName</p>
-    }
-
-}
+</div>
