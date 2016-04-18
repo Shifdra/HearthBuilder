@@ -76,7 +76,6 @@
                     });
                 }
 
-
                 $scope.saveDeckClick = function() {
                     $scope.showNotification("Saving to DB...", "", "alert-warning");
                     var responsePromise = $http.post("/Deck/SaveDeck/", { id : $scope.txtDeckName });

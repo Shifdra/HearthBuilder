@@ -101,6 +101,7 @@ namespace HearthBuilder.Models.Decks
             catch (MySqlException e)
             {
                 System.Diagnostics.Debug.WriteLine(e.Message);
+                throw e;
             }
 
             return null;
@@ -145,7 +146,7 @@ namespace HearthBuilder.Models.Decks
                         transaction.Rollback();
                         System.Diagnostics.Debug.WriteLine(e.Message);
                         connection.Close();
-                        throw;
+                        throw e;
                     }
                 }
             }
@@ -172,7 +173,7 @@ namespace HearthBuilder.Models.Decks
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine(e.Message);
-                throw;
+                throw e;
             }
             connection.Close();
         }
