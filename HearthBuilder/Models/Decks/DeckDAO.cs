@@ -152,5 +152,30 @@ namespace HearthBuilder.Models.Decks
             connection.Close();
         }
 
+        public void DeleteDeck(int id)
+        {
+            connection.Open();
+            try
+            {
+                
+                using (MySqlCommand cmd1 = new MySqlCommand("DELETE FROM decks WHERE id = @id", connection))
+                {
+                    cmd1.Parameters.AddWithValue("@id", id);
+                    cmd1.ExecuteNonQuery();
+                }
+                using (MySqlCommand cmd2 = new MySqlCommand("DELETE FROM deck_cards WHERE deck_id = @id", connection))
+                {
+                    cmd2.Parameters.AddWithValue("@id", id);
+                    cmd2.ExecuteNonQuery();
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+                throw;
+            }
+            connection.Close();
+        }
+
     }
 }

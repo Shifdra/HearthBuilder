@@ -28,15 +28,22 @@ namespace HearthBuilder.Controllers
                     Session["notifications"] = new List<Notification>();
 
                 ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "You must select a class!", NotificationType.ERROR));
-                
                 return RedirectToAction("Index", "Deck");
             }
 
-            //generating a new deck from the db
-            Deck deck = DeckDAO.Instance.CreateNewDeck(id.ToUpper());
-
-            //redirect them to the edit deck page
-            return RedirectToAction("Edit", new { id = deck.Id });
+            try
+            {
+                //generating a new deck from the db
+                Deck deck = DeckDAO.Instance.CreateNewDeck(id.ToUpper());
+                //redirect them to the edit deck page
+                return RedirectToAction("Edit", new { id = deck.Id });
+            }
+            catch (Exception e)
+            {
+                ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "Unexpected error creating deck! " + e.Message, NotificationType.ERROR));
+                return RedirectToAction("Index", "Deck");
+            }
+            
         }
 
         public ActionResult Edit(int id = 0) //editing a current deck
@@ -61,17 +68,23 @@ namespace HearthBuilder.Controllers
             }
             return View();
         }
-
-        public string ListCards()
+        
+        public string ListAllCards()
         {
             return JsonConvert.SerializeObject(CardCollection.Instance.AllCards);
         }
 
-        public string ListDeck()
+        public string SessionDeck()
         {
             return JsonConvert.SerializeObject((Deck)Session["deck"]);
         }
 
+        public string GetDeck(int id)
+        {
+            return JsonConvert.SerializeObject(DeckDAO.Instance.GetDeckById(id));
+        }
+
+        [HttpPost]
         public ActionResult AddCard(string id)
         {
             var result = new List<object>();
@@ -100,6 +113,7 @@ namespace HearthBuilder.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         public ActionResult RemoveCard(string id)
         {
             var result = new List<object>();
@@ -128,6 +142,7 @@ namespace HearthBuilder.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         public ActionResult SaveDeck(string id)
         {
             var result = new List<object>();
@@ -144,54 +159,48 @@ namespace HearthBuilder.Controllers
                 deck.Title = id;
                 Session["deck"] = deck; //update the session
 
-                //save the deck
-                //generating a new deck from the db
-                DeckDAO.Instance.UpdateDeck(deck);
-
-                if (deck != null)
+                try
+                {
+                    //save the deck
+                    DeckDAO.Instance.UpdateDeck(deck);
                     result.Add(new { Result = "1", Message = "Saved deck!" });
-                else 
-                    result.Add(new { Result = "0", Message = "Couldn't save deck!?" });
+                }
+                catch (Exception e)
+                {
+                    result.Add(new { Result = "0", Message = "Couldn't save deck!? " + e.Message});
+                }                    
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpGet]
-        public ActionResult ConfirmDeleteDeck() //this will be select a class
-        {
-            return View();
-        }
-
         [HttpPost]
-        public ActionResult ConfirmDeleteDeck(string id) //this will be select a class
+        public ActionResult DeleteDeck()
         {
+            var result = new List<object>();
+
             if (Session["deck"] == null)
             {
-                if (Session["notifications"] != null)
-                    ((List<Notification>)Session["notifications"]).Add(new Notification("Error", "You can't discard a deck you don't have!" + id, NotificationType.ERROR));
-                else
-                {
-                    List<Notification> notifications = new List<Notification>();
-                    notifications.Add(new Notification("Error", "You can't discard a deck you don't have!" + id, NotificationType.ERROR));
-                    Session["notifications"] = notifications;
-                }
+                result.Add(new { Result = "0", Message = "Couldn't delete deck that doesn't exist!?" });
             }
-
-            Session["deck"] = null; //invalidate the session
-
-            if (Session["notifications"] != null)
-                ((List<Notification>)Session["notifications"]).Add(new Notification("Okay...", "This deck has been discarded! " + id, NotificationType.WARNING));
             else
             {
-                List<Notification> notifications = new List<Notification>();
-                notifications.Add(new Notification("Okay...", "This deck has been discarded! " + id, NotificationType.WARNING));
-                Session["notifications"] = notifications;
+                try
+                {
+                    DeckDAO.Instance.DeleteDeck(((Deck)Session["deck"]).Id);
+                    result.Add(new { Result = "1", Message = "Deck deleted!" });
+                    if (Session["notifications"] == null)
+                        Session["notifications"] = new List<Notification>();
+                    ((List<Notification>)Session["notifications"]).Add(new Notification("Success!", "The deck has been deleted! ", NotificationType.SUCCESS));
+                }
+                catch (Exception e)
+                {
+                    result.Add(new { Result = "0", Message = "Couldn't delete deck! Error: " + e.Message });
+                }
             }
-
-
-
-            return Redirect("/Build/");
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+       
     }
 }

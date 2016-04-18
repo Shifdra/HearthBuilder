@@ -1766,7 +1766,6 @@
     <Content Include="Views\Shared\_LoginHeaderPartial.cshtml" />
     <Content Include="Views\Browse\CardName.cshtml" />
     <Content Include="Views\Browse\CardId.cshtml" />
-    <Content Include="Views\Deck\ConfirmDeleteDeck.cshtml" />
     <Content Include="Views\Deck\New.cshtml" />
     <Content Include="Views\Deck\Index.cshtml" />
     <Content Include="Views\Deck\Edit.cshtml" />

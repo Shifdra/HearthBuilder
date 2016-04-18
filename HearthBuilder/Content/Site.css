@@ -74,14 +74,18 @@ input{
     border-color: #BFA880; /* #C5AD83 #BFA880 #AD9B78 */
 }
 
-.panel {
+.panel, .modal-content {
     margin-bottom: 20px;
     background-color: #f4e5c6;
     border-radius: 4px;
     box-shadow: 0 0 5px rgba(0,0,0,0.1);
 }
 
-.panel-default > .panel-heading {
+.modal-dialog .modal-header {
+    padding: 0;
+}
+
+.panel-default > .panel-heading, .modal-dialog .modal-title {
     font-size: 1.8em;
     text-align: center;
     text-shadow: 1px 1px 0 #000,1px 0 0 #000,1px -1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 1px 0 #000,-1px 0 0 #000,-1px -1px 0 #000;
