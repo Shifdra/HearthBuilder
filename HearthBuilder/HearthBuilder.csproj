@@ -1709,6 +1709,7 @@
     <Content Include="Content\Images\heros\HERO_07.gif" />
     <Content Include="Content\Images\heros\HERO_08.gif" />
     <Content Include="Content\Images\heros\HERO_09.gif" />
+    <Content Include="Content\ModalConfirm.html" />
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -1719,10 +1720,7 @@
     <Content Include="fonts\belwebd-webfont.eot" />
     <Content Include="fonts\belwebd-webfont.ttf" />
     <Content Include="fonts\belwebd-webfont.woff" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <None Include="Properties\PublishProfiles\HearthBuilder.pubxml" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
@@ -1745,22 +1743,22 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BrowseController.cs" />
-    <Compile Include="Controllers\BuildController.cs" />
+    <Compile Include="Controllers\DeckController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Account\User.cs" />
     <Compile Include="Models\Account\UserDAO.cs" />
-    <Compile Include="Models\Account\UserSession.cs" />
-    <Compile Include="Models\Card.cs" />
-    <Compile Include="Models\CardCollection.cs" />
-    <Compile Include="Models\Deck.cs" />
-    <Compile Include="Models\Exceptions\DeckException.cs" />
-    <Compile Include="Models\ImageActionLinkHelper.cs" />
-    <Compile Include="Models\NotificationType.cs" />
-    <Compile Include="Models\Notification.cs" />
-    <Compile Include="Models\PlayerClasses.cs" />
+	<Compile Include="Models\Account\UserSession.cs" />
+    <Compile Include="Models\Cards\Card.cs" />
+    <Compile Include="Models\Cards\CardCollection.cs" />
+    <Compile Include="Models\Decks\Deck.cs" />
+    <Compile Include="Models\Decks\DeckDAO.cs" />
+    <Compile Include="Models\Decks\DeckException.cs" />
+    <Compile Include="Models\Notifications\NotificationType.cs" />
+    <Compile Include="Models\Notifications\Notification.cs" />
+    <Compile Include="Models\Cards\PlayerClasses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1769,7 +1767,9 @@
     <Content Include="Views\Shared\_LoginHeaderPartial.cshtml" />
     <Content Include="Views\Browse\CardName.cshtml" />
     <Content Include="Views\Browse\CardId.cshtml" />
-    <Content Include="Views\Build\ConfirmDeleteDeck.cshtml" />
+    <Content Include="Views\Deck\New.cshtml" />
+    <Content Include="Views\Deck\Index.cshtml" />
+    <Content Include="Views\Deck\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
