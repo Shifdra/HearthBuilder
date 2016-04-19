@@ -352,3 +352,7 @@ input{
 .viewDeck .fixed {
     position:fixed;
 }
+
+.title {
+    line-height: 300%;
+}
