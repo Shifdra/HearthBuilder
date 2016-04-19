@@ -1700,6 +1700,7 @@
     <Content Include="Content\Images\deck\gem_epic.png" />
     <Content Include="Content\Images\deck\gem_legendary.png" />
     <Content Include="Content\Images\deck\gem_rare.png" />
+    <Content Include="Content\Images\hearthstone_header.png" />
     <Content Include="Content\Images\heros\DRUID.gif" />
     <Content Include="Content\Images\heros\HERO_01.gif" />
     <Content Include="Content\Images\heros\HERO_02.gif" />
