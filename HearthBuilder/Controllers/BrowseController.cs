@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using HearthBuilder.Models;
+using HearthBuilder.Models.FilterDecks;
 using HearthBuilder.Models.Cards;
 using HearthBuilder.Models.Decks;
 using HearthBuilder.Models.Notifications;
@@ -28,6 +28,51 @@ namespace HearthBuilder.Controllers
             {
                 ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "Unexpected error getting decks! " + e.Message, NotificationType.ERROR));
             }
+
+            return View(new SearchParams());
+        }
+
+        [HttpPost]
+        public ActionResult Index(SearchParams searchParams)
+        {
+            if (Session["notifications"] == null)
+                Session["notifications"] = new List<Notification>();
+
+            DeckDAO deckDAO = DeckDAO.Instance;
+            List<Deck> allDecks = deckDAO.GetAllDecks();
+
+            List<Deck> filteredDecks = new List<Deck>();
+
+            for(int i = 0; i < allDecks.Count; i++)
+            {
+                for (int j = 0; j < searchParams.Types.Count; j++)
+                {
+                    if (searchParams.Types[j].Checked && allDecks[i].Class.ToString() == searchParams.Types[j].Name.ToUpper())
+                    {
+                        filteredDecks.Add(allDecks[i]);
+                    }
+                }
+            }
+
+            try
+            {
+                if (filteredDecks.Count > 0)
+                {
+                    //only show filtered decks
+                    ViewBag.decks = filteredDecks;
+                }
+                else {
+                    //pull decks from the DB
+                    ViewBag.decks = DeckDAO.Instance.GetAllDecks();
+                    //display notification
+                    ((List<Notification>)Session["notifications"]).Add(new Notification("Woops!", "We couldn't find any decks matching your filter!", NotificationType.WARNING));
+                } 
+            }
+            catch (Exception e)
+            {
+                ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "Unexpected error getting decks! " + e.Message, NotificationType.ERROR));
+            }
+
             return View(new SearchParams());
         }
 
