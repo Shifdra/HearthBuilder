@@ -176,7 +176,7 @@
                         //console.log($scope.cardData.curCard);
                         if ($scope.cardData.curCard.Class == $scope.playerClass || $scope.cardData.curCard.Class == 0){ //filter by current class, and non-class
                             if ($scope.cardData.curCard.Name.toLowerCase().indexOf($scope.txtSearch) > -1) { //filter by textbox
-                                results += '<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"><img alt="tacos" ng-click="addCardClick($event)" data-id="' + $scope.cardData.curCard.Id + '" src="' + $scope.cardData.curCard.Url + '" /></div>';
+                                results += '<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"><img alt="'+$scope.cardData.curCard.Name+'" ng-click="addCardClick($event)" data-id="' + $scope.cardData.curCard.Id + '" src="' + $scope.cardData.curCard.Url + '" /></div>';
                             }
                         }
                     });
