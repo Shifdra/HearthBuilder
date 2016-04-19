@@ -5,7 +5,7 @@ using System.Web;
 
 namespace HearthBuilder.Models.FilterDecks
 {
-    public class ClassTypes
+    public class ClassNames
     {
         //public PlayerClass Class { get; private set; }
         public string Name { get; set; }

@@ -1763,7 +1763,7 @@
     <Compile Include="Models\Decks\Deck.cs" />
     <Compile Include="Models\Decks\DeckDAO.cs" />
     <Compile Include="Models\Decks\DeckException.cs" />
-    <Compile Include="Models\FilterDecks\ClassTypes.cs" />
+    <Compile Include="Models\FilterDecks\ClassNames.cs" />
     <Compile Include="Models\Notifications\NotificationType.cs" />
     <Compile Include="Models\Notifications\Notification.cs" />
     <Compile Include="Models\Cards\PlayerClasses.cs" />

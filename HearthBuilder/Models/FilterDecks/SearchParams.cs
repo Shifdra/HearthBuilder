@@ -7,23 +7,23 @@ namespace HearthBuilder.Models.FilterDecks
 {
     public class SearchParams
     {
-        public List<ClassTypes> Types { get; set; }
+        public List<ClassNames> Classes { get; set; }
         public String DeckName { get; set; }
 
 
         public SearchParams()
         {
-            Types = new List<ClassTypes>
+            Classes = new List<ClassNames>
             {
-                new ClassTypes { Name = "Druid" },
-                new ClassTypes { Name = "Hunter" },
-                new ClassTypes { Name = "Mage" },
-                new ClassTypes { Name = "Paladin" },
-                new ClassTypes { Name = "Priest" },
-                new ClassTypes { Name = "Rogue" },
-                new ClassTypes { Name = "Shaman" },
-                new ClassTypes { Name = "Warlock" },
-                new ClassTypes { Name = "Warrior" },
+                new ClassNames { Name = "Druid" },
+                new ClassNames { Name = "Hunter" },
+                new ClassNames { Name = "Mage" },
+                new ClassNames { Name = "Paladin" },
+                new ClassNames { Name = "Priest" },
+                new ClassNames { Name = "Rogue" },
+                new ClassNames { Name = "Shaman" },
+                new ClassNames { Name = "Warlock" },
+                new ClassNames { Name = "Warrior" },
             };
         }
     }

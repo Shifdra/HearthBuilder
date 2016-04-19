@@ -33,7 +33,7 @@ namespace HearthBuilder.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(SearchParams searchParams)
+        public ActionResult Index(SearchParams searchParams) //this page will filter down the number of decks displayed
         {
             if (Session["notifications"] == null)
                 Session["notifications"] = new List<Notification>();
@@ -43,13 +43,44 @@ namespace HearthBuilder.Controllers
 
             List<Deck> filteredDecks = new List<Deck>();
 
-            for(int i = 0; i < allDecks.Count; i++)
+            //filter down decks here
+            Boolean classFilter = false;
+            for (int i = 0; i < allDecks.Count; i++)
             {
-                for (int j = 0; j < searchParams.Types.Count; j++)
+                //check if there should be a class filter
+                for (int j = 0; j < searchParams.Classes.Count; j++)
                 {
-                    if (searchParams.Types[j].Checked && allDecks[i].Class.ToString() == searchParams.Types[j].Name.ToUpper())
+                    if (searchParams.Classes[j].Checked)
                     {
-                        filteredDecks.Add(allDecks[i]);
+                        classFilter = true;
+                    }
+
+                }
+                //there is a deck name and class filter
+                if (searchParams.DeckName != null && classFilter)
+                {
+                    for (int j = 0; j < searchParams.Classes.Count; j++)
+                    {
+                        if (searchParams.Classes[j].Checked && allDecks[i].Class.ToString() == searchParams.Classes[j].Name.ToUpper() && searchParams.DeckName == allDecks[i].Title)
+                        {
+                            filteredDecks.Add(allDecks[i]);
+                        }
+                    }
+                }
+                //there is a deck name, no class filter
+                else if (searchParams.DeckName != null && !classFilter && searchParams.DeckName == allDecks[i].Title)
+                {
+                    filteredDecks.Add(allDecks[i]);
+                }
+                //there is no deck name, but a class filter
+                else if (searchParams.DeckName == null && classFilter)
+                {
+                    for (int j = 0; j < searchParams.Classes.Count; j++)
+                    {
+                        if (searchParams.Classes[j].Checked && allDecks[i].Class.ToString() == searchParams.Classes[j].Name.ToUpper())
+                        {
+                            filteredDecks.Add(allDecks[i]);
+                        }
                     }
                 }
             }
