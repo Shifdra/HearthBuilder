@@ -14,14 +14,14 @@
                     @Html.ValidationSummary(true)
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                        @Html.TextBoxFor(model => model.Fname, new { @class = "form-control", @placeholder = "First Name" })
-                        @Html.ValidationMessageFor(model => model.Fname)
+                        @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", @placeholder = "First Name" })
+                        @Html.ValidationMessageFor(model => model.FirstName)
                     </div>
                     <span class="help-block"></span>
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                        @Html.TextBoxFor(model => model.Lname, new { @class = "form-control", @placeholder = "Last Name" })
-                        @Html.ValidationMessageFor(model => model.Lname)
+                        @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", @placeholder = "Last Name" })
+                        @Html.ValidationMessageFor(model => model.LastName)
                     </div>
                     <span class="help-block"></span>
                     <div class="input-group">

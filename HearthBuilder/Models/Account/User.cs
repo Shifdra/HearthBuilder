@@ -9,8 +9,8 @@ namespace HearthBuilder.Models.Account
     public class User
     {
         public int ID { get; set; }
-        public String Fname { get; set; }
-        public String Lname { get; set; }
+        public String FirstName { get; set; }
+        public String LastName { get; set; }
 
         [Required(ErrorMessage = "An email is required.")]
         [RegularExpression(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$", ErrorMessage = "Invalid email address.")]
@@ -24,7 +24,7 @@ namespace HearthBuilder.Models.Account
 
         public override string ToString()
         {
-            return ID + ", " + Fname + ", " + Lname + ", " + Email + ", " + Password;
+            return ID + ", " + FirstName + ", " + LastName + ", " + Email + ", " + Password;
         }
 
     }

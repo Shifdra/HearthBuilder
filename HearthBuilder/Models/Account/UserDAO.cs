@@ -62,8 +62,8 @@ namespace HearthBuilder.Models.Account
                         {
                             //map values to user obj
                             user.ID = Convert.ToInt32(reader.GetString("account_id"));
-                            user.Fname = reader.GetString("first_name");
-                            user.Lname = reader.GetString("last_name");
+                            user.FirstName = reader.GetString("first_name");
+                            user.LastName = reader.GetString("last_name");
                             user.Email = reader.GetString("email");
                             user.Password = reader.GetString("password");
 
@@ -103,9 +103,9 @@ namespace HearthBuilder.Models.Account
                         }
                     }
                     //register them
-                    cmd = new MySqlCommand("INSERT INTO account (first_name, last_name, email, password) VALUES (@fname, @lname, @email, @passHash)", connection);
-                    cmd.Parameters.AddWithValue("@fname", user.Fname);
-                    cmd.Parameters.AddWithValue("@lname", user.Lname);
+                    cmd = new MySqlCommand("INSERT INTO account (first_name, last_name, email, password) VALUES (@firstname, @lastname, @email, @passHash)", connection);
+                    cmd.Parameters.AddWithValue("@firstname", user.FirstName);
+                    cmd.Parameters.AddWithValue("@lastname", user.LastName);
                     cmd.Parameters.AddWithValue("@email", user.Email);
                     cmd.Parameters.AddWithValue("@passHash", passHash);
                     cmd.ExecuteNonQuery();
