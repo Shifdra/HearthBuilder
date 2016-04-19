@@ -12,7 +12,7 @@
 }
 
 <div class="container">
-    <h1 class="title">Browse Decks</h1>
+    <h1>Browse Decks</h1>
 
     <div class="filter">
         <div class="panel panel-default">
@@ -24,14 +24,14 @@
                 <div class="row" style="padding:15px;">
                     <div class="col-xs-12">
                         <fieldset>
-                            <div class="input-group">
+                            <div class="btn-group" data-toggle="buttons">
                                 @for (int i = 0; i < Model.Classes.Count; i++)
                                 {
-                                    <div class="col-xs-2">
                                         @Html.HiddenFor(m => m.Classes[i].Name)
-                                        @Html.LabelFor(m => m.Classes[i].Checked, Model.Classes[i].Name)
-                                        @Html.CheckBoxFor(m => m.Classes[i].Checked)
-                                    </div>
+                                        <label class="btn btn-primary">
+                                            @Html.CheckBoxFor(m => m.Classes[i].Checked, new { autocomplete = "off" })
+                                            @Model.Classes[i].Name
+                                        </label>
                                 }
                             </div><br />
 
