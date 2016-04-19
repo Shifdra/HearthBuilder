@@ -353,3 +353,11 @@ input{
 .viewDeck .fixed {
     position:fixed;
 }
+
+.filter {
+    text-align: center;
+}
+
+.filter .panel {
+    display: inline-block;
+}
