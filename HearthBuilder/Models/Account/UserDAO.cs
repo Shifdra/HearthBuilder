@@ -50,34 +50,37 @@ namespace HearthBuilder.Models.Account
 
             try
             {
-                connection.Open();
-                cmd = new MySqlCommand("SELECT * FROM account WHERE email = @email AND password = @passHash", connection);
-                cmd.Parameters.AddWithValue("@email", user.Email);
-                cmd.Parameters.AddWithValue("@passHash", passHash);
-                reader = cmd.ExecuteReader();
+                using (MySqlConnection connection = new MySqlConnection(ConfigurationManager.ConnectionStrings["MySQLConnection"].ConnectionString))
+                {
+                    connection.Open();
+                    cmd = new MySqlCommand("SELECT * FROM account WHERE email = @email AND password = @passHash", connection);
+                    cmd.Parameters.AddWithValue("@email", user.Email);
+                    cmd.Parameters.AddWithValue("@passHash", passHash);
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            //map values to user obj
+                            user.ID = Convert.ToInt32(reader.GetString("account_id"));
+                            user.Fname = reader.GetString("first_name");
+                            user.Lname = reader.GetString("last_name");
+                            user.Email = reader.GetString("email");
+                            user.Password = reader.GetString("password");
 
-                if (reader.Read())
-                {
-                    //map values to user obj
-                    user.ID = Convert.ToInt32(reader.GetString("account_id"));
-                    user.Fname = reader.GetString("first_name");
-                    user.Lname = reader.GetString("last_name");
-                    user.Email = reader.GetString("email");
-                    user.Password = reader.GetString("password");
-                }
-                else
-                {
-                    return null;
+                            return user;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
                 }
             }
             catch (MySqlException e)
             {
                 System.Diagnostics.Debug.WriteLine(e.Message);
             }
-
-            reader.Close();
-            connection.Close();
-            return user;
+            return null;
         }
 
         public User RegisterUser(User user)
@@ -86,21 +89,24 @@ namespace HearthBuilder.Models.Account
 
             try
             {
-                connection.Open();
-                cmd = new MySqlCommand("INSERT INTO account (first_name, last_name, email, password) VALUES (@fname, @lname, @email, @passHash)", connection);
-                cmd.Parameters.AddWithValue("@fname", user.Fname);
-                cmd.Parameters.AddWithValue("@lname", user.Lname);
-                cmd.Parameters.AddWithValue("@email", user.Email);
-                cmd.Parameters.AddWithValue("@passHash", passHash);
-                cmd.ExecuteNonQuery();
+                using (MySqlConnection connection = new MySqlConnection(ConfigurationManager.ConnectionStrings["MySQLConnection"].ConnectionString))
+                {
+                    connection.Open();
+                    cmd = new MySqlCommand("INSERT INTO account (first_name, last_name, email, password) VALUES (@fname, @lname, @email, @passHash)", connection);
+                    cmd.Parameters.AddWithValue("@fname", user.Fname);
+                    cmd.Parameters.AddWithValue("@lname", user.Lname);
+                    cmd.Parameters.AddWithValue("@email", user.Email);
+                    cmd.Parameters.AddWithValue("@passHash", passHash);
+                    cmd.ExecuteNonQuery();
+
+                    return user;
+                }
             }
             catch (MySqlException e)
             {
                 System.Diagnostics.Debug.WriteLine(e.Message);
             }
-
-            connection.Close();
-            return user;
+            return null;
         }
     }
 }
