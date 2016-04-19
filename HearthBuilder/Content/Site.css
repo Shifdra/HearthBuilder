@@ -354,6 +354,10 @@ input{
     position:fixed;
 }
 
+.title {
+    line-height: 300%;
+}
+
 .filter, .news {
     text-align: center;
 }
