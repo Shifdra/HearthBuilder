@@ -16,6 +16,7 @@ namespace HearthBuilder.Models.Decks
         public string ClassStr { get { return char.ToUpper(Class.ToString().ToLower()[0]) + Class.ToString().ToLower().Substring(1); } } //converts "CLASS" to "Class"
         public string Title { get; set; }
         public int Likes { get; set; }
+        public int UserId { get; set; }
 
         public Deck()
         {

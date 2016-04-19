@@ -270,7 +270,18 @@
                 </div>
             </div>
             <div class="col-fixed-262">
-                <div class="deckOptions"><button ng-click='saveDeckClick()' class="btn btn-primary btn-lg">Save</button> <button ng-click='delDeckClick()' class="btn btn-danger btn-lg">Delete</button></div>
+                <div class="deckOptions">
+                    @if (Session["UserSession"] != null) //are they logged in?
+                    {
+                        <button ng-click='saveDeckClick()' class="btn btn-primary btn-lg">Save</button>
+                    }
+                    else
+                    {
+                        <button disabled class="btn btn-primary btn-lg">Save</button>
+                    }
+
+                    <button ng-click='delDeckClick()' class="btn btn-danger btn-lg">Delete</button>
+                </div>
                 <div id="overview" class="panel panel-default">
                     <div class="panel-heading"><input type="text" name="input" ng-model="txtDeckName" ng-trim="true" placeholder="Deck Name" class="txtInput" /></div>
                     <div class="panel-body">

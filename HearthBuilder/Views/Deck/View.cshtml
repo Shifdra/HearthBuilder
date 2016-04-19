@@ -1,6 +1,7 @@
 ﻿@using HearthBuilder.Models.Cards
 @using HearthBuilder.Models.Decks
 @using HearthBuilder.Models.Notifications
+@using HearthBuilder.Models.Account
 
 @{
     ViewBag.Title = "View Deck";
@@ -13,7 +14,10 @@
 <div class="container">
     <h1>Viewing Deck:</h1>
     <div class="viewDeck">
-        <a class="btn btn-primary btn-lg" href="/Deck/Edit/@ViewBag.deck.Id">Edit Deck</a>
+        @if (Session["UserSession"] != null && ((User)Session["UserSession"]).ID == ViewBag.deck.UserId)
+        {
+            <a class="btn btn-primary btn-lg" href="/Deck/Edit/@ViewBag.deck.Id">Edit Deck</a>
+        }
         <div class="deckList  text-center">
             <div class="portrait">
                 <div class="@ViewBag.deck.ClassStr.ToLower()">

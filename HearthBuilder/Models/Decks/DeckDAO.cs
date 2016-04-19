@@ -52,6 +52,7 @@ namespace HearthBuilder.Models.Decks
                             if (!deckReader.IsDBNull(titleOrdinal))
                                 deck.Title = deckReader.GetString(titleOrdinal);
                             deck.Likes = deckReader.GetInt32("likes");
+                            deck.UserId = deckReader.GetInt32("account_id");
                         }
                     }
                     
@@ -84,8 +85,9 @@ namespace HearthBuilder.Models.Decks
                 {
                     connection.Open();
                     MySqlCommand cmd = connection.CreateCommand();
-                    cmd.CommandText = string.Format("INSERT INTO decks (`class`) VALUES (@pClass)");
+                    cmd.CommandText = string.Format("INSERT INTO decks (`class`, `account_id`) VALUES (@pClass, @userId)");
                     cmd.Parameters.AddWithValue("@pClass", deck.Class.ToString());
+                    cmd.Parameters.AddWithValue("@userId", deck.UserId);
                     cmd.ExecuteNonQuery();
                     int deckid = 0;
                     int.TryParse(cmd.LastInsertedId.ToString(), out deckid); //get the mysql generated last ID

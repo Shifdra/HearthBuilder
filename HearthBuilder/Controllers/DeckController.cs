@@ -1,4 +1,5 @@
 ﻿using HearthBuilder.Models;
+using HearthBuilder.Models.Account;
 using HearthBuilder.Models.Cards;
 using HearthBuilder.Models.Decks;
 using HearthBuilder.Models.Notifications;
@@ -16,6 +17,12 @@ namespace HearthBuilder.Controllers
         // GET: Deck
         public ActionResult Index() //selecting a new class
         {
+            if (Session["notifications"] == null)
+                Session["notifications"] = new List<Notification>();
+
+            if (Session["UserSession"] == null)
+                ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "You are not logged in and as a result, will be unable to save decks! <a href='/Account'>Log in</a> or <a href='/Account/Register'>Register</a>", NotificationType.WARNING));
+
             return View();
         }
         
@@ -30,6 +37,9 @@ namespace HearthBuilder.Controllers
                 int nId = 0;
                 Deck deck;
 
+                if (Session["UserSession"] == null)
+                    ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "You are not logged in and as a result, will be unable to save decks! <a href='/Account'>Log in</a> or <a href='/Account/Register'>Register</a>", NotificationType.WARNING));
+
                 //do we have an existing deck?
                 if (int.TryParse(id, out nId))
                 {
@@ -39,6 +49,12 @@ namespace HearthBuilder.Controllers
                     if (deck == null)
                     {
                         ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "Couldn't edit a deck that doesn't exist!", NotificationType.ERROR));
+                        return Redirect("/");
+                    }
+                    //check deck ownership before allowing editing
+                    if (Session["UserSession"] != null && deck.UserId != ((User)Session["UserSession"]).ID)
+                    {
+                        ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "You can't edit a deck that is not yours!", NotificationType.ERROR));
                         return Redirect("/");
                     }
                 }
@@ -75,7 +91,6 @@ namespace HearthBuilder.Controllers
 
             try
             {
-                Deck deck;
                 //try to pull the deck via ID from the DB
                 ViewBag.deck = DeckDAO.Instance.GetDeckById(id);
                 if (ViewBag.deck == null)
@@ -180,9 +195,15 @@ namespace HearthBuilder.Controllers
                 //somethings wrong, there should be a deck here...
                 result.Add(new { Result = "0", Message = "No deck to save!" });
             }
+            else if (Session["UserSession"] == null)
+            {
+                //somethings wrong, there should be a user here... HAXORS
+                result.Add(new { Result = "0", Message = "No user to save deck!" });
+            }
             else
             {
                 Deck deck = (Deck)Session["deck"];
+                deck.UserId = ((User)Session["UserSession"]).ID;
                 System.Diagnostics.Debug.WriteLine("SaveDeck() " + deck.Id + " card count " + deck.Cards.Count);
 
                 //add the new title
