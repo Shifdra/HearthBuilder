@@ -51,8 +51,12 @@ namespace HearthBuilder.Controllers
                         return RedirectToAction("Index", "Deck");
                     }
 
-                    deck = new Deck((PlayerClass)Enum.Parse(typeof(PlayerClass), id, true));
-                    Session["deck"] = deck; //save the deck to the session
+                    //are they refreshing the page with a new deck?
+                    if (Session["deck"] == null || ((Deck)Session["deck"]).Id != 0)
+                    {
+                        deck = new Deck((PlayerClass)Enum.Parse(typeof(PlayerClass), id, true));
+                        Session["deck"] = deck; //save the deck to the session
+                    }
                 }
             }
             catch (Exception e)
