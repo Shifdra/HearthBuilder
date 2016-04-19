@@ -71,7 +71,7 @@ namespace HearthBuilder.Models.Account
                         }
                         else
                         {
-                            return null;
+                            throw new UserException("Could not find matching username and password combination!");
                         }
                     }
                 }
@@ -79,19 +79,30 @@ namespace HearthBuilder.Models.Account
             catch (MySqlException e)
             {
                 System.Diagnostics.Debug.WriteLine(e.Message);
+                throw e;
             }
-            return null;
         }
 
         public User RegisterUser(User user)
         {
             String passHash = Hash(user.Email + ":" + user.Password);
+            bool shouldRegister = false;
 
             try
             {
                 using (MySqlConnection connection = new MySqlConnection(ConfigurationManager.ConnectionStrings["MySQLConnection"].ConnectionString))
                 {
                     connection.Open();
+                    cmd = new MySqlCommand("SELECT * FROM account WHERE email = @email", connection);
+                    cmd.Parameters.AddWithValue("@email", user.Email);
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read()) //is there a result?
+                        {
+                            throw new UserException("That email address is already in use!");
+                        }
+                    }
+                    //register them
                     cmd = new MySqlCommand("INSERT INTO account (first_name, last_name, email, password) VALUES (@fname, @lname, @email, @passHash)", connection);
                     cmd.Parameters.AddWithValue("@fname", user.Fname);
                     cmd.Parameters.AddWithValue("@lname", user.Lname);
@@ -106,7 +117,7 @@ namespace HearthBuilder.Models.Account
             {
                 System.Diagnostics.Debug.WriteLine(e.Message);
             }
-            return null;
+                throw e;
         }
     }
 }

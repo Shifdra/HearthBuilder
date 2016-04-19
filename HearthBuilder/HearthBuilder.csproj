@@ -1756,6 +1756,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Account\EmailPassNotFoundException.cs" />
     <Compile Include="Models\Account\User.cs" />
     <Compile Include="Models\Account\UserDAO.cs" />
     <Compile Include="Models\Account\UserSession.cs" />
