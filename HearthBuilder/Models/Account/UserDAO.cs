@@ -116,8 +116,8 @@ namespace HearthBuilder.Models.Account
             catch (MySqlException e)
             {
                 System.Diagnostics.Debug.WriteLine(e.Message);
-            }
                 throw e;
+            }
         }
     }
 }
