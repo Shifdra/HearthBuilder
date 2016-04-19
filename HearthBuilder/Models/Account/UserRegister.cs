@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HearthBuilder.Models.Account
 {
-    public class User
+    public class UserRegister
     {
         public int ID { get; set; }
 
@@ -24,7 +24,7 @@ namespace HearthBuilder.Models.Account
         [DataType(DataType.Password)]
         public String Password { get; set; }
 
-        public User() { }
+        public UserRegister() { }
 
         public override string ToString()
         {

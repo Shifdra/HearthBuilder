@@ -44,7 +44,7 @@ namespace HearthBuilder.Models.Account
             return string.Join("", hash.Select(b => b.ToString("x2")).ToArray());
         }
 
-        public User GetAccountByEmailAndPassword(User user)
+        public UserLogin GetAccountByEmailAndPassword(UserLogin user)
         {
             String passHash = Hash(user.Email + ":" + user.Password);
 
@@ -83,7 +83,7 @@ namespace HearthBuilder.Models.Account
             }
         }
 
-        public User GetUserbyId(int id)
+        public UserLogin GetUserbyId(int id)
         {
             try
             {
@@ -96,7 +96,7 @@ namespace HearthBuilder.Models.Account
                     {
                         if (reader.Read())
                         {
-                            User user = new User();
+                            UserLogin user = new UserLogin();
                             //map values to user obj
                             user.ID = Convert.ToInt32(reader.GetString("account_id"));
                             user.FirstName = reader.GetString("first_name");
@@ -120,7 +120,7 @@ namespace HearthBuilder.Models.Account
             }
         }
 
-        public User RegisterUser(User user)
+        public UserRegister RegisterUser(UserRegister user)
         {
             String passHash = Hash(user.Email + ":" + user.Password);
 

@@ -1757,9 +1757,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Account\UserException.cs" />
-    <Compile Include="Models\Account\User.cs" />
+    <Compile Include="Models\Account\UserRegister.cs" />
     <Compile Include="Models\Account\UserDAO.cs" />
-    <Compile Include="Models\Account\UserSession.cs" />
+    <Compile Include="Models\Account\UserLogin.cs" />
     <Compile Include="Models\Cards\Card.cs" />
     <Compile Include="Models\Cards\CardCollection.cs" />
     <Compile Include="Models\Decks\Deck.cs" />

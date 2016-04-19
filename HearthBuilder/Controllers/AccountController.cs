@@ -10,7 +10,7 @@ namespace HearthBuilder.Controllers
     public class AccountController : Controller
     {
         UserDAO userDAO = UserDAO.Instance;
-        UserSession userSession = new UserSession();
+        UserLogin userSession = new UserLogin();
 
 
         //view login page on first visit
@@ -20,7 +20,7 @@ namespace HearthBuilder.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(User user)
+        public ActionResult Index(UserLogin user)
         {
             if (Session["notifications"] == null)
                 Session["notifications"] = new List<Notification>();
@@ -29,7 +29,7 @@ namespace HearthBuilder.Controllers
             {
                 try
                 {
-                    User userLogin = userDAO.GetAccountByEmailAndPassword(user);
+                    UserLogin userLogin = userDAO.GetAccountByEmailAndPassword(user);
                     if (userLogin != null)
                         Session["UserSession"] = userLogin;
 
@@ -56,7 +56,7 @@ namespace HearthBuilder.Controllers
         }
 
         [HttpPost]
-        public ActionResult Register(User user)
+        public ActionResult Register(UserRegister user)
         {
             if (Session["notifications"] == null)
                 Session["notifications"] = new List<Notification>();
@@ -71,7 +71,7 @@ namespace HearthBuilder.Controllers
             {
                 try
                 {
-                    User userRegister = userDAO.RegisterUser(user);
+                    UserRegister userRegister = userDAO.RegisterUser(user);
                     if (userRegister != null)
                         Session["UserSession"] = userRegister;
 

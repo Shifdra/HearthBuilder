@@ -2,7 +2,7 @@
 @if (Session["UserSession"] != null)
 {
     
-        User user = (User)Session["UserSession"];
+        UserLogin user = (UserLogin)Session["UserSession"];
 
     //We'll need to check login states based on our logic here
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
