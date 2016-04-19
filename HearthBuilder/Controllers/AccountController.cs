@@ -61,6 +61,12 @@ namespace HearthBuilder.Controllers
             if (Session["notifications"] == null)
                 Session["notifications"] = new List<Notification>();
 
+            if (user.FirstName == null)
+                ModelState.AddModelError("FirstName", "You must enter a first name.");
+
+            if (user.LastName == null)
+                ModelState.AddModelError("LastName", "You must enter a last name.");
+
             if (ModelState.IsValid)
             {
                 try

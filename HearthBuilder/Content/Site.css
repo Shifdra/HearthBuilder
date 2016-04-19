@@ -138,6 +138,7 @@ input{
     bottom: 10px;
     left: 0;
     width: 100%;
+    overflow: hidden;
 }
 
 .portrait i {
