@@ -86,7 +86,6 @@ namespace HearthBuilder.Models.Account
         public User RegisterUser(User user)
         {
             String passHash = Hash(user.Email + ":" + user.Password);
-            bool shouldRegister = false;
 
             try
             {
