@@ -198,15 +198,23 @@ input{
 .buildDeck .selectCard img {
     width:100%;
     cursor: pointer;
+    transition: all 300ms;
+}
+
+.buildDeck .selectCard img:hover {
+    -webkit-filter: drop-shadow(0px 0px 10px #06e);
+    filter: drop-shadow(0px 0px 10px #06e);
 }
 
 .buildDeck .deckList {
     
 }
 
-.buildDeck .txtDeckName {
+.buildDeck .txtInput {
     width: 100%;
     color: #251d18;
+    padding: 0 5px;
+    text-align:center;
 }
 
 .deckList .cardRow {
@@ -218,7 +226,7 @@ input{
 }
 
 .deckList .cardRow:hover .delCard{
-    visibility: visible;
+    opacity: 1;
 }
 
 .deckList .cardFrame {
@@ -259,7 +267,7 @@ input{
 }
 
 .deckList .delCard {
-    visibility:hidden;
+    opacity:0;
     text-shadow: 1px 1px 0 #000,1px 0 0 #000,1px -1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 1px 0 #000,-1px 0 0 #000,-1px -1px 0 #000;
     font-weight: 400;
     font-size:1.5em;
@@ -271,6 +279,7 @@ input{
     background-color: rgba(0, 0, 0, 0.43);
     margin: 3px 10px;
     text-align: center;
+    transition: all 200ms;
 }
 
 .deckList .delCard i {
