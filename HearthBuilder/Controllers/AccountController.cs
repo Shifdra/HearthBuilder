@@ -86,5 +86,23 @@ namespace HearthBuilder.Controllers
             return View();
         }
 
+        public ActionResult Logout()
+        {
+            if (Session["notifications"] == null)
+                Session["notifications"] = new List<Notification>();
+
+            if (Session["UserSession"] != null)
+            {
+                Session["UserSession"] = null;
+                ((List<Notification>)Session["notifications"]).Add(new Notification("Great!", "You have been logged out.", NotificationType.SUCCESS));
+            }
+            else
+            {
+                ((List<Notification>)Session["notifications"]).Add(new Notification("Woah!", "You weren't logged in, so there was nothing to log out of...", NotificationType.WARNING));
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }
