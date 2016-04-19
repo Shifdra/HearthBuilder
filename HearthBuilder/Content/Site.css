@@ -362,3 +362,26 @@ input{
 .filter .panel, .news .panel {
     display: inline-block;
 }
+
+.form-control {
+    border: 1px solid #251D18;
+}
+
+.btn-default {
+    border: 1px solid #251D18;
+}
+
+.btn-danger {
+    border: 1px solid #251D18;
+}
+
+.btn-primary, .input-group-addon {
+    color: #fff;
+    background-color: #251D18;
+    border-color: #000;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary.focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
+    background-color: #3D312D;
+    border-color: #000;
+}
