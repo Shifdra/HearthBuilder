@@ -1,5 +1,9 @@
-﻿@if (Request.IsAuthenticated)
+﻿@using HearthBuilder.Models.Account
+@if (Session["UserSession"] != null)
 {
+    
+        User user = (User)Session["UserSession"];
+
     //We'll need to check login states based on our logic here
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
@@ -7,9 +11,11 @@
 
         <ul class="nav navbar-nav navbar-right">
             <li>
-                @Html.ActionLink("Hello " + User.Identity.Name + "!", "Manage", "Account", routeValues: null, htmlAttributes: new { title = "Manage" })
+                <p class="navbar-text">Hello @user.FirstName!</p>
             </li>
-            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+            <li>
+                @Html.ActionLink("Log off", "Logout", "Account", routeValues: null, htmlAttributes: new { title = "Logout" })
+            </li>
         </ul>
     }
 }
