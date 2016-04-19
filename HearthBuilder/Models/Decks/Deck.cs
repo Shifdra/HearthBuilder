@@ -10,26 +10,34 @@ namespace HearthBuilder.Models.Decks
 {
     public class Deck
     {
-        public int Id { get; private set; }
+        public int Id { get; set; }
         public List<Card> Cards { get; private set; }
         public PlayerClass Class { get; private set; }
         public string ClassStr { get { return char.ToUpper(Class.ToString().ToLower()[0]) + Class.ToString().ToLower().Substring(1); } } //converts "CLASS" to "Class"
         public string Title { get; set; }
         public int Likes { get; set; }
 
-        public Deck(int id, PlayerClass pClass)
-        {
-            Id = id;
-            Cards = new List<Card>();
-            Class = pClass;
-            Title = "";
-        }
-
         public Deck()
         {
             Id = 0;
             Cards = new List<Card>();
             Class = PlayerClass.NONE;
+            Title = "";
+        }
+
+        public Deck(PlayerClass pClass)
+        {
+            Id = 0;
+            Cards = new List<Card>();
+            Class = pClass;
+            Title = "";
+        }
+
+        public Deck(int id, PlayerClass pClass)
+        {
+            Id = id;
+            Cards = new List<Card>();
+            Class = pClass;
             Title = "";
         }
 

@@ -15,12 +15,12 @@
                     @Html.ValidationSummary(true)
                     <div class="input-group">
                         @Html.LabelFor(model => model.Email)
-                        @Html.TextBoxFor(model => model.Email)
+                        @Html.TextBoxFor(model => model.Email, new { @class="form-control", @placeholder= "Email" })
                         @Html.ValidationMessageFor(model => model.Email)
                     </div>
                     <div class="input-group">
                         @Html.LabelFor(model => model.Password)
-                        @Html.TextBoxFor(model => model.Password)
+                        @Html.TextBoxFor(model => model.Password, new { @class="form-control", @placeholder= "Password" })
                         @Html.ValidationMessageFor(model => model.Password)
                     </div>
                     <div>

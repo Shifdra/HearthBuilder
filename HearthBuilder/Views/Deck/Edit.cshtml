@@ -51,7 +51,7 @@
                         });
                     });
                     responsePromise.error(function(data, status, headers, config) {
-                        alert("AJAX failed! add" + data.Message);
+                        $scope.showNotification("Error! init",  data.Message, "alert-danger");
                     });
                 }
 
@@ -72,7 +72,7 @@
                         });
                     });
                     responsePromise.error(function(data, status, headers, config) {
-                        alert("AJAX failed! del" + data.Message);
+                        $scope.showNotification("Error! init",  data.Message, "alert-danger");
                     });
                 }
 
@@ -85,6 +85,8 @@
                                 $scope.showNotification("Success!", result.Message, "alert-success");
                                 //we saved the deck successfully
                                 $scope.refreshDeck();
+                                if (result.ShouldRedirect === true)
+                                    $window.location.href = '/Deck/Edit/' + result.NewId;
                             }
                             else {
                                 $scope.showNotification("Error!", "Couldn't save deck!? " + result.Message, "alert-danger");
@@ -93,7 +95,7 @@
 
                     });
                     responsePromise.error(function(data, status, headers, config) {
-                        alert("AJAX failed! del" + data.Message);
+                        $scope.showNotification("Error! init",  data.Message, "alert-danger");
                     });
                 }
 
@@ -192,11 +194,8 @@
                     var element = angular.element(document.querySelector('#notificationBlock'));
                     var generated = element.html(alert);
                     $compile(generated.contents())($scope);
-
                     $scope.showNotificationMessage = true;
-
                     $timeout.cancel($scope.showNotificationTimeout); //cancel the previous timeout, weve got a new notification to show
-
                     $scope.showNotificationTimeout = $timeout(function() {
                         $scope.showNotificationMessage = false;
                     }, 5000);

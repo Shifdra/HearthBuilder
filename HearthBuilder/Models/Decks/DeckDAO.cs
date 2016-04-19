@@ -76,7 +76,7 @@ namespace HearthBuilder.Models.Decks
             }
         }
 
-        public Deck CreateNewDeck(string pClass)
+        public int CreateNewDeck(Deck deck)
         {
             try
             {
@@ -85,12 +85,12 @@ namespace HearthBuilder.Models.Decks
                     connection.Open();
                     MySqlCommand cmd = connection.CreateCommand();
                     cmd.CommandText = string.Format("INSERT INTO decks (`class`) VALUES (@pClass)");
-                    cmd.Parameters.AddWithValue("@pClass", pClass);
+                    cmd.Parameters.AddWithValue("@pClass", deck.Class.ToString());
                     cmd.ExecuteNonQuery();
                     int deckid = 0;
                     int.TryParse(cmd.LastInsertedId.ToString(), out deckid); //get the mysql generated last ID
 
-                    return new Deck(deckid, (PlayerClass)Enum.Parse(typeof(PlayerClass), pClass, true));
+                    return deckid;
                 }
             }
             catch (MySqlException e)
@@ -100,11 +100,19 @@ namespace HearthBuilder.Models.Decks
             }
         }
 
-        public void UpdateDeck(Deck deck)
+        public Deck UpdateDeck(Deck deck)
         {
             using (MySqlConnection connection = new MySqlConnection(ConfigurationManager.ConnectionStrings["MySQLConnection"].ConnectionString))
             {
                 connection.Open();
+
+                if (deck.Id == 0) // if we have a "new" deck
+                {
+                    deck.Id = CreateNewDeck(deck); //get the new deck id from the DB, after adding a fresh one
+                    System.Diagnostics.Debug.WriteLine("UpdateDeck() -> inserting a new Deck: " + deck.Id + " with card count " + deck.Cards.Count);
+                }
+                else
+                    System.Diagnostics.Debug.WriteLine("UpdateDeck() -> updating an old Deck: " + deck.Id + " with card count " + deck.Cards.Count);
 
                 MySqlCommand cmd1 = new MySqlCommand("UPDATE decks SET title = @title WHERE id = @id", connection);
                 cmd1.Parameters.AddWithValue("@title", deck.Title);
@@ -142,6 +150,7 @@ namespace HearthBuilder.Models.Decks
                     }
                 }
             }
+            return deck;
         }
 
         public void DeleteDeck(int id)

@@ -18,53 +18,47 @@ namespace HearthBuilder.Controllers
         {
             return View();
         }
-
-        public ActionResult New(string id) //generating a new deck from the db
-        {
-            //check to ensure we have a valid action
-            if (id != "Druid" && id != "Hunter" && id != "Mage" && id != "Paladin" && id != "Priest" && id != "Rogue" && id != "Shaman" && id != "Warlock" && id != "Warrior")
-            {
-                if (Session["notifications"] == null)
-                    Session["notifications"] = new List<Notification>();
-
-                ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "You must select a class!", NotificationType.ERROR));
-                return RedirectToAction("Index", "Deck");
-            }
-
-            try
-            {
-                //generating a new deck from the db
-                Deck deck = DeckDAO.Instance.CreateNewDeck(id.ToUpper());
-                //redirect them to the edit deck page
-                return RedirectToAction("Edit", new { id = deck.Id });
-            }
-            catch (Exception e)
-            {
-                ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "Unexpected error creating deck! " + e.Message, NotificationType.ERROR));
-                return RedirectToAction("Index", "Deck");
-            }
-            
-        }
-
-        public ActionResult Edit(int id = 0) //editing a current deck
+        
+        //@id is either an number or the name of a class
+        public ActionResult Edit(string id = "") //editing a current deck
         {
             if (Session["notifications"] == null)
                 Session["notifications"] = new List<Notification>();
             
             try
             {
-                //try to pull the deck via ID from the DB
-                Deck deck = DeckDAO.Instance.GetDeckById(id);
-                if (deck == null)
+                int nId = 0;
+                Deck deck;
+
+                //do we have an existing deck?
+                if (int.TryParse(id, out nId))
                 {
-                    ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "Couldn't edit a deck that doesn't exist!", NotificationType.ERROR));
-                    return Redirect("/");
+                    //try to pull the deck via ID from the DB
+                    deck = DeckDAO.Instance.GetDeckById(nId);
+                    Session["deck"] = deck; //save the deck to the session
+                    if (deck == null)
+                    {
+                        ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "Couldn't edit a deck that doesn't exist!", NotificationType.ERROR));
+                        return Redirect("/");
+                    }
                 }
-                Session["deck"] = deck; //save the deck to the session
+                else //we have a new deck
+                {
+                    //check to ensure we have a valid action
+                    if (id != "Druid" && id != "Hunter" && id != "Mage" && id != "Paladin" && id != "Priest" && id != "Rogue" && id != "Shaman" && id != "Warlock" && id != "Warrior")
+                    {
+                        ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "You must select a class!", NotificationType.ERROR));
+                        return RedirectToAction("Index", "Deck");
+                    }
+
+                    deck = new Deck((PlayerClass)Enum.Parse(typeof(PlayerClass), id, true));
+                    Session["deck"] = deck; //save the deck to the session
+                }
             }
             catch (Exception e)
             {
                 ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "Unexpected error getting deck! " + e.Message, NotificationType.ERROR));
+                System.Diagnostics.Debug.WriteLine(e.Message);
                 return Redirect("/");
             }
             return View();
@@ -106,6 +100,7 @@ namespace HearthBuilder.Controllers
                 }
                 catch (Exception e)
                 {
+                    System.Diagnostics.Debug.WriteLine(e.Message);
                     result.Add(new { Result = "0", Message = e.Message, CardId = id, StackTrace = e.StackTrace.ToString() });
                 }
             }
@@ -135,6 +130,7 @@ namespace HearthBuilder.Controllers
                 }
                 catch (Exception e)
                 {
+                    System.Diagnostics.Debug.WriteLine(e.Message);
                     result.Add(new { Result = "0", Message = e.Message, CardId = id, StackTrace = e.StackTrace.ToString() });
                 }
             }
@@ -147,6 +143,7 @@ namespace HearthBuilder.Controllers
         public ActionResult SaveDeck(string id)
         {
             var result = new List<object>();
+            bool shouldRedirect = false;
 
             if (Session["deck"] == null)
             {
@@ -156,18 +153,25 @@ namespace HearthBuilder.Controllers
             else
             {
                 Deck deck = (Deck)Session["deck"];
+                System.Diagnostics.Debug.WriteLine("SaveDeck() " + deck.Id + " card count " + deck.Cards.Count);
+
                 //add the new title
                 deck.Title = id;
-                Session["deck"] = deck; //update the session
-
+                
                 try
                 {
+                    if (deck.Id == 0)
+                        shouldRedirect = true;
+
                     //save the deck
-                    DeckDAO.Instance.UpdateDeck(deck);
-                    result.Add(new { Result = "1", Message = "Saved deck!" });
+                    deck = DeckDAO.Instance.UpdateDeck(deck);
+                    result.Add(new { Result = "1", Message = "Saved deck!", ShouldRedirect = shouldRedirect, NewId = deck.Id });
+
+                    Session["deck"] = deck; //update the session
                 }
                 catch (Exception e)
                 {
+                    System.Diagnostics.Debug.WriteLine(e.Message);
                     result.Add(new { Result = "0", Message = "Couldn't save deck!? " + e.Message});
                 }                    
             }
@@ -196,6 +200,7 @@ namespace HearthBuilder.Controllers
                 }
                 catch (Exception e)
                 {
+                    System.Diagnostics.Debug.WriteLine(e.Message);
                     result.Add(new { Result = "0", Message = "Couldn't delete deck! Error: " + e.Message });
                 }
             }
