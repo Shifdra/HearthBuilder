@@ -182,7 +182,7 @@ input{
 
 }
 
-.buildDeck .cardCount {
+.cardCount {
     font-weight: 400;
     font-size:1.2em;
     color: #7e6b51;
