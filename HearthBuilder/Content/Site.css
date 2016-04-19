@@ -402,3 +402,8 @@ input{
     background-color: #3D312D;
     border-color: #000;
 }
+
+.validation-message {
+    color: red;
+    display: block;
+}

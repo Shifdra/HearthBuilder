@@ -11,31 +11,34 @@
             <div class="col-sm-12">
                 @using (Html.BeginForm())
                 {
-                    @Html.ValidationSummary(true)
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-user"></i></span>
                         @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", @placeholder = "First Name" })
-                        @Html.ValidationMessageFor(model => model.FirstName)
                     </div>
+                    @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "validation-message" })
                     <span class="help-block"></span>
+
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-user"></i></span>
                         @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", @placeholder = "Last Name" })
-                        @Html.ValidationMessageFor(model => model.LastName)
                     </div>
+                    @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "validation-message" })
                     <span class="help-block"></span>
+
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-at"></i></span>
                         @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @placeholder = "Email" })
-                        @Html.ValidationMessageFor(model => model.Email)
                     </div>
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "validation-message" })
                     <span class="help-block"></span>
+
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-lock"></i></span>
                         @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @placeholder = "Password" } })
-                        @Html.ValidationMessageFor(model => model.Password)
                     </div>
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "validation-message" })
                     <span class="help-block"></span>
+
                     <div class="row">
                         <div class="col-md-6">
                             <button type="submit" class="btn btn-primary btn-lg btn-block">Register</button>

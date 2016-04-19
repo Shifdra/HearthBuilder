@@ -9,14 +9,18 @@ namespace HearthBuilder.Models.Account
     public class User
     {
         public int ID { get; set; }
+
+        [Required(ErrorMessage = "First name is a required field.")]
         public String FirstName { get; set; }
+
+        [Required(ErrorMessage = "Last name is a required field.")]
         public String LastName { get; set; }
 
-        [Required(ErrorMessage = "An email is required.")]
+        [Required(ErrorMessage = "Email is a required field.")]
         [RegularExpression(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$", ErrorMessage = "Invalid email address.")]
         public String Email { get; set; }
 
-        [Required(ErrorMessage = "A password is required.")]
+        [Required(ErrorMessage = "Password is a required field.")]
         [DataType(DataType.Password)]
         public String Password { get; set; }
 
