@@ -53,6 +53,8 @@ namespace HearthBuilder.Models.Decks
                                 deck.Title = deckReader.GetString(titleOrdinal);
                             deck.Likes = deckReader.GetInt32("likes");
                             deck.UserId = deckReader.GetInt32("account_id");
+                            deck.DateCreated = deckReader.GetDateTime("date_created");
+                            deck.DateUpdated = deckReader.GetDateTime("date_updated");
                         }
                     }
                     
@@ -73,6 +75,7 @@ namespace HearthBuilder.Models.Decks
             }
             catch (Exception e)
             {
+                System.Diagnostics.Debug.WriteLine(e.Message);
                 throw e;
             }
         }
@@ -85,7 +88,7 @@ namespace HearthBuilder.Models.Decks
                 {
                     connection.Open();
                     MySqlCommand cmd = connection.CreateCommand();
-                    cmd.CommandText = string.Format("INSERT INTO decks (`class`, `account_id`) VALUES (@pClass, @userId)");
+                    cmd.CommandText = string.Format("INSERT INTO decks (`class`, `account_id`, `date_created`, `date_updated`) VALUES (@pClass, @userId, now(), now())");
                     cmd.Parameters.AddWithValue("@pClass", deck.Class.ToString());
                     cmd.Parameters.AddWithValue("@userId", deck.UserId);
                     cmd.ExecuteNonQuery();
@@ -116,10 +119,12 @@ namespace HearthBuilder.Models.Decks
                 else
                     System.Diagnostics.Debug.WriteLine("UpdateDeck() -> updating an old Deck: " + deck.Id + " with card count " + deck.Cards.Count);
 
-                MySqlCommand cmd1 = new MySqlCommand("UPDATE decks SET title = @title WHERE id = @id", connection);
+                MySqlCommand cmd1 = new MySqlCommand("UPDATE decks SET title = @title, date_updated = now() WHERE id = @id", connection);
                 cmd1.Parameters.AddWithValue("@title", deck.Title);
                 cmd1.Parameters.AddWithValue("@id", deck.Id);
                 cmd1.ExecuteNonQuery();
+
+                deck.DateUpdated = DateTime.Now; //update this to reflect the change
 
                 MySqlCommand cmd2 = new MySqlCommand("DELETE FROM deck_cards WHERE deck_id = @id", connection);
                 cmd2.Parameters.AddWithValue("@id", deck.Id);
@@ -198,6 +203,8 @@ namespace HearthBuilder.Models.Decks
                             if (!deckReader.IsDBNull(titleOrdinal))
                                 deck.Title = deckReader.GetString(titleOrdinal);
                             deck.Likes = deckReader.GetInt32("likes");
+                            deck.DateCreated = deckReader.GetDateTime("date_created");
+                            deck.DateUpdated = deckReader.GetDateTime("date_updated");
                             decks.Add(deck);
                         }
                     }

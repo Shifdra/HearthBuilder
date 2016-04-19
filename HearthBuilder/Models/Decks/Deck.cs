@@ -17,7 +17,9 @@ namespace HearthBuilder.Models.Decks
         public string Title { get; set; }
         public int Likes { get; set; }
         public int UserId { get; set; }
-
+        public DateTime DateCreated { get; set; }
+        public DateTime DateUpdated { get; set; }
+        
         public Deck()
         {
             Id = 0;

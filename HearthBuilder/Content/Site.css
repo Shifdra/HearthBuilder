@@ -354,10 +354,17 @@ input{
     display: block;
     position: relative;
     text-align:center;
+    padding-top:20px;
 }
 
 .viewDeck .fixed {
     position:fixed;
+}
+
+.deckInfo {
+    text-align: left;
+    margin-top:80px;
+    display:inline-block;
 }
 
 .filter, .news {
@@ -366,6 +373,10 @@ input{
 
 .filter .panel, .news .panel {
     display: inline-block;
+}
+
+.banner img {
+    margin:0 auto;
 }
 
 .form-control {

@@ -98,7 +98,8 @@ namespace HearthBuilder.Controllers
                     ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "Couldn't edit a deck that doesn't exist!", NotificationType.ERROR));
                     return Redirect("/");
                 }
-                
+
+                ViewBag.user = UserDAO.Instance.GetUserbyId(((Deck)ViewBag.deck).UserId);
             }
             catch (Exception e)
             {
@@ -204,7 +205,7 @@ namespace HearthBuilder.Controllers
             {
                 Deck deck = (Deck)Session["deck"];
                 deck.UserId = ((User)Session["UserSession"]).ID;
-                System.Diagnostics.Debug.WriteLine("SaveDeck() " + deck.Id + " card count " + deck.Cards.Count);
+                System.Diagnostics.Debug.WriteLine("SaveDeck() " + deck.Id + " card count " + deck.Cards.Count + " to user " + ((User)Session["UserSession"]).ID);
 
                 //add the new title
                 deck.Title = id;
@@ -244,6 +245,7 @@ namespace HearthBuilder.Controllers
                 try
                 {
                     DeckDAO.Instance.DeleteDeck(((Deck)Session["deck"]).Id);
+                    Session["deck"] = null;
                     result.Add(new { Result = "1", Message = "Deck deleted!" });
                     if (Session["notifications"] == null)
                         Session["notifications"] = new List<Notification>();

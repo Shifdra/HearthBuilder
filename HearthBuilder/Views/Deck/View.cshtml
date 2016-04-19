@@ -12,56 +12,73 @@
 }
 
 <div class="container">
-    <h1>Viewing Deck:</h1>
-    <div class="viewDeck">
-        @if (Session["UserSession"] != null && ((User)Session["UserSession"]).ID == ViewBag.deck.UserId)
-        {
-            <a class="btn btn-primary btn-lg" href="/Deck/Edit/@ViewBag.deck.Id">Edit Deck</a>
-        }
-        <div class="deckList  text-center">
-            <div class="portrait">
-                <div class="@ViewBag.deck.ClassStr.ToLower()">
-                    <i></i>
-                    <span class="name">@ViewBag.deck.Title</span>
+        <div class="row">
+            <div class="col-sm-4 text-center">
+                <div class="panel panel-default deckInfo">
+                    <div class="panel-heading"><h3>Deck Info:</h3></div>
+                    <div class="panel-body">
+                        <p><strong>Title: </strong> @(((Deck)ViewBag.deck).Title)</p>
+                        <p><strong>Author: </strong> @(((User)ViewBag.user).FirstName)</p>
+                        <p><strong>Date Created: </strong> @(((Deck)ViewBag.deck).DateCreated.ToString())</p>
+                        <p><strong>Date Updated: </strong> @(((Deck)ViewBag.deck).DateUpdated.ToString())</p>
+
+                        @if (Session["UserSession"] != null && ((User)Session["UserSession"]).ID == ViewBag.deck.UserId)
+                        {
+                            <a class="btn btn-primary" href="/Deck/Edit/@ViewBag.deck.Id">Edit Deck</a>
+                        }
+                    </div>
                 </div>
             </div>
-            <div class="cards">
-                @for (int cardId = 0; cardId < ViewBag.deck.Cards.Count; cardId++)
-                {
-                    shouldHide = false;
-                    duplicateVisible = "";
-                    for (int tmpCardId = 0; tmpCardId < ViewBag.deck.Cards.Count; tmpCardId++)
-                    {
-                        if (ViewBag.deck.Cards[cardId].Id == ViewBag.deck.Cards[tmpCardId].Id && cardId != tmpCardId)
-                        { //if we have duplicate cards
-                            if (cardId < tmpCardId)
-                            { //if were on the first occurance of the card
-                                duplicateVisible = "<span class='duplicate'>2</span>";
-                            }
-                            else if (cardId > tmpCardId)
-                            {  //if were on the 2nd occurance of the card
-                                shouldHide = true; //hide entire entry because the first has a counter
-                            }
-                        }
-                        cardCount = cardId;
-                    }
-
-                    if (shouldHide == false)
-                    {
-                        <div class='cardRow'>
-                            <div class='card' style="background-image: url('/Content/Images/bars/@(ViewBag.deck.Cards[cardId].Id).png');"></div>
-                            <div class='cardFrame'>
-                                <span class='cardCost'>@(ViewBag.deck.Cards[cardId].Cost)</span>
-                                <span class='cardName'>@(ViewBag.deck.Cards[cardId].Name)</span>
-                                @Html.Raw(duplicateVisible)
+            <div class="col-sm-8">
+                <div class="viewDeck">
+                    <div class="deckList  text-center">
+                        <div class="portrait">
+                            <div class="@ViewBag.deck.ClassStr.ToLower()">
+                                <i></i>
+                                <span class="name">@ViewBag.deck.Title</span>
                             </div>
                         </div>
-                    }
-                }
-            </div>
-            <div class="cardCount">
-                <span>(@cardCount/30) Cards</span>
-            </div>
+                        <div class="cards">
+                            @for (int cardId = 0; cardId < ViewBag.deck.Cards.Count; cardId++)
+                            {
+                                shouldHide = false;
+                                duplicateVisible = "";
+                                for (int tmpCardId = 0; tmpCardId < ViewBag.deck.Cards.Count; tmpCardId++)
+                                {
+                                    if (ViewBag.deck.Cards[cardId].Id == ViewBag.deck.Cards[tmpCardId].Id && cardId != tmpCardId)
+                                    { //if we have duplicate cards
+                                        if (cardId < tmpCardId)
+                                        { //if were on the first occurance of the card
+                                            duplicateVisible = "<span class='duplicate'>2</span>";
+                                        }
+                                        else if (cardId > tmpCardId)
+                                        {  //if were on the 2nd occurance of the card
+                                            shouldHide = true; //hide entire entry because the first has a counter
+                                        }
+                                    }
+                                    cardCount = cardId;
+                                }
+
+                                if (shouldHide == false)
+                                {
+                                    <div class='cardRow'>
+                                        <div class='card' style="background-image: url('/Content/Images/bars/@(ViewBag.deck.Cards[cardId].Id).png');"></div>
+                                        <div class='cardFrame'>
+                                            <span class='cardCost'>@(ViewBag.deck.Cards[cardId].Cost)</span>
+                                            <span class='cardName'>@(ViewBag.deck.Cards[cardId].Name)</span>
+                                            @Html.Raw(duplicateVisible)
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <div class="cardCount">
+                            <span>(@(cardCount + 1)/30) Cards</span>
+                        </div>
+                    </div>
+                </div>
         </div>
+
+        
     </div>
 </div>
