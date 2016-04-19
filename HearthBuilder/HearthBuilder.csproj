@@ -1700,6 +1700,7 @@
     <Content Include="Content\Images\deck\gem_epic.png" />
     <Content Include="Content\Images\deck\gem_legendary.png" />
     <Content Include="Content\Images\deck\gem_rare.png" />
+    <Content Include="Content\Images\heros\DRUID.gif" />
     <Content Include="Content\Images\heros\HERO_01.gif" />
     <Content Include="Content\Images\heros\HERO_02.gif" />
     <Content Include="Content\Images\heros\HERO_03.gif" />
@@ -1709,6 +1710,14 @@
     <Content Include="Content\Images\heros\HERO_07.gif" />
     <Content Include="Content\Images\heros\HERO_08.gif" />
     <Content Include="Content\Images\heros\HERO_09.gif" />
+    <Content Include="Content\Images\heros\HUNTER.gif" />
+    <Content Include="Content\Images\heros\MAGE.gif" />
+    <Content Include="Content\Images\heros\PALADIN.gif" />
+    <Content Include="Content\Images\heros\PRIEST.gif" />
+    <Content Include="Content\Images\heros\ROGUE.gif" />
+    <Content Include="Content\Images\heros\SHAMAN.gif" />
+    <Content Include="Content\Images\heros\WARLOCK.gif" />
+    <Content Include="Content\Images\heros\WARRIOR.gif" />
     <Content Include="Content\ModalConfirm.html" />
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -1733,9 +1742,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Build\Index.cshtml" />
-    <Content Include="Views\Build\Deck.cshtml" />
-    <Content Include="Views\Browse\Deck.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Browse\Index.cshtml" />
@@ -1770,9 +1776,9 @@
     <Content Include="Views\Shared\_LoginHeaderPartial.cshtml" />
     <Content Include="Views\Browse\CardName.cshtml" />
     <Content Include="Views\Browse\CardId.cshtml" />
-    <Content Include="Views\Deck\New.cshtml" />
     <Content Include="Views\Deck\Index.cshtml" />
     <Content Include="Views\Deck\Edit.cshtml" />
+    <Content Include="Views\Deck\View.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

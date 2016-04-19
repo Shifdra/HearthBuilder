@@ -63,7 +63,33 @@ namespace HearthBuilder.Controllers
             }
             return View();
         }
-        
+
+        public ActionResult View(int id) //editing a current deck
+        {
+            if (Session["notifications"] == null)
+                Session["notifications"] = new List<Notification>();
+
+            try
+            {
+                Deck deck;
+                //try to pull the deck via ID from the DB
+                ViewBag.deck = DeckDAO.Instance.GetDeckById(id);
+                if (ViewBag.deck == null)
+                {
+                    ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "Couldn't edit a deck that doesn't exist!", NotificationType.ERROR));
+                    return Redirect("/");
+                }
+                
+            }
+            catch (Exception e)
+            {
+                ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "Unexpected error getting deck! " + e.Message, NotificationType.ERROR));
+                System.Diagnostics.Debug.WriteLine(e.Message);
+                return Redirect("/");
+            }
+            return View();
+        }
+
         public string ListAllCards()
         {
             return JsonConvert.SerializeObject(CardCollection.Instance.AllCards);

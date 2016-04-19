@@ -61,40 +61,47 @@
         @foreach (Deck deck in ViewBag.decks)
         {
             <div class="deckList  text-center">
-                <h3>@deck.Title</h3>
-                <a href="/Deck/Edit/@deck.Id" class="btn btn-primary">Edit</a>
-
-                @for (int cardId = 0; cardId < deck.Cards.Count; cardId++)
-                {
-                    shouldHide = false;
-                    duplicateVisible = "";
-                    for (int tmpCardId = 0; tmpCardId < deck.Cards.Count; tmpCardId++)
-                    {
-                        if (deck.Cards[cardId].Id == deck.Cards[tmpCardId].Id && cardId != tmpCardId)
-                        { //if we have duplicate cards
-                            if (cardId < tmpCardId)
-                            { //if were on the first occurance of the card
-                                duplicateVisible = "<span class='duplicate'>2</span>";
+                <a href="/Deck/View/@deck.Id">
+                    <div class="portrait">
+                        <div class="@deck.ClassStr.ToLower()">
+                            <i></i>
+                            <span class="name">@deck.Title</span>
+                        </div>
+                    </div>
+                    <div class="cards">
+                        @for (int cardId = 0; cardId < deck.Cards.Count; cardId++)
+                        {
+                            shouldHide = false;
+                            duplicateVisible = "";
+                            for (int tmpCardId = 0; tmpCardId < deck.Cards.Count; tmpCardId++)
+                            {
+                                if (deck.Cards[cardId].Id == deck.Cards[tmpCardId].Id && cardId != tmpCardId)
+                                { //if we have duplicate cards
+                                    if (cardId < tmpCardId)
+                                    { //if were on the first occurance of the card
+                                        duplicateVisible = "<span class='duplicate'>2</span>";
+                                    }
+                                    else if (cardId > tmpCardId)
+                                    {  //if were on the 2nd occurance of the card
+                                        shouldHide = true; //hide entire entry because the first has a counter
+                                    }
+                                }
                             }
-                            else if (cardId > tmpCardId)
-                            {  //if were on the 2nd occurance of the card
-                                shouldHide = true; //hide entire entry because the first has a counter
+
+                            if (shouldHide == false)
+                            {
+                                <div class='cardRow'>
+                                    <div class='card' style="background-image: url('/Content/Images/bars/@(deck.Cards[cardId].Id).png');"></div>
+                                    <div class='cardFrame'>
+                                        <span class='cardCost'>@(deck.Cards[cardId].Cost)</span>
+                                        <span class='cardName'>@(deck.Cards[cardId].Name)</span>
+                                        @Html.Raw(duplicateVisible)
+                                    </div>
+                                </div>
                             }
                         }
-                    }
-
-                    if (shouldHide == false)
-                    {
-                        <div class='cardRow'>
-                            <div class='card' style="background-image: url('/Content/Images/bars/@(deck.Cards[cardId].Id).png');"></div>
-                            <div class='cardFrame'>
-                                <span class='cardCost'>@(deck.Cards[cardId].Cost)</span>
-                                <span class='cardName'>@(deck.Cards[cardId].Name)</span>
-                                @Html.Raw(duplicateVisible)
-                            </div>
-                        </div>
-                    }
-                }
+                    </div>
+                </a>
             </div>
         }
     </div>

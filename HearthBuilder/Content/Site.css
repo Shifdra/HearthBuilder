@@ -118,11 +118,12 @@ input{
 
 }
 
-.pickClass .portrait {
+.portrait {
     text-align: center;
+    position: relative;
 }
 
-.pickClass .name {
+.portrait .name {
     text-shadow: 1px 1px 0 #000,1px 0 0 #000,1px -1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 1px 0 #000,-1px 0 0 #000,-1px -1px 0 #000;
     font-weight: 400;
     font-size:3.5em;
@@ -134,49 +135,47 @@ input{
     width: 100%;
 }
 
-.pickClass i {
-    height: 275px;
-    width: 240px;
+.portrait i {
+    height: 273px;
+    width: 236px;
     display: inline-block;
     
-    background-size: 306px 464px !important;
-    background-position-y: -113px !important;
 }
 
-.pickClass .druid i {
-    background: url("/Content/Images/heros/HERO_06.gif") center no-repeat;
+.druid i {
+    background: url("/Content/Images/heros/DRUID.gif") center no-repeat;
 }
 
-.pickClass .hunter i {
-    background: url("/Content/Images/heros/HERO_05.gif") center no-repeat;
+.hunter i {
+    background: url("/Content/Images/heros/HUNTER.gif") center no-repeat;
 }
 
-.pickClass .mage i {
-    background: url("/Content/Images/heros/HERO_08.gif") center no-repeat;
+.mage i {
+    background: url("/Content/Images/heros/MAGE.gif") center no-repeat;
 }
 
-.pickClass .paladin i {
-    background: url("/Content/Images/heros/HERO_04.gif") center no-repeat;
+.paladin i {
+    background: url("/Content/Images/heros/PALADIN.gif") center no-repeat;
 }
 
-.pickClass .priest i {
-    background: url("/Content/Images/heros/HERO_09.gif") center no-repeat;
+.priest i {
+    background: url("/Content/Images/heros/PRIEST.gif") center no-repeat;
 }
 
-.pickClass .rogue i {
-    background: url("/Content/Images/heros/HERO_03.gif") center no-repeat;
+.rogue i {
+    background: url("/Content/Images/heros/ROGUE.gif") center no-repeat;
 }
 
-.pickClass .shaman i {
-    background: url("/Content/Images/heros/HERO_02.gif") center no-repeat;
+.shaman i {
+    background: url("/Content/Images/heros/SHAMAN.gif") center no-repeat;
 }
 
-.pickClass .warlock i {
-    background: url("/Content/Images/heros/HERO_07.gif") center no-repeat;
+.warlock i {
+    background: url("/Content/Images/heros/WARLOCK.gif") center no-repeat;
 }
 
-.pickClass .warrior i {
-    background: url("/Content/Images/heros/HERO_01.gif") center no-repeat;
+.warrior i {
+    background: url("/Content/Images/heros/WARRIOR.gif") center no-repeat;
 }
 
 .buildDeck {
@@ -293,7 +292,12 @@ input{
     background: url('/Content/Images/deck/countbox.png') no-repeat;
     height: 34px;
     width: 34px;
-    padding: 1px 0px 0px 17px;
+    padding: 1px 7px 0px 17px;
+}
+
+.browseDeck .deckList .cards{
+    overflow:hidden;
+    max-height: 140px;
 }
 
 .buildDeck .col-fixed-262 {
@@ -305,7 +309,37 @@ input{
     padding-left: 280px;
 }
 
+.browseDeck {
+    text-align: center;
+}
+
 .browseDeck .deckList {
     width: 230px;
     display: inline-block;
+    position: relative;
+}
+
+.browseDeck .deckList:hover i {
+    -webkit-filter: drop-shadow(0px 0px 10px #06e);
+    filter: drop-shadow(0px 0px 10px #06e);
+}
+
+.deckList .portrait .name {
+    font-size: 1.2em;
+    font-size: 2.5em;
+    bottom: 20px;
+}
+
+
+.viewDeck {
+    width: 230px;
+    margin-left: auto ;
+    margin-right: auto ;
+    display: block;
+    position: relative;
+    text-align:center;
+}
+
+.viewDeck .fixed {
+    position:fixed;
 }
