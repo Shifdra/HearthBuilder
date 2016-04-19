@@ -52,7 +52,7 @@ namespace HearthBuilder.Controllers
                     }
 
                     //are they refreshing the page with a new deck?
-                    if (Session["deck"] == null || ((Deck)Session["deck"]).Id != 0)
+                    if (Session["deck"] == null || ((Deck)Session["deck"]).Id != 0 || ((Deck)Session["deck"]).ClassStr != id)
                     {
                         deck = new Deck((PlayerClass)Enum.Parse(typeof(PlayerClass), id, true));
                         Session["deck"] = deck; //save the deck to the session
