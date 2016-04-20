@@ -28,12 +28,21 @@
             {
                 <div class="row" style="padding:15px;">
                     <div class="col-xs-12">
-                        <div class="input-group">
+                        <div class="btn-group" data-toggle="buttons">
+                            <label class="btn btn-primary">
+                                <input type="checkbox" autocomplete="off"> Checkbox 1
+                            </label>
+                            <label class="btn btn-primary">
+                                <input type="checkbox" autocomplete="off"> Checkbox 2
+                            </label>
+                        </div><br />
+
+                        <div class="btn-group" >
                             @for (int i = 0; i < Model.Classes.Count; i++)
                             {
                                 //THIS WORKS... WHY?
                                 @Html.HiddenFor(m => m.Classes[i].PlayerClass)
-                                @Html.LabelFor(m => m.Classes[i].Checked, Model.Classes[i].PlayerClass)
+                                @Html.LabelFor(m => m.Classes[i].Checked, Model.Classes[i].PlayerClass, new { @class = "btn btn-primary" })
                                 @Html.CheckBoxFor(m => m.Classes[i].Checked)
                                 
                                 //THIS DOESNT WORK, causes blank results
