@@ -415,3 +415,13 @@ input{
     color: red;
     display: block;
 }
+
+.classButtons input[type=checkbox].chk:checked {
+    color:blue;
+}
+
+ 
+
+ .classButtons input[type=checkbox].chk:checked + .lblChk {
+    color:blue;
+}
