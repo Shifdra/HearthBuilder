@@ -340,8 +340,7 @@ input{
 }
 
 
-.deckList .portrait .name {
-    font-size: 1.2em;
+.deckList .portrait .name, .viewDeck .portrait .name {
     font-size: 2.5em;
     bottom: 30px;
     line-height: 90%;
@@ -349,23 +348,32 @@ input{
 
 
 .viewDeck {
-    width: 230px;
-    margin-left: auto ;
-    margin-right: auto ;
-    display: block;
-    position: relative;
-    text-align:center;
-    padding-top:20px;
+    padding-top:40px;
+    padding-bottom: 40px;
 }
 
 .viewDeck .fixed {
     position:fixed;
 }
 
+.viewDeck .deckList {
+    width: 230px;
+    margin-left: auto ;
+    margin-right: auto ;
+    display: block;
+    position: relative;
+    text-align:center;
+}
+
+
 .deckInfo {
     text-align: left;
-    margin-top:80px;
+    margin: 20px 0;
     display:inline-block;
+}
+
+.deckInfo h3 {
+    margin:0;
 }
 
 .filter, .news {
