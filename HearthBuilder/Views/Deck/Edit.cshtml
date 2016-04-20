@@ -257,17 +257,6 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-xs-12 col-offset-262">
-                <h1>Editing a @(((Deck)Session["deck"]).ClassStr) Deck</h1>
-                <div id="overview" class="panel panel-default">
-                    <div class="panel-heading">Search for Cards: <input autofocus type="text" name="input" ng-model="txtSearch" ng-change="filterCards()" ng-trim="true" placeholder="Card Names" class="txtInput"/> </div>
-                    <div class="panel-body">
-                        <div class="row selectCard">
-
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="col-fixed-262">
                 <div class="deckOptions">
                     @if (Session["UserSession"] != null) //are they logged in?
@@ -289,6 +278,17 @@
                         </div>
                         <div class="cardCount">
                             <span>({{cardCount}}/30) Cards</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-offset-262">
+                <h1>Editing a @(((Deck)Session["deck"]).ClassStr) Deck</h1>
+                <div id="overview" class="panel panel-default">
+                    <div class="panel-heading">Search for Cards: <input autofocus type="text" name="input" ng-model="txtSearch" ng-change="filterCards()" ng-trim="true" placeholder="Card Names" class="txtInput"/> </div>
+                    <div class="panel-body">
+                        <div class="row selectCard">
+
                         </div>
                     </div>
                 </div>

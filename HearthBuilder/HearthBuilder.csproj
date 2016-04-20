@@ -1720,6 +1720,7 @@
     <Content Include="Content\Images\heros\WARLOCK.gif" />
     <Content Include="Content\Images\heros\WARRIOR.gif" />
     <Content Include="Content\ModalConfirm.html" />
+    <Content Include="Content\Responsive.css" />
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

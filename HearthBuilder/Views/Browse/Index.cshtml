@@ -76,7 +76,7 @@
             {
                 <div class="row" style="padding:15px;">
                     <div class="col-xs-12 form-group">
-                        <div class="btn-group classButtons">
+                        <div class="classButtons">
                             @for (int i = 0; i < Model.Classes.Count; i++)
                             {
                                 <div class="btn btn-primary chkBtn">
@@ -92,10 +92,10 @@
                         </div>
                         <br/><br/>
                         <div class="row">
-                            <div class="col-xs-6">
+                            <div class="col-sm-6">
                                 @Html.TextBoxFor(model => model.DeckName, new { @class = ("form-control input-lg"), @placeholder = "Deck Name (optional)" })
                             </div>
-                            <div class="col-xs-6">
+                            <div class="col-sm-6">
                                 <input type="submit" value="Filter" class="btn btn-primary btn-block btn-danger btn-lg" />
                             </div>
                         </div>
