@@ -13,13 +13,18 @@ namespace HearthBuilder.Models.FilterDecks
 
         public SearchParams()
         {
-            Classes = new List<ClassNames>();
-            foreach (PlayerClasses pClass in Enum.GetValues(typeof(PlayerClasses)))
+            Classes = new List<ClassNames>
             {
-                if (pClass != PlayerClasses.NONE)
-                    Classes.Add(new ClassNames(pClass));
-            }
+                new ClassNames { Name = "Druid" },
+                new ClassNames { Name = "Hunter" },
+                new ClassNames { Name = "Mage" },
+                new ClassNames { Name = "Paladin" },
+                new ClassNames { Name = "Priest" },
+                new ClassNames { Name = "Rogue" },
+                new ClassNames { Name = "Shaman" },
+                new ClassNames { Name = "Warlock" },
+                new ClassNames { Name = "Warrior" },
+            };
         }
-
     }
 }

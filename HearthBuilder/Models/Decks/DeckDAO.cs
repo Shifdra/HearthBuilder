@@ -187,48 +187,44 @@ namespace HearthBuilder.Models.Decks
 
         public List<Deck> GetDecksByClassAndDeckName(SearchParams searchParams)
         {
+            List<Deck> decks = new List<Deck>();
             try
             {
                 using (MySqlConnection connection = new MySqlConnection(ConfigurationManager.ConnectionStrings["MySQLConnection"].ConnectionString))
                 {
-                    Boolean classFilter = false;
+                    List<String> classSearchParams = new List<String>();
                     for (int i = 0; i < searchParams.Classes.Count; i++)
                     {
                         if (searchParams.Classes[i].Checked) //if any classes were checked then we need to filter by class
-                            classFilter = true;
+                            classSearchParams.Add(searchParams.Classes[i].Name);
                     }
 
-                    string classSearchParams = "";
-                    for (int i = 0; i < searchParams.Classes.Count; i++)
+                    String classSearchParamsStr = "";
+                    foreach (String param in classSearchParams) //add all params into one long string
                     {
-                        if (i != searchParams.Classes.Count - 1 && searchParams.Classes[i].Checked) //when a class is checked, add it's class string to the params to be used in the query
-                        {
-                            classSearchParams += searchParams.Classes[i].PlayerClassStr + " AND ";
-                        }
-                        else if (i == searchParams.Classes.Count - 1 && searchParams.Classes[i].Checked) //the last param has no 'AND'
-                        {
-                            classSearchParams += searchParams.Classes[i].PlayerClassStr;
-                        }
+                        if (param != classSearchParams[classSearchParams.Count - 1]) //if not last parameter then add an 'OR' on the end
+                            classSearchParamsStr += "'" + param.ToUpper() + "' OR class = ";
+                        else
+                            classSearchParamsStr += "'" + param.ToUpper() + "'";
                     }
 
                     MySqlCommand cmd1;
-                    if (searchParams.DeckName != null && classFilter) //there is a deck name and class filter
+                    if (searchParams.DeckName != null && classSearchParams.Count > 0) //there is a deck name and class filter
                     {
-                        cmd1 = new MySqlCommand("SELECT * FROM decks WHERE class = @classSearchParams AND title = @title", connection);
-                        cmd1.Parameters.AddWithValue("@classSearchParams", classSearchParams);
+                        cmd1 = new MySqlCommand("SELECT * FROM decks WHERE class = " + classSearchParamsStr + " AND title = @title", connection);
                         cmd1.Parameters.AddWithValue("@title", searchParams.DeckName);
                     }
-                    else if (classFilter) //there is a class filter
+                    else if (classSearchParams.Count > 0) //there is a class filter
                     {
-                        cmd1 = new MySqlCommand("SELECT * FROM decks WHERE class = @classSearchParams", connection);
-                        cmd1.Parameters.AddWithValue("@classSearchParams", classSearchParams);
+                        cmd1 = new MySqlCommand("SELECT * FROM decks WHERE class = " + classSearchParamsStr, connection);
                     }
                     else //there is a deck name
                     {
                         cmd1 = new MySqlCommand("SELECT * FROM decks WHERE title = @title", connection);
                         cmd1.Parameters.AddWithValue("@title", searchParams.DeckName);
                     }
-                    List<Deck> decks = new List<Deck>();
+
+                    System.Diagnostics.Debug.WriteLine(cmd1.CommandText);
                     connection.Open();
                     using (MySqlDataReader deckReader = cmd1.ExecuteReader())
                     {
@@ -262,13 +258,13 @@ namespace HearthBuilder.Models.Decks
                         }
                         cardsReader.Close();
                     }
-                    return decks;
                 }
             }
             catch (Exception e)
             {
-                throw e;
+                System.Diagnostics.Debug.WriteLine(e.StackTrace);
             }
+            return decks;
         }
 
         public List<Deck> GetAllDecks()
@@ -337,7 +333,7 @@ namespace HearthBuilder.Models.Decks
                         while (deckReader.Read())
                         {
                             //map values to deck obj
-                            Deck deck = new Deck(deckReader.GetInt32("id"), (PlayerClass)Enum.Parse(typeof(PlayerClass), deckReader.GetString("class"), true));
+                            Deck deck = new Deck(deckReader.GetInt32("id"), (PlayerClasses)Enum.Parse(typeof(PlayerClasses), deckReader.GetString("class"), true));
                             var titleOrdinal = deckReader.GetOrdinal("title");
                             if (!deckReader.IsDBNull(titleOrdinal))
                                 deck.Title = deckReader.GetString(titleOrdinal);
