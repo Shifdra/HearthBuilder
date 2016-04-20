@@ -72,7 +72,7 @@ namespace HearthBuilder.Controllers
         public ActionResult CardName(String id) //viewing a card
         {
             //look for a card using the name
-            Card card = CardCollection.Instance.getByName(id);// Cards.GetFromName(id HearthDb.Enums.Language.enUS, true);
+            Card card = CardCollectionFactory.Instance.getByName(id);// Cards.GetFromName(id HearthDb.Enums.Language.enUS, true);
             
             ViewData["card"] = card;
             ViewData["searchName"] = id;
@@ -83,7 +83,7 @@ namespace HearthBuilder.Controllers
         public ActionResult CardId(String id) //viewing a card
         {
             //look for a card using the name
-            Card card = CardCollection.Instance.getById(id);// Cards.GetFromName(id HearthDb.Enums.Language.enUS, true);
+            Card card = CardCollectionFactory.Instance.getById(id);// Cards.GetFromName(id HearthDb.Enums.Language.enUS, true);
 
             ViewData["card"] = card;
             ViewData["searchName"] = id;

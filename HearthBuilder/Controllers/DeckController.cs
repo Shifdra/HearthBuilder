@@ -112,7 +112,7 @@ namespace HearthBuilder.Controllers
 
         public string ListAllCards()
         {
-            return JsonConvert.SerializeObject(CardCollection.Instance.AllCards);
+            return JsonConvert.SerializeObject(CardCollectionFactory.Instance.AllCards);
         }
 
         public string SessionDeck()
@@ -140,7 +140,7 @@ namespace HearthBuilder.Controllers
                 try
                 {
                     Deck deck = (Deck)Session["deck"];
-                    deck.AddCard(CardCollection.Instance.getById(id));
+                    deck.AddCard(CardCollectionFactory.Instance.getById(id));
                     Session["deck"] = deck;
                     result.Add(new { Result = "1", Message = "Added card to Deck" });
                 }
@@ -170,7 +170,7 @@ namespace HearthBuilder.Controllers
                 try
                 {
                     Deck deck = (Deck)Session["deck"];
-                    deck.RemoveCard(CardCollection.Instance.getById(id));
+                    deck.RemoveCard(CardCollectionFactory.Instance.getById(id));
                     Session["deck"] = deck;
                     result.Add(new { Result = "1", Message = "Card removed from deck!" });
                 }

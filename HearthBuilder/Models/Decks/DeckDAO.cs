@@ -67,7 +67,7 @@ namespace HearthBuilder.Models.Decks
                         //add each card to the deck
                         while (cardsReader.Read())
                         {
-                            deck.AddCard(CardCollection.Instance.getById(cardsReader.GetString("card_id")));
+                            deck.AddCard(CardCollectionFactory.Instance.getById(cardsReader.GetString("card_id")));
                         }
                         
                         return deck;
@@ -214,7 +214,7 @@ namespace HearthBuilder.Models.Decks
                     string query = "SELECT * FROM decks WHERE ";
                     if (searchParams.DeckName != null && classFilter)
                     {
-                        query += classSearchParams + " AND title Like @deckName ";
+                        query += "( "+ classSearchParams + ") AND title Like @deckName ";
                     }
                     else if (classFilter)
                     {
@@ -258,7 +258,7 @@ namespace HearthBuilder.Models.Decks
                             //add each card to the deck
                             while (cardsReader.Read())
                             {
-                                deck.AddCard(CardCollection.Instance.getById(cardsReader.GetString("card_id")));
+                                deck.AddCard(CardCollectionFactory.Instance.getById(cardsReader.GetString("card_id")));
                             }
                         }
                         cardsReader.Close();
@@ -310,7 +310,7 @@ namespace HearthBuilder.Models.Decks
                             //add each card to the deck
                             while (cardsReader.Read())
                             {
-                                deck.AddCard(CardCollection.Instance.getById(cardsReader.GetString("card_id")));
+                                deck.AddCard(CardCollectionFactory.Instance.getById(cardsReader.GetString("card_id")));
                             }
                         }
                         cardsReader.Close();
@@ -362,7 +362,7 @@ namespace HearthBuilder.Models.Decks
                             //add each card to the deck
                             while (cardsReader.Read())
                             {
-                                deck.AddCard(CardCollection.Instance.getById(cardsReader.GetString("card_id")));
+                                deck.AddCard(CardCollectionFactory.Instance.getById(cardsReader.GetString("card_id")));
                             }
                         }
                         cardsReader.Close();
