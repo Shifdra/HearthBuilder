@@ -26,7 +26,7 @@
                     <div class="panel-body">
                         <p><strong>Title: </strong> @(((Deck)ViewBag.deck).Title)</p>
                         <p><strong>Class: </strong> @(((Deck)ViewBag.deck).ClassStr)</p>
-                        <p><strong>Author: </strong> @(((User)ViewBag.user).FirstName)</p>
+                        <p><strong>Author: </strong> @(((User)ViewBag.user).FirstName) <a class="btn btn-primary btn-sm" href="/Browse/UserDecks/@(((User)ViewBag.user).ID)">See their Decks</a></p>
                         <p><strong>Date Created: </strong> @(((Deck)ViewBag.deck).DateCreated.ToString())</p>
                         <p><strong>Date Updated: </strong> @(((Deck)ViewBag.deck).DateUpdated.ToString())</p>
 

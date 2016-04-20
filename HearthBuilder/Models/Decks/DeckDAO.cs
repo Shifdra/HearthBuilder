@@ -235,5 +235,57 @@ namespace HearthBuilder.Models.Decks
             }
         }
 
+        public List<Deck> GetDecksByUser(int id)
+        {
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(ConfigurationManager.ConnectionStrings["MySQLConnection"].ConnectionString))
+                {
+                    MySqlCommand cmd1 = new MySqlCommand("SELECT * FROM decks WHERE account_id = @id", connection);
+                    cmd1.Parameters.AddWithValue("@id", id);
+                    List<Deck> decks = new List<Deck>();
+                    connection.Open();
+                    using (MySqlDataReader deckReader = cmd1.ExecuteReader())
+                    {
+                        while (deckReader.Read())
+                        {
+                            //map values to deck obj
+                            Deck deck = new Deck(deckReader.GetInt32("id"), (PlayerClass)Enum.Parse(typeof(PlayerClass), deckReader.GetString("class"), true));
+                            var titleOrdinal = deckReader.GetOrdinal("title");
+                            if (!deckReader.IsDBNull(titleOrdinal))
+                                deck.Title = deckReader.GetString(titleOrdinal);
+                            deck.Likes = deckReader.GetInt32("likes");
+                            deck.DateCreated = deckReader.GetDateTime("date_created");
+                            deck.DateUpdated = deckReader.GetDateTime("date_updated");
+                            decks.Add(deck);
+                        }
+                    }
+
+                    foreach (Deck deck in decks)
+                    {
+                        //now get the cards
+                        MySqlCommand cmd2 = new MySqlCommand("SELECT card_id FROM deck_cards WHERE deck_id = @id", connection);
+                        cmd2.Parameters.AddWithValue("@id", deck.Id);
+                        MySqlDataReader cardsReader = cmd2.ExecuteReader();
+                        using (cardsReader)
+                        {
+                            //add each card to the deck
+                            while (cardsReader.Read())
+                            {
+                                deck.AddCard(CardCollection.Instance.getById(cardsReader.GetString("card_id")));
+                            }
+                        }
+                        cardsReader.Close();
+                    }
+
+                    return decks;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
     }
 }

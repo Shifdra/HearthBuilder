@@ -11,7 +11,7 @@
 
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <p class="navbar-text">Hello @user.FirstName!</p>
+                @Html.ActionLink("Hello " +user.FirstName+"!", "UserDecks", "Browse", routeValues: new { id = "Mine" }, htmlAttributes: new { title = "Logout" })
             </li>
             <li>
                 @Html.ActionLink("Log off", "Logout", "Account", routeValues: null, htmlAttributes: new { title = "Logout" })

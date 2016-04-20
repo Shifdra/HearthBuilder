@@ -7,6 +7,7 @@ using HearthBuilder.Models.FilterDecks;
 using HearthBuilder.Models.Cards;
 using HearthBuilder.Models.Decks;
 using HearthBuilder.Models.Notifications;
+using HearthBuilder.Models.Account;
 
 namespace HearthBuilder.Controllers
 {
@@ -129,6 +130,38 @@ namespace HearthBuilder.Controllers
 
             ViewData["card"] = card;
             ViewData["searchName"] = id;
+
+            return View();
+        }
+
+        public ActionResult UserDecks(string id)
+        {
+            if (Session["notifications"] == null)
+                Session["notifications"] = new List<Notification>();
+
+            int uId = 0;
+            
+            //do we have an existing user?
+            if (int.TryParse(id, out uId))
+            {
+                //try to pull the decks via user ID from the DB
+                List<Deck> decks = DeckDAO.Instance.GetDecksByUser(uId);
+
+                ViewBag.decks = decks;
+            }
+            else if (id == "Mine") //our deck
+            {
+                if (Session["UserSession"] == null)
+                {
+                    ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "You aren't logged in!", NotificationType.ERROR));
+                    return Redirect("/");
+                }
+
+                //try to pull the decks via user ID from the DB
+                List<Deck> decks = DeckDAO.Instance.GetDecksByUser(((User)Session["UserSession"]).ID);
+
+                ViewBag.decks = decks;
+            }
 
             return View();
         }

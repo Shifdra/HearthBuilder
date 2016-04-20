@@ -1782,6 +1782,7 @@
     <Content Include="Views\Deck\Index.cshtml" />
     <Content Include="Views\Deck\Edit.cshtml" />
     <Content Include="Views\Deck\View.cshtml" />
+    <Content Include="Views\Browse\UserDecks.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

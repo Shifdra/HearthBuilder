@@ -52,7 +52,7 @@ namespace HearthBuilder.Controllers
                         return Redirect("/");
                     }
                     //check deck ownership before allowing editing
-                    if (Session["UserSession"] != null && deck.UserId != ((UserRegister)Session["UserSession"]).ID)
+                    if (Session["UserSession"] != null && deck.UserId != ((User)Session["UserSession"]).ID)
                     {
                         ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "You can't edit a deck that is not yours!", NotificationType.ERROR));
                         return Redirect("/");
@@ -204,8 +204,8 @@ namespace HearthBuilder.Controllers
             else
             {
                 Deck deck = (Deck)Session["deck"];
-                deck.UserId = ((UserRegister)Session["UserSession"]).ID;
-                System.Diagnostics.Debug.WriteLine("SaveDeck() " + deck.Id + " card count " + deck.Cards.Count + " to user " + ((UserRegister)Session["UserSession"]).ID);
+                deck.UserId = ((User)Session["UserSession"]).ID;
+                System.Diagnostics.Debug.WriteLine("SaveDeck() " + deck.Id + " card count " + deck.Cards.Count + " to user " + ((User)Session["UserSession"]).ID);
 
                 //add the new title
                 deck.Title = id;
