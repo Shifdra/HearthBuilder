@@ -11,6 +11,10 @@
 
 }
 
+<script>
+
+</script>
+
 <div class="container">
     <h1>Browse Decks</h1>
 
@@ -33,16 +37,11 @@
                         </div><br />
 
                         <div class="btn-group" data-toggle="buttons">
-                            <label class="btn btn-primary">
-                                <input type="checkbox" autocomplete="off"> Checkbox 2
-                            </label>
                             @for (int i = 0; i < Model.Classes.Count; i++)
                             {
-                                <label class="btn btn-primary">
-                                    @Html.HiddenFor(m => m.Classes[i].Name)
-                                    @Html.LabelFor(m => m.Classes[i].Checked, @Model.Classes[i].Name)
-                                    @Html.CheckBoxFor(m => m.Classes[i].Checked, new { @autocomplete = "off" })
-                                </label>
+                                @Html.HiddenFor(m => m.Classes[i].Name)
+                                @Html.LabelFor(m => m.Classes[i].Checked, @Model.Classes[i].Name, new { @class = "btn btn-primary" })
+                                @Html.CheckBoxFor(m => m.Classes[i].Checked, new { @htmlattributes = new { @autocomplete = "off" } })
                             }
                         </div><br />
 

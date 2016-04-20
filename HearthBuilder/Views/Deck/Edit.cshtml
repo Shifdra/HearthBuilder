@@ -3,9 +3,7 @@
 @using HearthBuilder.Models.Notifications
 @using System.Web.Optimization
 @{
-    
     ViewBag.Title = "Edit a " + ((Deck)Session["deck"]).ClassStr + " Deck";
-    
 }
 
 <div data-ng-controller="EditController" data-ng-init="init()" class="buildDeck">
