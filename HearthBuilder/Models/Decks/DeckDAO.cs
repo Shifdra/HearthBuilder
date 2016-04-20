@@ -224,6 +224,7 @@ namespace HearthBuilder.Models.Decks
                     {
                         query += " title Like @deckName ";
                     }
+
                     System.Diagnostics.Debug.WriteLine(query);
                     cmd1.CommandText = query;
                     cmd1.Parameters.AddWithValue("@deckName", "%"+searchParams.DeckName+"%");

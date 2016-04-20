@@ -16,10 +16,5 @@ namespace HearthBuilder.Models.FilterDecks
             this.PlayerClass = PlayerClass;
             Checked = false;
         }
-
-        public ClassNames()
-        {
-
-        }
     }
 }

@@ -13,13 +13,11 @@ namespace HearthBuilder.Models.FilterDecks
 
         public SearchParams()
         {
-            Classes = new List<ClassNames>();
             foreach (PlayerClasses pClass in Enum.GetValues(typeof(PlayerClasses)))
             {
                 if (pClass != PlayerClasses.NONE)
                     Classes.Add(new ClassNames(pClass.ToString()));
             }
         }
-
     }
 }
