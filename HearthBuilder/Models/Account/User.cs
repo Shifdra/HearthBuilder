@@ -15,5 +15,10 @@ namespace HearthBuilder.Models.Account
         public virtual String Password { get; set; }
 
         public User() { }
+
+        public string toString()
+        {
+            return "ID: " + ID + " FirstName: " + FirstName + " LastName: " + LastName + " Email: " + Email + " Pass: " + Password;
+        }
     }
 }

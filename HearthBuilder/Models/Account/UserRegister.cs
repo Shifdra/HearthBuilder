@@ -8,8 +8,6 @@ namespace HearthBuilder.Models.Account
 {
     public class UserRegister : User
     {
-        public override int ID { get; set; }
-
         [Required(ErrorMessage = "First name is a required field.")]
         public override String FirstName { get; set; }
         
@@ -25,11 +23,6 @@ namespace HearthBuilder.Models.Account
         public override String Password { get; set; }
 
         public UserRegister() { }
-
-        public override string ToString()
-        {
-            return ID + ", " + FirstName + ", " + LastName + ", " + Email + ", " + Password;
-        }
-
+        
     }
 }

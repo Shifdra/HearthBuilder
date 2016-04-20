@@ -107,6 +107,7 @@ input{
 /* Alert boxes */
 .alert {
     margin-bottom: 0px;
+
 }
 .alert:last-child {
     margin-bottom: 20px;
@@ -116,7 +117,7 @@ input{
     position: fixed;
     top: 60px;
     left:40%;
-    z-index:10;
+    z-index:20;
 }
 
 .pickClass {
