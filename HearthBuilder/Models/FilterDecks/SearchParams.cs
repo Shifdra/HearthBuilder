@@ -17,9 +17,8 @@ namespace HearthBuilder.Models.FilterDecks
             foreach (PlayerClasses pClass in Enum.GetValues(typeof(PlayerClasses)))
             {
                 if (pClass != PlayerClasses.NONE)
-                    Classes.Add(new ClassNames(pClass));
+                    Classes.Add(new ClassNames(pClass.ToString()));
             }
         }
-
     }
 }

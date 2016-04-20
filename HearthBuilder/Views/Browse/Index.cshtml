@@ -13,54 +13,90 @@
 }
 
 <script>
+    var myapp = angular.module('myapp', ['ngSanitize', 'ui.bootstrap'])
+            .controller("BrowseController", function ($scope, $http, $compile, $timeout, $uibModal, $window) {
 
+                // in controller
+
+                //called on page load
+                $scope.init = function () {
+                    //$scope.refreshButtons();
+                };
+
+                $scope.classButton = function(item) {
+                    var forId = item.currentTarget.getAttribute("for");
+                    var checkBox = angular.element(document.querySelector('#' + forId));
+                    if (checkBox.Selected === true) {
+                        checkBox.Selected = false;
+                    } else {
+                        checkBox.Selected = true;
+                    }
+
+                    $(item.currentTarget).toggleClass('active');
+
+                    console.log("classButton() forId: " + forId);
+
+                }
+
+                $scope.refreshButtons = function () {
+                    var classes = [ "DRUID", "HUNTER", "MAGE", "PALADIN", "PRIEST", "ROGUE", "SHAMAN", "WARLOCK", "WARRIOR" ];
+
+                    angular.forEach(classes, function(value, key) {
+                        var lbl = angular.element(document.querySelector('lbl' + value));
+                        var chk = angular.element(document.querySelector('chk' + value));
+
+                        console.log("Refreshing checkboxes..." + lbl.html());
+                        
+                        if (chk.Selected === true) {
+                            if ($(lbl).hasClass('active') === true) {
+                                $(lbl).toggleClass('active');
+                                console.log("selected, isnt checked. Checking.");
+                            }
+                        }  else {
+                            if ($(lbl).hasClass('active') === false) {
+                                $(lbl).toggleClass('active');
+                                console.log("selected, is checked. unChecking.");
+                            }
+                        }
+                    });
+                }
+
+            } )
 </script>
 
-<div class="container">
+<div class="container" data-ng-controller="BrowseController" data-ng-init="init()">
     <h1>Browse Decks</h1>
 
     <div class="filter">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <p>Pick One or More Classes</p>
+                <p>Filter decks by Class and Name</p>
             </div>
             @using (Html.BeginForm())
             {
                 <div class="row" style="padding:15px;">
-                    <div class="col-xs-12">
-                        <div class="btn-group" data-toggle="buttons">
-                            <label class="btn btn-primary">
-                                <input type="checkbox" autocomplete="off"> Checkbox 1
-                            </label>
-                            <label class="btn btn-primary">
-                                <input type="checkbox" autocomplete="off"> Checkbox 2
-                            </label>
-                        </div><br />
-
-                        <div class="btn-group" data-toggle="buttons">
+                    <div class="col-xs-12 form-group">
+                        <div class="classButtons">
                             @for (int i = 0; i < Model.Classes.Count; i++)
                             {
-                                <label class="btn btn-primary">
-                                    @Html.CheckBoxFor(m => m.Classes[i].Checked, new { @autocomplete = "off" })
-                                    @Html.DisplayName(Model.Classes[i].PlayerClassStr)
-                                </label>
+                                <div class="btn btn-primary chkBtn">
+                                    @Html.HiddenFor(m => m.Classes[i].PlayerClass)
+                                    @Html.LabelFor(m => m.Classes[i].Checked, Model.Classes[i].PlayerClass, new { @class = ("lblChk") })
+                                    @Html.CheckBoxFor(m => m.Classes[i].Checked, new { @class = ("chk"), @htmlattributes = new { @autocomplete = "off" } })
+                                </div>
+
+                                //THIS DOESNT WORK, causes blank results
+                                //@Html.CheckBoxFor(m => m.Classes[i].Checked, new { @autocomplete = "off" })
+                                //@Html.DisplayName(Model.Classes[i].PlayerClass)
                             }
-                        </div><br />
-
-                        <div class="col-xs-12">
-                            <div class="row">
-                                <div class="col-xs-6">
-                                    @Html.LabelFor(model => model.DeckName, "Deck Name (optional):")
-                                    @Html.TextBoxFor(model => model.DeckName)
-                                </div>
+                        </div>
+                        <br/><br/>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                @Html.TextBoxFor(model => model.DeckName, new { @class = ("form-control input-lg"), @placeholder = "Deck Name (optional)" })
                             </div>
-                        </div><br /><br />
-
-                        <div class="col-xs-12">
-                            <div class="row">
-                                <div class="col-xs-6">
-                                    <input type="submit" value="Filter" class="btn btn-primary" />
-                                </div>
+                            <div class="col-sm-6">
+                                <input type="submit" value="Filter" class="btn btn-primary btn-block btn-danger btn-lg" />
                             </div>
                         </div>
                     </div>
