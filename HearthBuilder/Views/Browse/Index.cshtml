@@ -24,7 +24,7 @@
             <div class="panel-heading">
                 <p>Pick One or More Classes</p>
             </div>
-            @using (Html.BeginForm())
+            @using (Html.BeginForm("Index", "Browse", FormMethod.Post))
             {
                 <div class="row" style="padding:15px;">
                     <div class="col-xs-12">
