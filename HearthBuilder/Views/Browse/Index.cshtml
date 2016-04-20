@@ -2,6 +2,7 @@
 @using HearthBuilder.Models.Decks
 @using HearthBuilder.Models.Notifications
 @using HearthBuilder.Models
+@using HearthBuilder.Models.FilterDecks
 @model HearthBuilder.Models.FilterDecks.SearchParams
 
 @{
@@ -37,13 +38,12 @@
                         </div><br />
 
                         <div class="btn-group" data-toggle="buttons">
-                        @{Array Classes = Enum.GetValues(typeof(PlayerClass));}
-                            @for (int i = 0; i < Classes.Length; i++)
+                            @for (int i = 0; i < Model.Classes.Count; i++)
                             {
-                                string ClassStr = char.ToUpper(Classes.GetValue(i).ToString().ToLower()[0]) + Classes.GetValue(i).ToString().ToLower().Substring(1);
-                                @Html.HiddenFor(m => m.Classes[i])
-                                @Html.LabelFor(m => m.Classes[i], ClassStr, new { @class = "btn btn-primary" })
-                                @Html.CheckBoxFor(m => m.Classes[i], new { @htmlattributes = new { @autocomplete = "off" } })
+                                <label class="btn btn-primary">
+                                    @Html.CheckBoxFor(m => m.Classes[i].Checked, new { @autocomplete = "off" })
+                                    @Html.DisplayName(Model.Classes[i].PlayerClassStr)
+                                </label>
                             }
                         </div><br />
 

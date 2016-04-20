@@ -21,10 +21,10 @@ namespace HearthBuilder.Models.Cards
         public string Name { get; private set; }
         public string Text { get; private set; }
         public int Cost { get; private set; }
-        public PlayerClass Class { get; private set; }
+        public PlayerClasses Class { get; private set; }
         public Rarity Rarity { get; private set; }
 
-        public Card(string Id, string Name, string Text, PlayerClass Class, Rarity Rarity, int Cost)
+        public Card(string Id, string Name, string Text, PlayerClasses Class, Rarity Rarity, int Cost)
         {
             this.Id = Id;
             this.Name = Name;
@@ -44,34 +44,34 @@ namespace HearthBuilder.Models.Cards
             switch (card.Class)
             {
                 case CardClass.DRUID:
-                    Class = PlayerClass.DRUID;
+                    Class = PlayerClasses.DRUID;
                     break;
                 case CardClass.HUNTER:
-                    Class = PlayerClass.HUNTER;
+                    Class = PlayerClasses.HUNTER;
                     break;
                 case CardClass.MAGE:
-                    Class = PlayerClass.MAGE;
+                    Class = PlayerClasses.MAGE;
                     break;
                 case CardClass.PALADIN:
-                    Class = PlayerClass.PALADIN;
+                    Class = PlayerClasses.PALADIN;
                     break;
                 case CardClass.PRIEST:
-                    Class = PlayerClass.PRIEST;
+                    Class = PlayerClasses.PRIEST;
                     break;
                 case CardClass.ROGUE:
-                    Class = PlayerClass.ROGUE;
+                    Class = PlayerClasses.ROGUE;
                     break;
                 case CardClass.SHAMAN:
-                    Class = PlayerClass.SHAMAN;
+                    Class = PlayerClasses.SHAMAN;
                     break;
                 case CardClass.WARLOCK:
-                    Class = PlayerClass.WARLOCK;
+                    Class = PlayerClasses.WARLOCK;
                     break;
                 case CardClass.WARRIOR:
-                    Class = PlayerClass.WARRIOR;
+                    Class = PlayerClasses.WARRIOR;
                     break;
                 default:
-                    Class = PlayerClass.NONE;
+                    Class = PlayerClasses.NONE;
                     break;
             }
 

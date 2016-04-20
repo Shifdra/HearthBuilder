@@ -40,50 +40,7 @@ namespace HearthBuilder.Controllers
                 Session["notifications"] = new List<Notification>();
 
             DeckDAO deckDAO = DeckDAO.Instance;
-            List<Deck> allDecks = deckDAO.GetAllDecks();
-
-            List<Deck> filteredDecks = new List<Deck>();
-
-            //filter down decks here
-            Boolean classFilter = false;
-            for (int i = 0; i < allDecks.Count; i++)
-            {
-                //check if there should be a class filter
-                for (int j = 0; j < searchParams.Classes.Count; j++)
-                {
-                    if (searchParams.Classes[j].Checked)
-                    {
-                        classFilter = true;
-                    }
-                }
-                //there is a deck name and class filter
-                if (searchParams.DeckName != null && classFilter)
-                {
-                    for (int j = 0; j < searchParams.Classes.Count; j++)
-                    {
-                        if (searchParams.Classes[j].Checked && allDecks[i].Class.ToString() == searchParams.Classes[j].Name.ToUpper() && searchParams.DeckName == allDecks[i].Title)
-                        {
-                            filteredDecks.Add(allDecks[i]);
-                        }
-                    }
-                }
-                //there is a deck name, no class filter
-                else if (searchParams.DeckName != null && !classFilter && searchParams.DeckName == allDecks[i].Title)
-                {
-                    filteredDecks.Add(allDecks[i]);
-                }
-                //there is no deck name, but a class filter
-                else if (searchParams.DeckName == null && classFilter)
-                {
-                    for (int j = 0; j < searchParams.Classes.Count; j++)
-                    {
-                        if (searchParams.Classes[j].Checked && allDecks[i].Class.ToString() == searchParams.Classes[j].Name.ToUpper())
-                        {
-                            filteredDecks.Add(allDecks[i]);
-                        }
-                    }
-                }
-            }
+            List<Deck> filteredDecks = deckDAO.GetDecksByClassAndDeckName(searchParams);
 
             try
             {
@@ -94,7 +51,7 @@ namespace HearthBuilder.Controllers
                 }
                 else {
                     //pull decks from the DB
-                    ViewBag.decks = DeckDAO.Instance.GetAllDecks();
+                    ViewBag.decks = deckDAO.GetAllDecks();
                     //display notification
                     ((List<Notification>)Session["notifications"]).Add(new Notification("Woops!", "We couldn't find any decks matching your filter!", NotificationType.WARNING));
                 } 

@@ -12,7 +12,7 @@ namespace HearthBuilder.Models.Decks
     {
         public int Id { get; set; }
         public List<Card> Cards { get; private set; }
-        public PlayerClass Class { get; private set; }
+        public PlayerClasses Class { get; private set; }
         public string ClassStr { get { return char.ToUpper(Class.ToString().ToLower()[0]) + Class.ToString().ToLower().Substring(1); } } //converts "CLASS" to "Class"
         public string Title { get; set; }
         public int Likes { get; set; }
@@ -24,11 +24,11 @@ namespace HearthBuilder.Models.Decks
         {
             Id = 0;
             Cards = new List<Card>();
-            Class = PlayerClass.NONE;
+            Class = PlayerClasses.NONE;
             Title = "";
         }
 
-        public Deck(PlayerClass pClass)
+        public Deck(PlayerClasses pClass)
         {
             Id = 0;
             Cards = new List<Card>();
@@ -36,7 +36,7 @@ namespace HearthBuilder.Models.Decks
             Title = "";
         }
 
-        public Deck(int id, PlayerClass pClass)
+        public Deck(int id, PlayerClasses pClass)
         {
             Id = id;
             Cards = new List<Card>();
