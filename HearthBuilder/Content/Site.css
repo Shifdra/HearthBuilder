@@ -323,6 +323,7 @@ input{
 .buildDeck .col-fixed-262 {
     width: 262px;
     position:absolute;
+    z-index: 10;
 }
 
 .buildDeck .col-offset-262 {
