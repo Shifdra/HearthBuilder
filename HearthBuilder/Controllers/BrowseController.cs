@@ -54,7 +54,6 @@ namespace HearthBuilder.Controllers
                     {
                         classFilter = true;
                     }
-
                 }
                 //there is a deck name and class filter
                 if (searchParams.DeckName != null && classFilter)

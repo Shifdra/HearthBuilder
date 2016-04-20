@@ -7,8 +7,8 @@ namespace HearthBuilder.Models.FilterDecks
 {
     public class ClassNames
     {
-        //public PlayerClass Class { get; private set; }
-        public string Name { get; set; }
+        public PlayerClass Class { get; private set; }
+        //public string Name { get; set; }
         public bool Checked { get; set; }
     }
 }

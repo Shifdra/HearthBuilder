@@ -37,11 +37,13 @@
                         </div><br />
 
                         <div class="btn-group" data-toggle="buttons">
-                            @for (int i = 0; i < Model.Classes.Count; i++)
+                        @{Array Classes = Enum.GetValues(typeof(PlayerClass));}
+                            @for (int i = 0; i < Classes.Length; i++)
                             {
-                                @Html.HiddenFor(m => m.Classes[i].Name)
-                                @Html.LabelFor(m => m.Classes[i].Checked, @Model.Classes[i].Name, new { @class = "btn btn-primary" })
-                                @Html.CheckBoxFor(m => m.Classes[i].Checked, new { @htmlattributes = new { @autocomplete = "off" } })
+                                string ClassStr = char.ToUpper(Classes.GetValue(i).ToString().ToLower()[0]) + Classes.GetValue(i).ToString().ToLower().Substring(1);
+                                @Html.HiddenFor(m => m.Classes[i])
+                                @Html.LabelFor(m => m.Classes[i], ClassStr, new { @class = "btn btn-primary" })
+                                @Html.CheckBoxFor(m => m.Classes[i], new { @htmlattributes = new { @autocomplete = "off" } })
                             }
                         </div><br />
 
