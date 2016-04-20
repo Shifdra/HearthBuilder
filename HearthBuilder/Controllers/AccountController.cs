@@ -10,7 +10,7 @@ namespace HearthBuilder.Controllers
     public class AccountController : Controller
     {
         UserDAO userDAO = UserDAO.Instance;
-        UserLogin userSession = new UserLogin();
+        //User userSession = new User();
 
 
         //view login page on first visit
@@ -29,7 +29,7 @@ namespace HearthBuilder.Controllers
             {
                 try
                 {
-                    UserLogin userLogin = userDAO.GetAccountByEmailAndPassword(user);
+                    User userLogin = userDAO.GetAccountByEmailAndPassword(user);
                     if (userLogin != null)
                         Session["UserSession"] = userLogin;
 
@@ -71,7 +71,7 @@ namespace HearthBuilder.Controllers
             {
                 try
                 {
-                    UserRegister userRegister = userDAO.RegisterUser(user);
+                    User userRegister = userDAO.RegisterUser(user);
                     if (userRegister != null)
                         Session["UserSession"] = userRegister;
 
