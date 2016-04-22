@@ -201,6 +201,10 @@ namespace HearthBuilder.Controllers
                 //somethings wrong, there should be a user here... HAXORS
                 result.Add(new { Result = "0", Message = "No user to save deck!" });
             }
+            else if (((User)Session["UserSession"]).ID != ((Deck)Session["deck"]).UserId)
+            {
+                result.Add(new { Result = "0", Message = "This is not your deck to save!" });
+            }
             else
             {
                 Deck deck = (Deck)Session["deck"];
@@ -234,6 +238,9 @@ namespace HearthBuilder.Controllers
         [HttpPost]
         public ActionResult DeleteDeck()
         {
+            if (Session["notifications"] == null)
+                Session["notifications"] = new List<Notification>();
+
             var result = new List<object>();
 
             if (Session["deck"] == null)
@@ -244,12 +251,23 @@ namespace HearthBuilder.Controllers
             {
                 try
                 {
-                    DeckDAO.Instance.DeleteDeck(((Deck)Session["deck"]).Id);
-                    Session["deck"] = null;
-                    result.Add(new { Result = "1", Message = "Deck deleted!" });
-                    if (Session["notifications"] == null)
-                        Session["notifications"] = new List<Notification>();
-                    ((List<Notification>)Session["notifications"]).Add(new Notification("Success!", "The deck has been deleted! ", NotificationType.SUCCESS));
+                    if ((Session["UserSession"]) == null && ((Deck)Session["deck"]).UserId > 0 ||
+                        Session["UserSession"] != null && ((User)Session["UserSession"]).ID != ((Deck)Session["deck"]).UserId)
+                    {
+                        result.Add(new { Result = "0", Message = "This is not your deck to delete!" });
+                    }
+                    else
+                    {
+                        Session["deck"] = null;
+                        result.Add(new { Result = "1", Message = "Deck deleted!" });
+                        ((List<Notification>)Session["notifications"]).Add(new Notification("Success!", "The deck has been deleted! ", NotificationType.SUCCESS));
+
+                        if (((Deck)Session["deck"]).UserId > 0)
+                        {
+                            DeckDAO.Instance.DeleteDeck(((Deck)Session["deck"]).Id);
+                        }
+                    }
+                    
                 }
                 catch (Exception e)
                 {
