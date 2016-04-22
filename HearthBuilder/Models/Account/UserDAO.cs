@@ -97,7 +97,7 @@ namespace HearthBuilder.Models.Account
                         {
                             User user = new User();
                             //map values to user obj
-                            user.ID = Convert.ToInt32(reader.GetString("account_id"));
+                            user.ID = reader.GetInt32("account_id");
                             user.FirstName = reader.GetString("first_name");
                             user.LastName = reader.GetString("last_name");
                             user.Email = reader.GetString("email");
@@ -107,7 +107,44 @@ namespace HearthBuilder.Models.Account
                         }
                         else
                         {
-                            throw new UserException("Could not find user matching Id!" + id);
+                            throw new UserException("Could not find user matching Id! - " + id);
+                        }
+                    }
+                }
+            }
+            catch (MySqlException e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+                throw e;
+            }
+        }
+
+        public User GetUserbyEmail(string email)
+        {
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(ConfigurationManager.ConnectionStrings["MySQLConnection"].ConnectionString))
+                {
+                    connection.Open();
+                    cmd = new MySqlCommand("SELECT * FROM account WHERE email = @email", connection);
+                    cmd.Parameters.AddWithValue("@email", email);
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            User user = new User();
+                            //map values to user obj
+                            user.ID = reader.GetInt32("account_id");
+                            user.FirstName = reader.GetString("first_name");
+                            user.LastName = reader.GetString("last_name");
+                            user.Email = reader.GetString("email");
+                            user.Password = reader.GetString("password");
+
+                            return user;
+                        }
+                        else
+                        {
+                            throw new UserException("Could not find user matching email! - " + email);
                         }
                     }
                 }
@@ -150,6 +187,25 @@ namespace HearthBuilder.Models.Account
                     user.ID = userId;
 
                     return user;
+                }
+            }
+            catch (MySqlException e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+                throw e;
+            }
+        }
+
+        public User DeleteUser(User user)
+        {
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(ConfigurationManager.ConnectionStrings["MySQLConnection"].ConnectionString))
+                {
+                    connection.Open();
+                    cmd = new MySqlCommand("DELETE FROM account WHERE account_id = @id", connection);
+                    cmd.Parameters.AddWithValue("@id", user.ID);
+                    return null;
                 }
             }
             catch (MySqlException e)
