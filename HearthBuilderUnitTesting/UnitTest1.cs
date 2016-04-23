@@ -228,7 +228,7 @@ namespace HearthBuilderUnitTesting
         }
 
         [TestMethod]
-        public void FilterByClassAndDeckName() //Filter by class and deck name
+        public void FilterByClassAndDeckName()
         {
             SearchParams searchParams = new SearchParams();
             searchParams.DeckName = "Dat Ramp";
@@ -244,6 +244,7 @@ namespace HearthBuilderUnitTesting
             foreach (Deck filteredDeck in filteredDeckList)
             {
                 //all returned results should be the Druid class and have the deck name 'Dat Ramp'
+                Assert.AreEqual(filteredDeck.Class, PlayerClasses.DRUID);
                 Assert.AreEqual(filteredDeck.Title, searchParams.DeckName);
             }
         }
