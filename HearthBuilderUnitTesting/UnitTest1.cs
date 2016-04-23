@@ -216,21 +216,5 @@ namespace HearthBuilderUnitTesting
         {
             SearchParams searchParams = new SearchParams();
         }
-
-        /*
-         * 
-         */ 
-
-        [TestMethod]
-        public void TestAccountView()
-        {
-            var loginController = new AccountController();
-            UserLogin user = new UserLogin { Email = "test@test.com", Password = "test" };
-
-            var result = (RedirectToRouteResult)loginController.Index(user);
-            result.RouteValues["action"].Equals("Index");
-
-            Assert.AreEqual("", result.ViewName);
-        }
     }
 }
