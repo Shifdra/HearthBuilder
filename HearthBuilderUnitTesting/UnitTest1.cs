@@ -103,13 +103,50 @@ namespace HearthBuilderUnitTesting
         }
 
         [TestMethod]
+        public void CreateDeck() //Creating a deck
+        {
+            Deck newDeck = new Deck(PlayerClasses.PALADIN);
+            newDeck.UserId = 8; //test user
+            newDeck.Title = "testDeck";
+            DeckDAO.Instance.UpdateDeck(newDeck); //create deck in db
+
+            List<Deck> deckList = DeckDAO.Instance.GetDecksByUser(8); //get all of test user's decks
+            System.Diagnostics.Debug.WriteLine(deckList.Count);
+            Boolean successFlag = false;
+            foreach (Deck deck in deckList)
+            {
+                //if no paladin deck exists with the title 'testDeck', the test is a fail
+                if (deck.Class == newDeck.Class && deck.Title == newDeck.Title)
+                {
+                    successFlag = true;
+                }
+            }
+            if (!successFlag)
+                Assert.Fail();
+        }
+
+        [TestMethod]
+        public void DeleteDeck() //Deleting a deck
+        {
+            //all decks made by user 'test'
+            List<Deck> deckList = DeckDAO.Instance.GetDecksByUser(8);
+
+            Boolean successFlag = false;
+            foreach (Deck deck in deckList)
+            {
+                if (deck.Class == PlayerClasses.PALADIN && deck.Title == "testDeck")
+                {
+                    DeckDAO.Instance.DeleteDeck(deck.Id);
+                    successFlag = true;
+                }
+            }
+            if (!successFlag)
+                Assert.Fail();
+        }
+
+        [TestMethod]
         public void DeckTests()
         {
-            //Creating a deck, based on a class
-            //Delete deck
-            //View deck
-            //View another user's deck
-
             Deck deck = new Deck(PlayerClasses.DRUID);
         }
 
