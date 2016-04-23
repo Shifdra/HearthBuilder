@@ -106,39 +106,107 @@ namespace HearthBuilderUnitTesting
         public void DeckTests()
         {
             //Creating a deck, based on a class
+            //Delete deck
+            //View deck
+            //View another user's deck
+
             Deck deck = new Deck(PlayerClasses.DRUID);
         }
 
         [TestMethod]
-        public void FilterByClass()
+        public void FilterByOneClass() //Filter by one class only
         {
-            //Filter by class
             SearchParams searchParams = new SearchParams();
             foreach (ClassNames className in searchParams.Classes)
             {
                 if (className.PlayerClass == PlayerClasses.DRUID.ToString())
                     className.Checked = true;
             }
+
             List<Deck> filteredDeckList = DeckDAO.Instance.GetDecksByClassAndDeckName(searchParams);
             System.Diagnostics.Debug.WriteLine(filteredDeckList.Count);
 
             foreach (Deck filteredDeck in filteredDeckList)
             {
+                //all returned results should be the Druid class
                 Assert.AreEqual(filteredDeck.Class, PlayerClasses.DRUID);
             }
         }
 
         [TestMethod]
-        public void FilterByDeckName()
+        public void FilterByMultipleClasses() //Filter by multiple classes
         {
-            //Filter by deck name
             SearchParams searchParams = new SearchParams();
-            searchParams.DeckName = "Dat Ramp";
+            foreach (ClassNames className in searchParams.Classes)
+            {
+                if (className.PlayerClass == PlayerClasses.DRUID.ToString())
+                    className.Checked = true;
+                if (className.PlayerClass == PlayerClasses.HUNTER.ToString())
+                    className.Checked = true;
+            }
+
             List<Deck> filteredDeckList = DeckDAO.Instance.GetDecksByClassAndDeckName(searchParams);
             System.Diagnostics.Debug.WriteLine(filteredDeckList.Count);
 
             foreach (Deck filteredDeck in filteredDeckList)
             {
+                System.Diagnostics.Debug.WriteLine(filteredDeck.Class.ToString());
+                //all returned results should be Druid or Hunter
+                if (filteredDeck.Class != PlayerClasses.DRUID && filteredDeck.Class != PlayerClasses.HUNTER)
+                    Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void FilterByDeckName() //Filter by deck name only
+        {
+            SearchParams searchParams = new SearchParams();
+            searchParams.DeckName = "Dat Ramp";
+
+            List<Deck> filteredDeckList = DeckDAO.Instance.GetDecksByClassAndDeckName(searchParams);
+            System.Diagnostics.Debug.WriteLine(filteredDeckList.Count);
+
+            foreach (Deck filteredDeck in filteredDeckList)
+            {
+                //all returned results should have the deck name 'Dat Ramp'
+                Assert.AreEqual(filteredDeck.Title, searchParams.DeckName);
+            }
+        }
+
+        [TestMethod]
+        public void FilterByPartialDeckName() //Filter with a partial deck name
+        {
+            SearchParams searchParams = new SearchParams();
+            searchParams.DeckName = "st";
+
+            List<Deck> filteredDeckList = DeckDAO.Instance.GetDecksByClassAndDeckName(searchParams);
+            System.Diagnostics.Debug.WriteLine(filteredDeckList.Count);
+
+            foreach (Deck filteredDeck in filteredDeckList)
+            {
+                System.Diagnostics.Debug.WriteLine(filteredDeck.Title);
+                //all returned results should have a deck name that contains the string 'st'
+                Assert.IsTrue(filteredDeck.Title.Contains("st") || filteredDeck.Title.Contains("ST"));
+            }
+        }
+
+        [TestMethod]
+        public void FilterByClassAndDeckName() //Filter by class and deck name
+        {
+            SearchParams searchParams = new SearchParams();
+            searchParams.DeckName = "Dat Ramp";
+            foreach (ClassNames className in searchParams.Classes)
+            {
+                if (className.PlayerClass == PlayerClasses.DRUID.ToString())
+                    className.Checked = true;
+            }
+
+            List<Deck> filteredDeckList = DeckDAO.Instance.GetDecksByClassAndDeckName(searchParams);
+            System.Diagnostics.Debug.WriteLine(filteredDeckList.Count);
+
+            foreach (Deck filteredDeck in filteredDeckList)
+            {
+                //all returned results should be the Druid class and have the deck name 'Dat Ramp'
                 Assert.AreEqual(filteredDeck.Title, searchParams.DeckName);
             }
         }
