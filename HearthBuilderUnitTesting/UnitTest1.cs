@@ -1,9 +1,12 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using HearthBuilder;
+using HearthBuilder.Models;
 using HearthBuilder.Models.Account;
+using HearthBuilder.Models.Cards;
 using HearthBuilder.Models.Decks;
-
+using HearthBuilder.Models.FilterDecks;
+using System.Collections.Generic;
 
 namespace HearthBuilderUnitTesting
 {
@@ -101,15 +104,47 @@ namespace HearthBuilderUnitTesting
         public void DeckTests()
         {
             //Creating a deck, based on a class
-            Deck deck = new Deck(HearthBuilder.Models.PlayerClasses.DRUID);
+            Deck deck = new Deck(PlayerClasses.DRUID);
+        }
 
+        [TestMethod]
+        public void FilterByClass()
+        {
+            //Filter by class
+            SearchParams searchParams = new SearchParams();
+            foreach (ClassNames className in searchParams.Classes)
+            {
+                if (className.PlayerClass == PlayerClasses.DRUID.ToString())
+                    className.Checked = true;
+            }
+            List<Deck> filteredDeckList = DeckDAO.Instance.GetDecksByClassAndDeckName(searchParams);
+            System.Diagnostics.Debug.WriteLine(filteredDeckList.Count);
 
+            foreach (Deck filteredDeck in filteredDeckList)
+            {
+                Assert.AreEqual(filteredDeck.Class, PlayerClasses.DRUID);
+            }
+        }
+
+        [TestMethod]
+        public void FilterByDeckName()
+        {
+            //Filter by deck name
+            SearchParams searchParams = new SearchParams();
+            searchParams.DeckName = "Dat Ramp";
+            List<Deck> filteredDeckList = DeckDAO.Instance.GetDecksByClassAndDeckName(searchParams);
+            System.Diagnostics.Debug.WriteLine(filteredDeckList.Count);
+
+            foreach (Deck filteredDeck in filteredDeckList)
+            {
+                Assert.AreEqual(filteredDeck.Title, searchParams.DeckName);
+            }
         }
 
         [TestMethod]
         public void FilterTests()
         {
-
+            SearchParams searchParams = new SearchParams();
         }
     }
 }
