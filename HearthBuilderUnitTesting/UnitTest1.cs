@@ -7,6 +7,8 @@ using HearthBuilder.Models.Cards;
 using HearthBuilder.Models.Decks;
 using HearthBuilder.Models.FilterDecks;
 using System.Collections.Generic;
+using HearthBuilder.Controllers;
+using System.Web.Mvc;
 
 namespace HearthBuilderUnitTesting
 {
@@ -145,6 +147,22 @@ namespace HearthBuilderUnitTesting
         public void FilterTests()
         {
             SearchParams searchParams = new SearchParams();
+        }
+
+        /*
+         * 
+         */ 
+
+        [TestMethod]
+        public void TestAccountView()
+        {
+            var loginController = new AccountController();
+            UserLogin user = new UserLogin { Email = "test@test.com", Password = "test" };
+
+            var result = (RedirectToRouteResult)loginController.Index(user);
+            result.RouteValues["action"].Equals("Index");
+
+            Assert.AreEqual("", result.ViewName);
         }
     }
 }
