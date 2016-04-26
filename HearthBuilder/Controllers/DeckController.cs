@@ -52,7 +52,7 @@ namespace HearthBuilder.Controllers
                         return Redirect("/");
                     }
                     //check deck ownership before allowing editing
-                    if (Session["UserSession"] != null && deck.UserId != ((User)Session["UserSession"]).ID)
+                    if (Session["UserSession"] == null || deck.UserId != ((User)Session["UserSession"]).ID)
                     {
                         ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "You can't edit a deck that is not yours!", NotificationType.ERROR));
                         return Redirect("/");
