@@ -102,9 +102,8 @@ namespace HearthBuilder.Controllers
             if (int.TryParse(id, out uId))
             {
                 //try to pull the decks via user ID from the DB
-                List<Deck> decks = DeckDAO.Instance.GetDecksByUser(uId);
-
-                ViewBag.decks = decks;
+                ViewBag.decks = DeckDAO.Instance.GetDecksByUser(uId);
+                ViewBag.firstName = UserDAO.Instance.GetUserbyId(uId).FirstName;
             }
             else if (id == "Mine") //our deck
             {
@@ -115,9 +114,8 @@ namespace HearthBuilder.Controllers
                 }
 
                 //try to pull the decks via user ID from the DB
-                List<Deck> decks = DeckDAO.Instance.GetDecksByUser(((User)Session["UserSession"]).ID);
-
-                ViewBag.decks = decks;
+                ViewBag.decks = DeckDAO.Instance.GetDecksByUser(((User)Session["UserSession"]).ID);
+                ViewBag.firstName = ((User)Session["UserSession"]).FirstName;
             }
 
             return View();
