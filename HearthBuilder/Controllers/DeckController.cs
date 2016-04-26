@@ -48,7 +48,7 @@ namespace HearthBuilder.Controllers
                     Session["deck"] = deck; //save the deck to the session
                     if (deck == null)
                     {
-                        ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "Couldn't edit a deck that doesn't exist!", NotificationType.ERROR));
+                        ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "You can't edit a deck that doesn't exist!", NotificationType.ERROR));
                         return Redirect("/");
                     }
                     //check deck ownership before allowing editing
@@ -133,16 +133,25 @@ namespace HearthBuilder.Controllers
             if (Session["deck"] == null)
             {
                 //somethings wrong, there should be a deck here...
-                result.Add(new { Result = "0", Message = "No deck to add card!" });
+                result.Add(new { Result = "0", Message = "Your session has expired and you will have to create a new deck... Sorry!" });
             }
             else
             {
                 try
                 {
                     Deck deck = (Deck)Session["deck"];
-                    deck.AddCard(CardCollectionFactory.Instance.getById(id));
-                    Session["deck"] = deck;
-                    result.Add(new { Result = "1", Message = "Added card to Deck" });
+
+                    //check deck ownership before allowing adding a card (malicious bypass)
+                    if (Session["UserSession"] != null && deck.UserId != ((User)Session["UserSession"]).ID && deck.UserId != 0)
+                    {
+                        result.Add(new { Result = "0", Message = "You can't add a card to a deck that isn't yours!" + deck.UserId });
+                    }
+                    else
+                    {
+                        deck.AddCard(CardCollectionFactory.Instance.getById(id));
+                        Session["deck"] = deck;
+                        result.Add(new { Result = "1", Message = "Card added." });
+                    }
                 }
                 catch (Exception e)
                 {
@@ -163,16 +172,25 @@ namespace HearthBuilder.Controllers
             if (Session["deck"] == null)
             {
                 //somethings wrong, there should be a deck here...
-                result.Add(new { Result = "0", Message = "No deck to remove card!" });
+                result.Add(new { Result = "0", Message = "Your session has expired and you will have to create a new deck... Sorry!" });
             }
             else
             {
                 try
                 {
                     Deck deck = (Deck)Session["deck"];
-                    deck.RemoveCard(CardCollectionFactory.Instance.getById(id));
-                    Session["deck"] = deck;
-                    result.Add(new { Result = "1", Message = "Card removed from deck!" });
+
+                    //check deck ownership before allowing adding a card (malicious bypass)
+                    if (Session["UserSession"] != null && deck.UserId != ((User)Session["UserSession"]).ID && deck.UserId != 0)
+                    {
+                        result.Add(new { Result = "0", Message = "You can't add a card to a deck that isn't yours!" });
+                    }
+                    else
+                    {
+                        deck.RemoveCard(CardCollectionFactory.Instance.getById(id));
+                        Session["deck"] = deck;
+                        result.Add(new { Result = "1", Message = "Card removed." });
+                    }
                 }
                 catch (Exception e)
                 {
@@ -194,14 +212,14 @@ namespace HearthBuilder.Controllers
             if (Session["deck"] == null)
             {
                 //somethings wrong, there should be a deck here...
-                result.Add(new { Result = "0", Message = "No deck to save!" });
+                result.Add(new { Result = "0", Message = "Your session has expired and you will have to create a new deck... Sorry!" });
             }
             else if (Session["UserSession"] == null)
             {
                 //somethings wrong, there should be a user here... HAXORS
-                result.Add(new { Result = "0", Message = "No user to save deck!" });
+                result.Add(new { Result = "0", Message = "You cannot save if you're not logged in!" });
             }
-            else if (((User)Session["UserSession"]).ID != ((Deck)Session["deck"]).UserId)
+            else if (((User)Session["UserSession"]).ID != ((Deck)Session["deck"]).UserId && ((Deck)Session["deck"]).UserId != 0)
             {
                 result.Add(new { Result = "0", Message = "This is not your deck to save!" });
             }
@@ -245,7 +263,7 @@ namespace HearthBuilder.Controllers
 
             if (Session["deck"] == null)
             {
-                result.Add(new { Result = "0", Message = "Couldn't delete deck that doesn't exist!?" });
+                result.Add(new { Result = "0", Message = "Your session has expired and you will have to create a new deck... Sorry!" });
             }
             else
             {
