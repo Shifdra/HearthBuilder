@@ -8,8 +8,8 @@
 
 <div data-ng-controller="EditController" data-ng-init="init()" class="buildDeck">
     <script>
-        var myapp = angular.module('myapp', ['ngSanitize', 'ui.bootstrap'])
-            .controller("EditController", function ($scope, $http, $compile, $timeout, $uibModal, $window) {
+        var myapp = angular.module('myapp', ['ngSanitize', 'ui.bootstrap', 'ngAnimate'])
+            .controller("EditController", ["$scope", "$http", "$compile", "$timeout", '$uibModal', '$window', function ($scope, $http, $compile, $timeout, $uibModal, $window) {
 
                 // in controller
 
@@ -128,6 +128,15 @@
                     }
                 }
 
+                $scope.cardPopover = {
+                    templateUrl: '/Content/templates/TemplateCardPopover.html',
+                    cardId: ''
+                }
+
+                $scope.cardHover = function(item) {
+                    $scope.cardPopover.cardUrl = "/Content/Images/cards/"+item.currentTarget.getAttribute("data-id")+".png";
+                }
+
                 $scope.cardCount = 0;
                 $scope.refreshDeck = function() {
                     var results = "";
@@ -152,7 +161,7 @@
                                 tmpCount += 1;
                             });
                             if (!shouldHide)
-                                results += "<div class='cardRow' ng-click='delCardClick($event)' data-id='" + card.Id + "'><div class='card' style=\"background-image: url('/Content/Images/bars/"+card.Id+".png');\"></div><div class='cardFrame'><span class='cardCost'>"+card.Cost+"</span><span class='cardName'>"+card.Name+"</span><span class='delCard'>Remove <i class='fa fa-times' aria-hidden='true'></i></span>"+duplicateVisible+"</div></div>";
+                                results += "<div class='cardRow' popover-placement='bottom' uib-popover-template='cardPopover.templateUrl' popover-trigger='mouseenter' ng-mouseenter='cardHover($event)' ng-click='delCardClick($event)' data-id='" + card.Id + "'><div class='card' style=\"background-image: url('/Content/Images/bars/"+card.Id+".png');\"></div><div class='cardFrame'><span class='cardCost'>"+card.Cost+"</span><span class='cardName'>"+card.Name+"</span><span class='delCard'>Remove <i class='fa fa-times' aria-hidden='true'></i></span>"+duplicateVisible+"</div></div>";
                             count += 1;
                         });
 
@@ -248,7 +257,7 @@
                     });
                 };
 
-            } )
+            }])
     </script>
 
     <div id="notificationBlock">

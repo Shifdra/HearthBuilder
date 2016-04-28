@@ -235,6 +235,7 @@ input{
     height: 35px;
     background: url('/Content/Images/deck/dark.png') no-repeat;
     cursor: pointer;
+    width: 217px;
 }
 
 .deckList .cardRow:hover .delCard{
@@ -252,7 +253,7 @@ input{
     height: 34px;
     width: 134px;
     top: 0;
-    right: 20px;
+    right: 6px;
     position: absolute;
 }
 
@@ -288,6 +289,8 @@ input{
     position: absolute;
     width: 95%;
     height: 90%;
+    top: -1px;
+    right: -6px;
     background-color: rgba(0, 0, 0, 0.43);
     margin: 3px 10px;
     text-align: center;
@@ -427,3 +430,25 @@ input{
  .classButtons input[type=checkbox].chk:checked + .lblChk {
     color:blue;
 }
+
+ .hoverCard {
+     overflow:hidden;
+ }
+
+ .hoverCard img {
+     margin-top:-15%;
+     height:300px;
+     width: auto;
+
+ }
+
+ .popover {
+     background-color: transparent;
+     border:none;
+     box-shadow:none;
+     z-index:1;
+ }
+
+ .popover>.arrow:after{
+     border:none;
+ }
