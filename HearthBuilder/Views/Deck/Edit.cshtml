@@ -161,7 +161,7 @@
                                 tmpCount += 1;
                             });
                             if (!shouldHide)
-                                results += "<div class='cardRow' popover-placement='bottom' uib-popover-template='cardPopover.templateUrl' popover-trigger='mouseenter' ng-mouseenter='cardHover($event)' ng-click='delCardClick($event)' data-id='" + card.Id + "'><div class='card' style=\"background-image: url('/Content/Images/bars/"+card.Id+".png');\"></div><div class='cardFrame'><span class='cardCost'>"+card.Cost+"</span><span class='cardName'>"+card.Name+"</span><span class='delCard'>Remove <i class='fa fa-times' aria-hidden='true'></i></span>"+duplicateVisible+"</div></div>";
+                                results += "<div class='cardRow' popover-placement='auto' uib-popover-template='cardPopover.templateUrl' popover-trigger='mouseenter' ng-mouseenter='cardHover($event)' ng-click='delCardClick($event)' data-id='" + card.Id + "'><div class='card' style=\"background-image: url('/Content/Images/bars/"+card.Id+".png');\"></div><div class='cardFrame'><span class='cardCost'>"+card.Cost+"</span><span class='cardName'>"+card.Name+"</span><span class='delCard'>Remove <i class='fa fa-times' aria-hidden='true'></i></span>"+duplicateVisible+"</div></div>";
                             count += 1;
                         });
 
