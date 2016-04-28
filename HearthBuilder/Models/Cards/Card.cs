@@ -13,10 +13,6 @@ namespace HearthBuilder.Models.Cards
         {
             get { return "/Content/Images/cards/" + Id + ".png"; }
         }
-        public string UrlGold
-        {
-            get { return "//wow.zamimg.com/images/hearthstone/cards/enus/animated/" + Id + "_premium.gif"; }
-        }
         public string Id { get; private set; }
         public string Name { get; private set; }
         public string Text { get; private set; }
