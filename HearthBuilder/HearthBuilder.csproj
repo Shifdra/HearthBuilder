@@ -2529,6 +2529,15 @@
     <Content Include="Views\Deck\View.cshtml" />
     <Content Include="Views\Browse\UserDecks.cshtml" />
     <Content Include="TestUml.cd" />
+    <Content Include="ConnectionStrings.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="ConnectionStrings.Debug.config">
+      <DependentUpon>ConnectionStrings.config</DependentUpon>
+    </Content>
+    <Content Include="ConnectionStrings.Release.config">
+      <DependentUpon>ConnectionStrings.config</DependentUpon>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
