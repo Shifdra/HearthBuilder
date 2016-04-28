@@ -236,6 +236,10 @@ input{
     background: url('/Content/Images/deck/dark.png') no-repeat;
     cursor: pointer;
     width: 217px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .deckList .cardRow:hover .delCard{
