@@ -6,284 +6,32 @@
     ViewBag.Title = "Edit a " + ((Deck)Session["deck"]).ClassStr + " Deck";
 }
 
-<div data-ng-controller="EditController" data-ng-init="init()" class="buildDeck">
-    <script>
-        var myapp = angular.module('myapp', ['ngSanitize', 'ui.bootstrap', 'ngAnimate'])
-            .controller("EditController", ["$scope", "$http", "$compile", "$timeout", '$uibModal', '$window', function ($scope, $http, $compile, $timeout, $uibModal, $window) {
-
-                // in controller
-
-                $scope.txtSearch = "";
-                $scope.txtDeckName = "@(((Deck)Session["deck"]).Title)";
-                $scope.deckId = @(((Deck)Session["deck"]).Id);
-                $scope.playerClass = @((int)((Deck)Session["deck"]).Class);
-                $scope.cardData = {};
-                $scope.animationsEnabled = true;
-
-                //called on page load
-                $scope.init = function () {
-                    var responsePromise = $http.get("/Deck/ListAllCards/");
-                    responsePromise.success(function (data, status, headers, config) {
-                        $scope.cardData = data;
-                        $scope.filterCards(); //do a fresh listing of filtered cards
-                        $scope.refreshDeck(); //refresh the player's deck
-                    });
-                    responsePromise.error(function (data, status, headers, config) {
-                        $scope.showNotification("Error! init",  data.Message, "alert-danger");
-                    });
-                };
-
-                $scope.addCardClick = function(item) {
-                    $scope.showNotification("Adding card...", "", "alert-warning");
-                    var cardId = item.currentTarget.getAttribute("data-id");
-                    var responsePromise = $http.post("/Deck/AddCard/", { id : cardId });
-                    responsePromise.success(function(data, status, headers, config) {
-                        angular.forEach(data, function (result){
-                            if (result.Result == '1'){
-                                $scope.showNotification("Success!", "Card Added.", "alert-success");
-                                $scope.refreshDeck();
-                            }
-                            else {
-                                $scope.showNotification("Error!", result.Message, "alert-danger");
-                            }
-                        });
-                    });
-                    responsePromise.error(function(data, status, headers, config) {
-                        $scope.showNotification("Error! init",  data.Message, "alert-danger");
-                    });
-                }
-
-                $scope.delCardClick = function(item) {
-                    $scope.showNotification("Deleting card...", "", "alert-warning");
-                    var cardId = item.currentTarget.getAttribute("data-id");
-                    var responsePromise = $http.post("/Deck/RemoveCard/", { id : cardId });
-                    responsePromise.success(function(data, status, headers, config) {
-                        angular.forEach(data, function (result){
-                            if (result.Result == '1'){
-                                //we added a card, lets update the Deck List
-                                $scope.showNotification("Success!", "Card Removed.", "alert-success");
-                                $scope.refreshDeck();
-                            }
-                            else {
-                                $scope.showNotification("Error!", "Card couldn't be removed!? " + result.Message, "alert-danger");
-                            }
-                        });
-                    });
-                    responsePromise.error(function(data, status, headers, config) {
-                        $scope.showNotification("Error! init",  data.Message, "alert-danger");
-                    });
-                }
-
-                $scope.saveDeck = function() {
-                    $scope.showNotification("Saving to DB...", "", "alert-warning");
-                    var responsePromise = $http.post("/Deck/SaveDeck/", { id : $scope.txtDeckName });
-                    responsePromise.success(function(data, status, headers, config) {
-                        angular.forEach(data, function (result){
-                            if (result.Result == '1'){
-                                $scope.showNotification("Success!", result.Message, "alert-success");
-                                //we saved the deck successfully
-                                $scope.refreshDeck();
-                                if (result.ShouldRedirect === true)
-                                    $window.location.href = '/Deck/Edit/' + result.NewId;
-                            }
-                            else {
-                                $scope.showNotification("Error!", "Couldn't save deck!? " + result.Message, "alert-danger");
-                            }
-                        });
-
-                    });
-                    responsePromise.error(function(data, status, headers, config) {
-                        $scope.showNotification("Error! init",  data.Message, "alert-danger");
-                    });
-                }
-
-                $scope.saveDeckClick = function() {
-                    if ($scope.cardCount < 30) { //is this deck not finished?
-                        var modalInstance = $uibModal.open({
-                            templateUrl: '/Content/ModalConfirm.html',
-                            size: 'sm',
-                            scope: $scope,
-                            resolve: {
-                                message: function () {
-                                    return "This deck is not yet finished (requires a total of 30 cards). Would you like to save anyways?";
-                                },
-                                title: function () {
-                                    return "Save Deck";
-                                }
-                            },
-                            controller:function($uibModalInstance, $scope, message, title){
-                                $scope.promptMessage = message;
-                                $scope.promptTitle = title;
-                                $scope.ok = function () {
-                                    $scope.saveDeck();
-                                    $uibModalInstance.dismiss('cancel');
-                                }
-                                $scope.cancel = function () {
-                                    $uibModalInstance.dismiss('cancel');
-                                };
-                            },
-                        });
-                    } else { //it is, save it
-                        $scope.saveDeck();
-                    }
-                }
-
-                $scope.cardPopover = {
-                    templateUrl: '/Content/templates/TemplateCardPopover.html',
-                    cardId: ''
-                }
-
-                $scope.cardHover = function(item) {
-                    $scope.cardPopover.cardUrl = "/Content/Images/cards/"+item.currentTarget.getAttribute("data-id")+".png";
-                }
-
-                $scope.cardCount = 0;
-                $scope.refreshDeck = function() {
-                    var results = "";
-                    var responsePromise = $http.get("/Deck/SessionDeck/");
-                    responsePromise.success(function(data, status, headers, config) {
-                        //$scope.myData.fromServer = data.message;
-                        var count = 0;
-                        angular.forEach(data.Cards, function (card){
-                            var duplicateVisible = "";
-                            var shouldHide = false;
-                            //we don't want to show duplicate cards, instead we should show a counter beside the card
-                            //so we loop through again, looking for another occurrance
-                            var tmpCount = 0;
-                            angular.forEach(data.Cards, function (tempCard){
-                                if (card.Id == tempCard.Id && count != tmpCount) { //if we have duplicate cards
-                                    if (count < tmpCount) { //if were on the first occurance of the card
-                                        duplicateVisible = "<span class='duplicate'>2</span>";
-                                    } else if (count > tmpCount) {  //if were on the 2nd occurance of the card
-                                        shouldHide = true; //hide entire entry because the first has a counter
-                                    }
-                                }
-                                tmpCount += 1;
-                            });
-                            if (!shouldHide)
-                                results += "<div class='cardRow' popover-placement='auto' uib-popover-template='cardPopover.templateUrl' popover-trigger='mouseenter' ng-mouseenter='cardHover($event)' ng-click='delCardClick($event)' data-id='" + card.Id + "'><div class='card' style=\"background-image: url('/Content/Images/bars/"+card.Id+".png');\"></div><div class='cardFrame'><span class='cardCost'>"+card.Cost+"</span><span class='cardName'>"+card.Name+"</span><span class='delCard'>Remove <i class='fa fa-times' aria-hidden='true'></i></span>"+duplicateVisible+"</div></div>";
-                            count += 1;
-                        });
-
-                        var element = angular.element(document.querySelector('.deckList'));
-                        var generated = element.html(results);
-                        $compile(generated.contents())($scope);
-                        $scope.cardCount = count; //update the counter on the page
-                    });
-                    responsePromise.error(function(data, status, headers, config) {
-                        alert("AJAX failed! refresh" + data.Message);
-                    });
-                }
-
-                $scope.filterCards = function () {
-
-                    var results = "";
-                    angular.forEach($scope.cardData, function (card) { //loop through every card
-                        $scope.cardData.curCard = card; //assign the current card to the scope
-                        //console.log($scope.cardData.curCard);
-                        if ($scope.cardData.curCard.Class == $scope.playerClass || $scope.cardData.curCard.Class == 0){ //filter by current class, and non-class
-                            if ($scope.cardData.curCard.Name.toLowerCase().indexOf($scope.txtSearch.toLowerCase()) > -1 || ($scope.cardData.curCard.Text != null && $scope.cardData.curCard.Text.toLowerCase().indexOf($scope.txtSearch.toLowerCase()) > -1)) { //filter by textbox
-                                results += '<div class="col-lg-3 col-md-4 col-sm-6 col-xs-6"><img alt="'+$scope.cardData.curCard.Name+'" ng-click="addCardClick($event)" data-id="' + $scope.cardData.curCard.Id + '" src="' + $scope.cardData.curCard.Url + '" /></div>';
-                                //console.log($scope.cardData.curCard.Text);
-                            }
-                        }
-                    });
-
-                    var element = angular.element(document.querySelector('.selectCard'));
-                    var generated = element.html(results);
-                    $compile(generated.contents())($scope);
-                }
-
-                $scope.showNotificationTimeout = {};
-                $scope.showNotification = function (title, msg, type) {
-
-                    var alert = '<div ng-show="showNotificationMessage" class="notificationAlert alert '+type+' alert-dismissible" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button> <strong>'+title+'</strong> '+msg+'</div>';
-
-                    var element = angular.element(document.querySelector('#notificationBlock'));
-                    var generated = element.html(alert);
-                    $compile(generated.contents())($scope);
-                    $scope.showNotificationMessage = true;
-                    $timeout.cancel($scope.showNotificationTimeout); //cancel the previous timeout, weve got a new notification to show
-                    $scope.showNotificationTimeout = $timeout(function() {
-                        $scope.showNotificationMessage = false;
-                    }, 5000);
-                }
-
-                $scope.delDeckClick = function () {
-                    var modalInstance = $uibModal.open({
-                        templateUrl: '/Content/ModalConfirm.html',
-                        size: 'sm',
-                        scope: $scope,
-                        resolve: {
-                            message: function () {
-                                return "Are you sure you want to delete this deck? This cannot be undone!";
-                            },
-                            title: function () {
-                                return "Delete Deck";
-                            }
-                        },
-                        controller:function($uibModalInstance, $scope, message, title){
-                            $scope.promptMessage = message;
-                            $scope.promptTitle = title;
-                            $scope.ok = function () {
-                                console.log("Deleting deck...");
-                                $scope.showNotification("Deleting deck...", "", "alert-warning");
-                                $uibModalInstance.dismiss('cancel');
-                                var responsePromise = $http.post("/Deck/DeleteDeck/");
-                                responsePromise.success(function(data, status, headers, config) {
-                                    angular.forEach(data, function (result){
-                                        if (result.Result == '1'){
-                                            console.log("Deck Removed.");
-                                            $scope.showNotification("Success!", "Deck Removed.", "alert-success");
-                                            $window.location.href = '/';
-                                        }
-                                        else {
-                                            console.log("Deck couldn't be removed!? "  + result.Message);
-                                            $scope.showNotification("Error!", "Deck couldn't be removed!? " + result.Message, "alert-danger");
-                                        }
-                                    });
-                                });
-                            }
-                            $scope.cancel = function () {
-                                $uibModalInstance.dismiss('cancel');
-                            };
-                        },
-                    });
-
-                    modalInstance.result.then(function (selectedItem) {
-                        $scope.selected = selectedItem;
-                    }, function () {
-                        //$log.info('Modal dismissed at: ' + new Date());
-                    });
-                };
-
-            }])
-    </script>
-
+<div data-ng-controller="EditDeckController" data-ng-init="init('@(((Deck)Session["deck"]).Title)', @(((Deck)Session["deck"]).Id), @((int)((Deck)Session["deck"]).Class))" class="buildDeck">
+    
+    <script src="~/Scripts/controllers/EditDeckController.js"></script>
+    
     <div id="notificationBlock">
-
     </div>
 
     <div class="container">
         <div class="row">
             <div class="col-fixed-262">
                 <div class="deckOptions">
-                    @if (Session["UserSession"] != null) //are they logged in?
-                    {
-                        <button ng-click='saveDeckClick()' class="btn btn-primary btn-lg">Save</button>
-                    }
-                    else
-                    {
-                        <button disabled class="btn btn-primary btn-lg">Save</button>
-                    }
-
+                    <button @(Session["UserSession"] == null ? "disabled" : String.Empty) ng-click='saveDeckClick()' class="btn btn-primary btn-lg">Save</button>
                     <button ng-click='delDeckClick()' class="btn btn-danger btn-lg">Delete</button>
                 </div>
                 <div id="overview" class="panel panel-default">
                     <div class="panel-heading"><input type="text" name="input" ng-model="txtDeckName" ng-trim="true" placeholder="Deck Name" class="txtInput" /></div>
                     <div class="panel-body">
                         <div class="deckList">
-
+                            <div class='cardRow' ng-repeat="card in deckCards" ng-if="card.isDuplicate == false" popover-placement='auto' uib-popover-template='cardPopover.templateUrl' popover-trigger='mouseenter' ng-mouseenter='cardHover($event)' ng-click='delCardClick($event)' data-id='{{card.Id}}'>
+                                <div class='card' style="background-image: url('/Content/Images/bars/{{card.Id}}.png')"></div>
+                                <div class='cardFrame'></div>
+                                <span class='cardCost'>{{card.Cost}}</span>
+                                <span class='cardName'>{{card.Name}}</span>
+                                <span class='delCard'>Remove <i class='fa fa-times' aria-hidden='true'></i></span>
+                                <span class='duplicate' ng-if="card.hasDuplicate == true">2</span>
+                            </div>
                         </div>
                         <div class="cardCount">
                             <span>({{cardCount}}/30) Cards</span>
@@ -297,7 +45,9 @@
                     <div class="panel-heading">Search for Cards: <input autofocus type="text" name="input" ng-model="txtSearch" ng-change="filterCards()" ng-trim="true" placeholder="Card Names" class="txtInput"/> </div>
                     <div class="panel-body">
                         <div class="row selectCard">
-
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6" ng-repeat="card in filteredCards">
+                                <img alt="{{card.Name}}" ng-click="addCardClick($event)" data-id="{{card.Id}}" src="{{card.Url}}" />
+                            </div>
                         </div>
                     </div>
                 </div>
