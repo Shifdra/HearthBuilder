@@ -317,7 +317,7 @@ input{
 .deckList .duplicate {
     position: absolute;
     top: 1px;
-    right: 3px;
+    right: 0px;
     text-shadow: 1px 1px 0 #000,1px 0 0 #000,1px -1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 1px 0 #000,-1px 0 0 #000,-1px -1px 0 #000;
     font-weight: 400;
     font-size: 1.5em;
