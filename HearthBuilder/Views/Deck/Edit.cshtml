@@ -25,7 +25,7 @@
                     <div class="panel-body">
                         <div class="deckList">
                             <div class='cardRow' ng-repeat="card in deckCards" ng-if="card.isDuplicate == false" popover-placement='auto' uib-popover-template='cardPopover.templateUrl' popover-trigger='mouseenter' ng-mouseenter='cardHover($event)' ng-click='delCardClick($event)' data-id='{{card.Id}}'>
-                                <div class='card' style="background-image: url('/Content/Images/bars/{{card.Id}}.png')"></div>
+                                <div class='cardImg' style="background-image: url('/Content/Images/bars/{{card.Id}}.png')"></div>
                                 <div class='cardFrame'></div>
                                 <span class='cardCost'>{{card.Cost}}</span>
                                 <span class='cardName'>{{card.Name}}</span>
