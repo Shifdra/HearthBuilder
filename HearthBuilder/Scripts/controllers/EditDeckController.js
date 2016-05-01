@@ -179,18 +179,23 @@
     }
 
     $scope.showNotificationTimeout = {};
+    $scope.notification = {
+        title: "",
+        message: "",
+        type: "",
+    }
     $scope.showNotification = function (title, msg, type) {
 
-        var alert = '<div ng-show="showNotificationMessage" class="notificationAlert alert '+type+' alert-dismissible" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button> <strong>'+title+'</strong> '+msg+'</div>';
+        $scope.notification.title = title;
+        $scope.notification.message = msg;
+        $scope.notification.type = type;
+        $scope.showNotificationMessage = true; //show it
 
-        var element = angular.element(document.querySelector('#notificationBlock'));
-        var generated = element.html(alert);
-        $compile(generated.contents())($scope);
-        $scope.showNotificationMessage = true;
         $timeout.cancel($scope.showNotificationTimeout); //cancel the previous timeout, weve got a new notification to show
-        $scope.showNotificationTimeout = $timeout(function() {
+        $scope.showNotificationTimeout = $timeout(function () { //hide it after 5s
             $scope.showNotificationMessage = false;
         }, 5000);
+        
     }
 
     $scope.delDeckClick = function () {
