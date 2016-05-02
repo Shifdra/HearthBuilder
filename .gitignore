@@ -248,6 +248,6 @@ paket-files/
 */ConnectionStrings.Release.config
 */ConnectionStrings.Debug.config
 
-ConnectionStrings.config
-ConnectionStrings.Release.config
-ConnectionStrings.Debug.config
+/HearthBuilder/ConnectionStrings.config
+/HearthBuilder/ConnectionStrings.Release.config
+/HearthBuilder/ConnectionStrings.Debug.config
