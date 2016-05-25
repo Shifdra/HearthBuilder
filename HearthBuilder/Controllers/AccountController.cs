@@ -7,7 +7,7 @@ using System.Web.Mvc;
 
 namespace HearthBuilder.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         UserDAO userDAO = UserDAO.Instance;
         //User userSession = new User();
@@ -22,9 +22,6 @@ namespace HearthBuilder.Controllers
         [HttpPost]
         public ActionResult Index(UserLogin user)
         {
-            if (Session["notifications"] == null)
-                Session["notifications"] = new List<Notification>();
-
             if (ModelState.IsValid)
             {
                 try
@@ -58,9 +55,6 @@ namespace HearthBuilder.Controllers
         [HttpPost]
         public ActionResult Register(UserRegister user)
         {
-            if (Session["notifications"] == null)
-                Session["notifications"] = new List<Notification>();
-
             if (user.FirstName == null)
                 ModelState.AddModelError("FirstName", "You must enter a first name.");
 
@@ -94,9 +88,6 @@ namespace HearthBuilder.Controllers
 
         public ActionResult Logout()
         {
-            if (Session["notifications"] == null)
-                Session["notifications"] = new List<Notification>();
-
             if (Session["UserSession"] != null)
             {
                 Session["UserSession"] = null;

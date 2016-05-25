@@ -9,17 +9,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace HearthBuilder.Controllers
 {
-    public class DeckController : Controller
+    public class DeckController : BaseController
     {
         // GET: Deck
         public ActionResult Index() //selecting a new class
         {
-            if (Session["notifications"] == null)
-                Session["notifications"] = new List<Notification>();
-
             if (Session["UserSession"] == null)
                 ((List<Notification>)Session["notifications"]).Add(new Notification("Error!", "You are not logged in and as a result, will be unable to save decks! <a href='/Account'>Log in</a> or <a href='/Account/Register'>Register</a>", NotificationType.WARNING));
 
@@ -29,9 +27,6 @@ namespace HearthBuilder.Controllers
         //@id is either an number or the name of a class
         public ActionResult Edit(string id = "") //editing a current deck
         {
-            if (Session["notifications"] == null)
-                Session["notifications"] = new List<Notification>();
-            
             try
             {
                 int nId = 0;
@@ -86,9 +81,6 @@ namespace HearthBuilder.Controllers
 
         public ActionResult View(int id) //editing a current deck
         {
-            if (Session["notifications"] == null)
-                Session["notifications"] = new List<Notification>();
-
             try
             {
                 //try to pull the deck via ID from the DB
@@ -256,9 +248,6 @@ namespace HearthBuilder.Controllers
         [HttpPost]
         public ActionResult DeleteDeck()
         {
-            if (Session["notifications"] == null)
-                Session["notifications"] = new List<Notification>();
-
             var result = new List<object>();
 
             if (Session["deck"] == null)

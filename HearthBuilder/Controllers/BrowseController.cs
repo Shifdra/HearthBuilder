@@ -11,15 +11,12 @@ using HearthBuilder.Models.Account;
 
 namespace HearthBuilder.Controllers
 {
-    public class BrowseController : Controller
+    public class BrowseController : BaseController
     {
         //
         // GET: /Browse/
         public ActionResult Index() //this is the main page to browse/search decks
         {
-            if (Session["notifications"] == null)
-                Session["notifications"] = new List<Notification>();
-
             try
             {
                 //try to pull the decks from the DB
@@ -36,9 +33,6 @@ namespace HearthBuilder.Controllers
         [HttpPost]
         public ActionResult Index(SearchParams searchParams) //this page will filter down the number of decks displayed
         {
-            if (Session["notifications"] == null)
-                Session["notifications"] = new List<Notification>();
-
             DeckDAO deckDAO = DeckDAO.Instance;
             List<Deck> filteredDecks = deckDAO.GetDecksByClassAndDeckName(searchParams);
 
@@ -93,9 +87,6 @@ namespace HearthBuilder.Controllers
 
         public ActionResult UserDecks(string id)
         {
-            if (Session["notifications"] == null)
-                Session["notifications"] = new List<Notification>();
-
             int uId = 0;
             
             //do we have an existing user?
